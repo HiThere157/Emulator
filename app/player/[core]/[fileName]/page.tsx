@@ -18,12 +18,9 @@ export default function Player({ params }: Props) {
       return;
     }
 
-    playerWindow.EJS_player = "#game";
     playerWindow.EJS_gameUrl = `/api/rom/${params.core}/${params.fileName}`;
     playerWindow.EJS_core = params.core;
-
-    const script = playerWindow.document.getElementById("script") as HTMLScriptElement;
-    script.src = "https://www.emulatorjs.com/loader.js";
+    playerWindow.init();
   };
 
   useEffect(() => {
