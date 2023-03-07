@@ -52,10 +52,14 @@ function NavbarItem({ core, files }: NavbarItemProps) {
         </div>
       </button>
       {!isCollapsed && (
-        <div>
+        <div className="flex flex-col mx-2">
           {files.map((file, index) => {
             return (
-              <Link key={index} href={``}>
+              <Link
+                key={index}
+                href={`/player/${file.id}`}
+                className="text-whiteColorAccent hover:text-whiteColor"
+              >
                 {file.friendlyName}
               </Link>
             );
