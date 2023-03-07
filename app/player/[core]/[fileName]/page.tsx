@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 
 type Props = {
   params: {
@@ -23,13 +23,9 @@ export default function Player({ params }: Props) {
     playerWindow.init();
   };
 
-  useEffect(() => {
-    preparePlayer();
-  }, []);
-
   return (
     <div className="h-full">
-      <iframe ref={playerRef} src="/test.html" className="w-full h-full" />
+      <iframe ref={playerRef} onLoad={preparePlayer} src="/player.html" className="w-full h-full" />
     </div>
   );
 }
