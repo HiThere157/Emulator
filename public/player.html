@@ -6,10 +6,20 @@
     </div>
     <script type="text/javascript">
       let EJS_player = "#game";
+      let EJS_pathtodata = "emulatorJs/data/";
+      let EJS_startOnLoaded = true;
+      let EJS_defaultOptions = {
+        "save-state-slot": 1,
+        "save-state-location": "keep in browser",
+      };
+      let EJS_Buttons = {
+        screenRecord: false,
+        cacheManager: false,
+      };
 
       function init() {
         const script = document.getElementById("script");
-        script.src = "/loader.js";
+        script.src = "/emulatorJs/data/loader.js";
       }
     </script>
     <script id="script"></script>
