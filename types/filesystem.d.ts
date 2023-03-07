@@ -1,4 +1,5 @@
-type RomFolder = {
-  name: string;
-  files: string[];
+type RomFile = {
+  friendlyName: string;
+  core: string;
+  id: string;
 };

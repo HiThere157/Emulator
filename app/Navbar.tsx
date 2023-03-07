@@ -1,34 +1,67 @@
-import path from "path";
-import { promises as fs } from "fs";
+"use client";
 
-import NavbarItem from "./NavbarItem";
+import { useEffect, useState } from "react";
 
-async function getFolderContents(): Promise<RomFolder[]> {
-  const romsPath = path.join(process.cwd(), "data/roms");
-  const folderNames = await fs.readdir(romsPath);
+import Link from "next/link";
 
-  const folders: RomFolder[] = await Promise.all(
-    folderNames.map(async (folderName) => {
-      const fileNames = await fs.readdir(`${romsPath}/${folderName}`);
+import { BsChevronDown, BsChevronUp } from "react-icons/bs";
 
-      return {
-        name: folderName,
-        files: fileNames,
-      };
-    }),
-  );
+export default function Navbar() {
+  const [files, setFiles] = useState<RomFile[]>([]);
+  const [cores, setCores] = useState<string[]>([]);
 
-  return folders;
-}
+  useEffect(() => {
+    (async () => {
+      const result = await fetch("/api/roms");
+      const files: RomFile[] = await result.json();
 
-export default async function Navbar() {
-  const folders = await getFolderContents();
+      setFiles(files);
+      setCores(Array.from(new Set(files.map((file) => file.core))));
+    })();
+  }, []);
 
   return (
     <nav className="flex flex-col gap-3 bg-lightBg p-2 h-full w-40">
-      {folders.map((folder, index) => {
-        return <NavbarItem key={index} folder={folder} />;
+      {cores.map((core, index) => {
+        return (
+          <NavbarItem key={index} core={core} files={files.filter((file) => file.core === core)} />
+        );
       })}
     </nav>
+  );
+}
+
+type NavbarItemProps = {
+  core: string;
+  files: RomFile[];
+};
+function NavbarItem({ core, files }: NavbarItemProps) {
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+
+  return (
+    <div>
+      <button
+        className="bg-el hover:bg-elAccent active:bg-elActive rounded-md px-2 w-full"
+        onClick={() => {
+          setIsCollapsed(!isCollapsed);
+        }}
+      >
+        <div className="flex items-center gap-2">
+          {isCollapsed ? <BsChevronDown /> : <BsChevronUp />}
+          <span>{core}</span>
+        </div>
+      </button>
+      {!isCollapsed && (
+        <div>
+          {files.map((file, index) => {
+            return (
+              <Link key={index} href={``}>
+                {file.friendlyName}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
   );
 }
