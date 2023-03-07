@@ -57,7 +57,7 @@ function NavbarItem({ core, files }: NavbarItemProps) {
             return (
               <Link
                 key={index}
-                href={`/player/${file.id}`}
+                href={`/player/${file.core}/${file.fileName}`}
                 className="text-whiteColorAccent hover:text-whiteColor"
               >
                 {file.friendlyName}
