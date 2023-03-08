@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+import { BsPlus, BsDash } from "react-icons/bs";
 
 export default function Navbar() {
   const [files, setFiles] = useState<RomFile[]>([]);
@@ -21,7 +21,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="flex flex-col gap-3 bg-lightBg p-2 h-full w-40">
+    <nav className="flex flex-col gap-3 bg-lightBg p-2 h-full w-48">
       {cores.map((core, index) => {
         return (
           <NavbarItem key={index} core={core} files={files.filter((file) => file.core === core)} />
@@ -36,7 +36,12 @@ type NavbarItemProps = {
   files: RomFile[];
 };
 function NavbarItem({ core, files }: NavbarItemProps) {
+  const path = usePathname();
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
+
+  const friendlyCoreNames: { [key: string]: string } = {
+    n64: "Nintendo 64",
+  };
 
   return (
     <div>
@@ -46,19 +51,25 @@ function NavbarItem({ core, files }: NavbarItemProps) {
           setIsCollapsed(!isCollapsed);
         }}
       >
-        <div className="flex items-center gap-2">
-          {isCollapsed ? <BsChevronDown /> : <BsChevronUp />}
-          <span>{core}</span>
+        <div className="flex items-center gap-1 whitespace-nowrap">
+          <div className="text-xl">{isCollapsed ? <BsPlus /> : <BsDash />}</div>
+          <span>{friendlyCoreNames[core] ?? core}</span>
         </div>
       </button>
       {!isCollapsed && (
-        <div className="flex flex-col mx-2">
+        <div className="flex flex-col mx-2.5">
           {files.map((file, index) => {
+            const itemPath = `/player/${file.core}/${file.fileName}`;
             return (
               <Link
                 key={index}
-                href={`/player/${file.core}/${file.fileName}`}
-                className="text-whiteColorAccent hover:text-whiteColor"
+                href={itemPath}
+                className={
+                  "text-sm " +
+                  (itemPath === path
+                    ? "text-whiteColor"
+                    : "text-whiteColorAccent hover:text-whiteColor")
+                }
               >
                 {file.friendlyName}
               </Link>
