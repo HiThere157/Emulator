@@ -10,9 +10,13 @@ module.exports = {
       whiteColor: "#F0F0F0",
       whiteColorAccent: "#A0A0A0",
 
-      el: "#272727",
-      elAccent: "#292929",
-      elActive: "#303030",
+      el1: "#272727",
+      el1Accent: "#303030",
+      el1Active: "#333333",
+
+      el2: "#272727",
+      el2Accent: "#208CF0",
+      el2Active: "#1482DC",
     },
   },
   plugins: [],
