@@ -2,6 +2,8 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
+import { cores } from "@/config/cores";
+
 import Button from "../Button";
 
 import { BsPlus, BsDash } from "react-icons/bs";
@@ -14,16 +16,12 @@ export default function NavbarItem({ core, files }: NavbarItemProps) {
   const path = usePathname();
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
-  const friendlyCoreNames: { [key: string]: string } = {
-    n64: "Nintendo 64",
-  };
-
   return (
     <div>
       <Button theme="flat" className="px-2 w-full" onClick={() => setIsCollapsed(!isCollapsed)}>
         <div className="flex items-center gap-1 whitespace-nowrap">
           <div className="text-xl">{isCollapsed ? <BsPlus /> : <BsDash />}</div>
-          <span>{friendlyCoreNames[core] ?? core}</span>
+          <span>{cores[core] ?? core}</span>
         </div>
       </Button>
       {!isCollapsed && (

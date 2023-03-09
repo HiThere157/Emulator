@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 
 import Button from "../Button";
 import NavbarItem from "./NavbarItem";
-import UploadFile from "../UploadFile/UploadFile";
+import UploadFiles from "../UploadFile/UploadFiles";
 
 import { BsCapslockFill, BsGearFill } from "react-icons/bs";
 
@@ -26,7 +26,7 @@ export default function Navbar() {
 
   return (
     <nav className="flex flex-col gap-2 bg-lightBg p-2 h-full w-48">
-      <UploadFile isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} />
+      <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} />
 
       <div className="grid grid-cols-2 gap-2 h-8">
         <Button
