@@ -1,4 +1,4 @@
-import { ChangeEvent, DragEvent } from "react";
+import { ChangeEvent, DragEvent, useState } from "react";
 
 import { BsPlusSquare } from "react-icons/bs";
 
@@ -6,8 +6,16 @@ type DragDropFileProps = {
   onUpload: (fileList: File[]) => any;
 };
 export default function DragDropFile({ onUpload }: DragDropFileProps) {
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+
+  const handleDrag = (event: DragEvent) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
   const handleDrop = (event: DragEvent) => {
     event.preventDefault();
+    setIsDragging(false);
     onUpload(Array.from(event.dataTransfer.files));
   };
 
@@ -19,9 +27,13 @@ export default function DragDropFile({ onUpload }: DragDropFileProps) {
 
   return (
     <label
-      className="flex items-center justify-center h-full rounded-md border-el1 border-4 border-dashed cursor-pointer"
-      onDragOver={(e: DragEvent) => e.preventDefault()}
+      className={
+        "flex items-center justify-center h-[25rem] rounded-md border-4 border-dashed cursor-pointer " +
+        (isDragging ? "border-el2Accent" : "border-el1")
+      }
+      onDragOver={handleDrag}
       onDrop={handleDrop}
+      onDragLeave={() => setIsDragging(false)}
     >
       <input className="hidden" type="file" multiple={true} onChange={handleChange} />
 

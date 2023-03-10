@@ -6,8 +6,9 @@ import Button from "../Button";
 type FilesProps = {
   fileList: File[];
   onBack: () => any;
+  onSubmit: () => any;
 };
-export default function Files({ fileList, onBack }: FilesProps) {
+export default function Files({ fileList, onBack, onSubmit }: FilesProps) {
   const [files, setFiles] = useState<UploadedFile[]>(
     fileList.map((file) => {
       return {
@@ -24,7 +25,7 @@ export default function Files({ fileList, onBack }: FilesProps) {
     setFiles(_files);
   };
 
-  const onSubmit = () => {
+  const uploadFiles = () => {
     files.forEach(async (file) => {
       const fileName = `${file.friendlyName
         .replace(/[^0-9a-zA-Z ]/g, "")
@@ -47,15 +48,17 @@ export default function Files({ fileList, onBack }: FilesProps) {
   };
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex flex-col gap-8 py-5 flex-grow bg-darkBg rounded-md overflow-auto">
+    <div className="flex flex-col max-h-[65vh]">
+      <div className="flex flex-col py-5 flex-grow bg-darkBg rounded-md overflow-auto">
         {files.map((file, index) => {
           return (
-            <FileItem
-              key={index}
-              file={file}
-              onFileChange={(file: UploadedFile) => onFileChange(file, index)}
-            />
+            <div key={index}>
+              {index !== 0 && <hr className="mx-5 my-6 border-el1" />}
+              <FileItem
+                file={file}
+                onFileChange={(file: UploadedFile) => onFileChange(file, index)}
+              />
+            </div>
           );
         })}
       </div>
@@ -64,7 +67,14 @@ export default function Files({ fileList, onBack }: FilesProps) {
         <Button theme="color" className="px-2" onClick={onBack}>
           Back
         </Button>
-        <Button theme="color" className="px-2" onClick={onSubmit}>
+        <Button
+          theme="color"
+          className="px-2"
+          onClick={() => {
+            uploadFiles();
+            onSubmit();
+          }}
+        >
           Submit
         </Button>
       </div>

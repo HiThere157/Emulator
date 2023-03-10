@@ -7,13 +7,13 @@ export default function Popup({ children, isOpen, onBackgroundClick }: PopupProp
   return (
     <>
       {isOpen && (
-        <>
+        <div className="absolute top-0 bottom-0 left-0 right-0 flex items-center justify-center z-[50]">
           <div
-            className="absolute top-0 bottom-0 left-0 right-0 opacity-80 bg-darkBg z-[50]"
+            className="absolute top-0 bottom-0 left-0 right-0 opacity-90 bg-darkBg"
             onClick={onBackgroundClick}
           />
-          <div className="absolute top-1/4 left-1/2 translate-x-[-50%] z-[50]">{children}</div>
-        </>
+          <div className="relative mb-24">{children}</div>
+        </div>
       )}
     </>
   );

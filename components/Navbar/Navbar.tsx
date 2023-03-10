@@ -11,22 +11,26 @@ import { BsCapslockFill, BsGearFill } from "react-icons/bs";
 export default function Navbar() {
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
 
-  const [files, setFiles] = useState<RomFile[]>([]);
+  const [files, setFiles] = useState<RomFile[]>();
   const [cores, setCores] = useState<string[]>([]);
 
-  useEffect(() => {
-    (async () => {
-      const result = await fetch("/api/roms");
-      const files: RomFile[] = await result.json();
+  const fetchNav = async () => {
+    setFiles(undefined);
 
-      setFiles(files);
-      setCores(Array.from(new Set(files.map((file) => file.core))));
-    })();
+    const result = await fetch("/api/roms");
+    const files: RomFile[] = await result.json();
+
+    setFiles(files);
+    setCores(Array.from(new Set(files.map((file) => file.core))));
+  };
+
+  useEffect(() => {
+    fetchNav();
   }, []);
 
   return (
     <nav className="flex flex-col gap-2 bg-lightBg p-2 h-full w-48">
-      <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} />
+      <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} onSubmit={fetchNav} />
 
       <div className="grid grid-cols-2 gap-2 h-8">
         <Button
@@ -41,11 +45,16 @@ export default function Navbar() {
         </Button>
       </div>
 
-      {cores.map((core, index) => {
-        return (
-          <NavbarItem key={index} core={core} files={files.filter((file) => file.core === core)} />
-        );
-      })}
+      {files &&
+        cores.map((core, index) => {
+          return (
+            <NavbarItem
+              key={index}
+              core={core}
+              files={files.filter((file) => file.core === core)}
+            />
+          );
+        })}
     </nav>
   );
 }
