@@ -1,28 +1,17 @@
-import path from "path";
 import { promises as fs } from "fs";
 
 import { cores } from "@/config/cores";
+import { createDirectory, exists, getRomPath } from "@/helpers/api";
 
 export const revalidate = 0;
 
-type FileProps = {
-  core: string;
-  fileName: string;
-};
-
-function getRomPath(params: FileProps) {
-  const unsafePath = `data/roms/${params.core}/${params.fileName}`;
-  const safePath = path.normalize(unsafePath).replace(/^(\.\.(\/|\\|$))+/, "");
-  return path.join(process.cwd(), safePath);
-}
-
 export async function GET(_request: Request, { params }: { params: FileProps }) {
-  const fileBlob = await fs.readFile(getRomPath(params));
+  const fileBlob = await fs.readFile(getRomPath(params.core, params.fileName));
   return new Response(fileBlob);
 }
 
 export async function POST(request: Request, { params }: { params: FileProps }) {
-  const romPath = getRomPath(params);
+  const romPath = getRomPath(params.core, params.fileName);
   const fileBuffer = new Uint8Array(await request.arrayBuffer());
 
   // check core
@@ -31,17 +20,12 @@ export async function POST(request: Request, { params }: { params: FileProps }) 
   }
 
   // path traversal should not be possible, since the core is whitelisted
-  try {
-    await fs.access(`data/roms/${params.core}`, fs.constants.F_OK);
-  } catch {
-    await fs.mkdir(`data/roms/${params.core}`);
+  await createDirectory(`data/roms/${params.core}`);
+
+  if (await exists(romPath)) {
+    return new Response(null, { status: 400 });
   }
 
-  try {
-    await fs.access(romPath, fs.constants.F_OK);
-    return new Response(null, { status: 400 });
-  } catch {
-    await fs.writeFile(romPath, fileBuffer);
-    return new Response();
-  }
+  await fs.writeFile(romPath, fileBuffer);
+  return new Response();
 }

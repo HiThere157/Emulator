@@ -8,10 +8,14 @@ type DragDropFileProps = {
 export default function DragDropFile({ onUpload }: DragDropFileProps) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
-  const handleDrag = (event: DragEvent) => {
+  const handleDragOver = (event: DragEvent) => {
     event.preventDefault();
     setIsDragging(true);
   };
+
+  const handleDragLeave = () => {
+    setIsDragging(false)
+  }
 
   const handleDrop = (event: DragEvent) => {
     event.preventDefault();
@@ -31,9 +35,9 @@ export default function DragDropFile({ onUpload }: DragDropFileProps) {
         "flex items-center justify-center h-[25rem] rounded-md border-4 border-dashed cursor-pointer " +
         (isDragging ? "border-el2Accent" : "border-el1")
       }
-      onDragOver={handleDrag}
+      onDragOver={handleDragOver}
       onDrop={handleDrop}
-      onDragLeave={() => setIsDragging(false)}
+      onDragLeave={handleDragLeave}
     >
       <input className="hidden" type="file" multiple={true} onChange={handleChange} />
 

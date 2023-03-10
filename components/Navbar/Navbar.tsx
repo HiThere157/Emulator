@@ -2,17 +2,19 @@
 
 import { useEffect, useState } from "react";
 
+import { cores } from "@/config/cores";
+
 import Button from "../Button";
 import NavbarItem from "./NavbarItem";
 import UploadFiles from "../UploadFile/UploadFiles";
 
-import { BsCapslockFill, BsGearFill } from "react-icons/bs";
+import { BsCapslockFill, BsFillTrashFill } from "react-icons/bs";
 
 export default function Navbar() {
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const [files, setFiles] = useState<RomFile[]>();
-  const [cores, setCores] = useState<string[]>([]);
 
   const fetchNav = async () => {
     setFiles(undefined);
@@ -21,7 +23,6 @@ export default function Navbar() {
     const files: RomFile[] = await result.json();
 
     setFiles(files);
-    setCores(Array.from(new Set(files.map((file) => file.core))));
   };
 
   useEffect(() => {
@@ -40,21 +41,28 @@ export default function Navbar() {
         >
           <BsCapslockFill />
         </Button>
-        <Button theme="color" className="flex justify-center items-center">
-          <BsGearFill />
+        <Button
+          theme="color"
+          className="flex justify-center items-center"
+          onClick={() => setIsEditing(!isEditing)}
+        >
+          <BsFillTrashFill />
         </Button>
       </div>
 
       {files &&
-        cores.map((core, index) => {
-          return (
-            <NavbarItem
-              key={index}
-              core={core}
-              files={files.filter((file) => file.core === core)}
-            />
-          );
-        })}
+        Object.keys(cores)
+          .filter((core) => files.some((file) => file.core === core) || isEditing)
+          .map((core, index) => {
+            return (
+              <NavbarItem
+                key={index}
+                core={core}
+                files={files.filter((file) => file.core === core)}
+                isEditing={isEditing}
+              />
+            );
+          })}
     </nav>
   );
 }
