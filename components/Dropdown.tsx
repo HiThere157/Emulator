@@ -32,7 +32,7 @@ export default function Dropdown({ items, friendlyLookup, value, onChange }: Dro
   };
 
   return (
-    <div ref={ref} className="relative w-fit z-[10] ">
+    <div ref={ref} className="relative w-fit z-[10]">
       <Button theme="flat" className="px-2" onClick={() => setIsOpen(!isOpen)}>
         <div className="flex items-center justify-between">
           <span className="mr-2">{friendlyLookup?.[value] ?? value}</span>
