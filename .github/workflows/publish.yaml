@@ -11,27 +11,22 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3.5.1
-        with:
-          node-version: 18.x
-
-      - name: Install Dependencies
-        run: npm install
-
       - name: Create Release
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
+            const fs = require("fs");
+            const package = JSON.parse(fs.readFileSync("./package.json"));
+
             try {
               const owner = context.repo.owner;
               const repo = context.repo.repo;
               const newRelease = await github.rest.repos.createRelease({
                 owner,
                 repo,
-                name: process.env.RELEASE_VERSION,
-                tag_name: `v${process.env.RELEASE_VERSION}`,
+                name: package.version,
+                tag_name: `v${package.version}`,
                 draft: true,
               });
             } catch (error) {

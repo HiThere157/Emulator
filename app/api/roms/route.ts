@@ -1,10 +1,13 @@
 import path from "path";
 import { promises as fs } from "fs";
 
+import { createDirectory } from "@/helpers/fs";
+
 export const revalidate = 0;
 
 export async function GET() {
   const romDBPath = path.join(process.cwd(), "data/roms");
+  await createDirectory(romDBPath);
 
   const folders = await fs.readdir(romDBPath);
   const roms: RomFile[] = [];
