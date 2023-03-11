@@ -1,5 +1,5 @@
 function makeFileName(friendlyName: string, extension: string) {
-  return `${friendlyName.replace(/[^0-9a-zA-Z ]/g, "").replace(" ", "-")}.${extension}`;
+  return `${friendlyName.replace(/[^0-9a-zA-Z ]/g, "").replace(/ /g, "-")}.${extension}`;
 }
 
 function makeFriendlyName(fileName: string) {
