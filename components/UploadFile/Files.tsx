@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { makeFileName } from "@/helpers/upload";
+
 import FileItem from "./FileItem";
 import Button from "../Button";
 
@@ -27,10 +29,7 @@ export default function Files({ fileList, onBack, onSubmit }: FilesProps) {
 
   const uploadFiles = () => {
     files.forEach(async (file) => {
-      const fileName = `${file.friendlyName
-        .replace(/[^0-9a-zA-Z ]/g, "")
-        .replace(" ", "-")}.${file.file.name.split(".").at(-1)}`;
-
+      const fileName = makeFileName(file.friendlyName, file.file.name.split(".").at(-1) ?? "rom");
       await fetch(`/api/rom/${file.core}/${fileName}`, {
         method: "POST",
         body: file.file,

@@ -1,9 +1,16 @@
+import path from "path";
 import { promises as fs } from "fs";
 
 import { cores } from "@/config/cores";
-import { createDirectory, exists, getRomPath } from "@/helpers/api";
+import { createDirectory, exists } from "@/helpers/fs";
 
 export const revalidate = 0;
+
+function getRomPath(core: string, fileName: string) {
+  const unsafePath = `data/roms/${core}/${fileName}`;
+  const safePath = path.normalize(unsafePath).replace(/^(\.\.(\/|\\|$))+/, "");
+  return path.join(process.cwd(), safePath);
+}
 
 type Props = {
   params: {

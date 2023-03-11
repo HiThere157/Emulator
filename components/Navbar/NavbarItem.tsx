@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 import { cores } from "@/config/cores";
+import { makeFriendlyName } from "@/helpers/upload";
 
 import Button from "../Button";
 
@@ -53,7 +54,7 @@ export default function NavbarItem({ core, files, isEditing }: NavbarItemProps) 
                     : "text-whiteColorAccent hover:text-whiteColor")
                 }
               >
-                {file.fileName}
+                {makeFriendlyName(file.fileName)}
                 {isEditing && (
                   <BsGrid3X2GapFill className="rotate-90 invisible group-hover:visible" />
                 )}
