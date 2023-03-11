@@ -18,3 +18,22 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
+
+      - name: Create Release
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            try {
+              const owner = context.repo.owner;
+              const repo = context.repo.repo;
+              const newRelease = await github.rest.repos.createRelease({
+                owner,
+                repo,
+                name: process.env.RELEASE_VERSION,
+                tag_name: `v${process.env.RELEASE_VERSION}`,
+                draft: true,
+              });
+            } catch (error) {
+              core.setFailed(error.message);
+            }
