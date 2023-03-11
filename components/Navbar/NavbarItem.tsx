@@ -13,8 +13,9 @@ type NavbarItemProps = {
   core: string;
   files: RomFile[];
   isEditing: boolean;
+  onMove: () => any;
 };
-export default function NavbarItem({ core, files, isEditing }: NavbarItemProps) {
+export default function NavbarItem({ core, files, isEditing, onMove }: NavbarItemProps) {
   const path = usePathname();
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
@@ -27,7 +28,19 @@ export default function NavbarItem({ core, files, isEditing }: NavbarItemProps) 
     event.preventDefault();
   };
 
-  const handleDrop = async (event: DragEvent) => {};
+  const handleDrop = async (event: DragEvent) => {
+    const sourceCore = event.dataTransfer.getData("core");
+    const fileName = event.dataTransfer.getData("filename");
+
+    await fetch(`/api/rom/${sourceCore}/${fileName}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        targetCore: core,
+      }),
+    });
+
+    onMove();
+  };
 
   return (
     <div onDragOver={handleDragOver} onDrop={handleDrop}>

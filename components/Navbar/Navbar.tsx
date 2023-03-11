@@ -17,8 +17,6 @@ export default function Navbar() {
   const [files, setFiles] = useState<RomFile[]>();
 
   const fetchNav = async () => {
-    setFiles(undefined);
-
     const result = await fetch("/api/roms");
     const files: RomFile[] = await result.json();
 
@@ -60,6 +58,7 @@ export default function Navbar() {
                 core={core}
                 files={files.filter((file) => file.core === core)}
                 isEditing={isEditing}
+                onMove={fetchNav}
               />
             );
           })}

@@ -18,27 +18,41 @@ type Props = {
     fileName: string;
   };
 };
-export async function GET(_request: Request, { params }: Props) {
+export async function GET(request: Request, { params }: Props) {
   const fileBlob = await fs.readFile(getRomPath(params.core, params.fileName));
   return new Response(fileBlob);
 }
 
 export async function POST(request: Request, { params }: Props) {
-  const romPath = getRomPath(params.core, params.fileName);
-  const fileBuffer = new Uint8Array(await request.arrayBuffer());
-
-  // check core
   if (!Object.keys(cores).includes(params.core)) {
     return new Response(null, { status: 400 });
   }
 
-  // path traversal should not be possible, since the core is whitelisted
-  await createDirectory(`data/roms/${params.core}`);
-
+  const romPath = getRomPath(params.core, params.fileName);
   if (await exists(romPath)) {
     return new Response(null, { status: 400 });
   }
 
+  const fileBuffer = new Uint8Array(await request.arrayBuffer());
+  await createDirectory(`data/roms/${params.core}`);
   await fs.writeFile(romPath, fileBuffer);
+  return new Response();
+}
+
+export async function PATCH(request: Request, { params }: Props) {
+  const { targetCore }: { targetCore: string } = await request.json();
+  if (!Object.keys(cores).includes(params.core) || !Object.keys(cores).includes(targetCore)) {
+    return new Response(null, { status: 400 });
+  }
+
+  const romPath = getRomPath(params.core, params.fileName);
+  const targetRomPath = getRomPath(targetCore, params.fileName);
+
+  if ((await exists(targetRomPath)) || !(await exists(romPath))) {
+    return new Response(null, { status: 400 });
+  }
+
+  await createDirectory(`data/roms/${targetCore}`);
+  await fs.rename(romPath, targetRomPath);
   return new Response();
 }

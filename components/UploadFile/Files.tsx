@@ -27,14 +27,17 @@ export default function Files({ fileList, onBack, onSubmit }: FilesProps) {
     setFiles(_files);
   };
 
-  const uploadFiles = () => {
-    files.forEach(async (file) => {
+  const uploadFiles = async () => {
+    const progress = files.map(async (file) => {
       const fileName = makeFileName(file.friendlyName, file.file.name.split(".").at(-1) ?? "rom");
       await fetch(`/api/rom/${file.core}/${fileName}`, {
         method: "POST",
         body: file.file,
       });
     });
+
+    await Promise.all(progress);
+    onSubmit();
   };
 
   return (
@@ -57,14 +60,7 @@ export default function Files({ fileList, onBack, onSubmit }: FilesProps) {
         <Button theme="color" className="px-2" onClick={onBack}>
           Back
         </Button>
-        <Button
-          theme="color"
-          className="px-2"
-          onClick={() => {
-            uploadFiles();
-            onSubmit();
-          }}
-        >
+        <Button theme="color" className="px-2" onClick={uploadFiles}>
           Submit
         </Button>
       </div>
