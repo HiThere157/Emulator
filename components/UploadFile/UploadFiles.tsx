@@ -12,13 +12,19 @@ type UploadFilesProps = {
 export default function UploadFiles({ isOpen, setIsOpen, onSubmit }: UploadFilesProps) {
   const [fileList, setFileList] = useState<File[]>([]);
 
+  const onFileSubmit = () => {
+    setIsOpen(false);
+    setFileList([]);
+    onSubmit();
+  };
+
   return (
     <Popup isOpen={isOpen} onBackgroundClick={() => setIsOpen(false)}>
       <div className="w-[45rem] bg-lightBg rounded-md p-5">
         {fileList.length === 0 ? (
           <DragDropFile onUpload={setFileList} />
         ) : (
-          <Files fileList={fileList} onBack={() => setFileList([])} onSubmit={onSubmit} />
+          <Files fileList={fileList} onBack={() => setFileList([])} onFileSubmit={onFileSubmit} />
         )}
       </div>
     </Popup>

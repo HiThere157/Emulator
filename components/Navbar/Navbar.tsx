@@ -8,7 +8,7 @@ import Button from "../Button";
 import NavbarItem from "./NavbarItem";
 import UploadFiles from "../UploadFile/UploadFiles";
 
-import { BsCapslockFill, BsFillTrashFill } from "react-icons/bs";
+import { BsCapslockFill, BsPencilFill } from "react-icons/bs";
 
 export default function Navbar() {
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
@@ -34,17 +34,21 @@ export default function Navbar() {
       <div className="grid grid-cols-2 gap-2 h-8">
         <Button
           theme="color"
-          className="flex justify-center items-center"
+          className={
+            "flex justify-center items-center " + (isUploadOpen ? "border-2 border-el2Accent" : "")
+          }
           onClick={() => setIsUploadOpen(true)}
         >
           <BsCapslockFill />
         </Button>
         <Button
           theme="color"
-          className="flex justify-center items-center"
+          className={
+            "flex justify-center items-center " + (isEditing ? "border-2 border-el2Accent" : "")
+          }
           onClick={() => setIsEditing(!isEditing)}
         >
-          <BsFillTrashFill />
+          <BsPencilFill />
         </Button>
       </div>
 
@@ -62,6 +66,8 @@ export default function Navbar() {
               />
             );
           })}
+
+      {isEditing && <NavbarItem core="Trash" files={[]} isEditing={true} onMove={fetchNav} />}
     </nav>
   );
 }

@@ -56,3 +56,17 @@ export async function PATCH(request: Request, { params }: Props) {
   await fs.rename(romPath, targetRomPath);
   return new Response();
 }
+
+export async function DELETE(request: Request, { params }: Props) {
+  if (!Object.keys(cores).includes(params.core)) {
+    return new Response(null, { status: 400 });
+  }
+
+  const romPath = getRomPath(params.core, params.fileName);
+  if (!(await exists(romPath))) {
+    return new Response(null, { status: 400 });
+  }
+
+  await fs.unlink(romPath);
+  return new Response();
+}

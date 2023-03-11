@@ -8,9 +8,9 @@ import Button from "../Button";
 type FilesProps = {
   fileList: File[];
   onBack: () => any;
-  onSubmit: () => any;
+  onFileSubmit: () => any;
 };
-export default function Files({ fileList, onBack, onSubmit }: FilesProps) {
+export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
   const [files, setFiles] = useState<UploadedFile[]>(
     fileList.map((file) => {
       return {
@@ -37,7 +37,7 @@ export default function Files({ fileList, onBack, onSubmit }: FilesProps) {
     });
 
     await Promise.all(progress);
-    onSubmit();
+    onFileSubmit();
   };
 
   return (
