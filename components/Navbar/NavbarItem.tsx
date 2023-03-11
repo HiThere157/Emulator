@@ -26,9 +26,7 @@ export default function NavbarItem({ core, files, isEditing }: NavbarItemProps) 
     event.preventDefault();
   };
 
-  const handleDrop = async (event: DragEvent) => {
-
-  };
+  const handleDrop = async (event: DragEvent) => {};
 
   return (
     <div onDragOver={handleDragOver} onDrop={handleDrop}>

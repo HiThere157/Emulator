@@ -14,8 +14,8 @@ export default function DragDropFile({ onUpload }: DragDropFileProps) {
   };
 
   const handleDragLeave = () => {
-    setIsDragging(false)
-  }
+    setIsDragging(false);
+  };
 
   const handleDrop = (event: DragEvent) => {
     event.preventDefault();
