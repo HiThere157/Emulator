@@ -35,15 +35,6 @@ export default function Files({ fileList, onBack, onSubmit }: FilesProps) {
         method: "POST",
         body: file.file,
       });
-
-      await fetch("/api/roms", {
-        method: "POST",
-        body: JSON.stringify({
-          friendlyName: file.friendlyName,
-          core: file.core,
-          fileName,
-        }),
-      });
     });
   };
 

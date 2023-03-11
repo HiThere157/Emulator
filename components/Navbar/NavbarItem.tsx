@@ -27,14 +27,7 @@ export default function NavbarItem({ core, files, isEditing }: NavbarItemProps) 
   };
 
   const handleDrop = async (event: DragEvent) => {
-    await fetch("/api/roms", {
-      method: "PATCH",
-      body: JSON.stringify({
-        fileName: event.dataTransfer.getData("filename"),
-        core: event.dataTransfer.getData("core"),
-        targetCore: core
-      })
-    })
+
   };
 
   return (
@@ -62,7 +55,7 @@ export default function NavbarItem({ core, files, isEditing }: NavbarItemProps) 
                     : "text-whiteColorAccent hover:text-whiteColor")
                 }
               >
-                {file.friendlyName}
+                {file.fileName}
                 {isEditing && (
                   <BsGrid3X2GapFill className="rotate-90 invisible group-hover:visible" />
                 )}

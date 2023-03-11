@@ -5,12 +5,18 @@ import { createDirectory, exists, getRomPath } from "@/helpers/api";
 
 export const revalidate = 0;
 
-export async function GET(_request: Request, { params }: { params: FileProps }) {
+type Props = {
+  params: {
+    core: string;
+    fileName: string;
+  };
+};
+export async function GET(_request: Request, { params }: Props) {
   const fileBlob = await fs.readFile(getRomPath(params.core, params.fileName));
   return new Response(fileBlob);
 }
 
-export async function POST(request: Request, { params }: { params: FileProps }) {
+export async function POST(request: Request, { params }: Props) {
   const romPath = getRomPath(params.core, params.fileName);
   const fileBuffer = new Uint8Array(await request.arrayBuffer());
 

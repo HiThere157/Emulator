@@ -1,10 +1,4 @@
-type FileProps = {
-  core: string;
-  fileName: string;
-};
-
 type RomFile = {
-  friendlyName: string;
   core: string;
   fileName: string;
 };
