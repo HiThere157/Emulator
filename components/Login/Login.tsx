@@ -16,6 +16,14 @@ export default function Login({ isOpen, setIsOpen, onLogin }: LoginProps) {
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
+  const sha256 = async (message: string) => {
+    const msgBuffer = new TextEncoder().encode(message);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+    return hashHex;
+  };
+
   const closePopup = () => {
     setIsOpen(false);
     setPassword("");
@@ -23,9 +31,10 @@ export default function Login({ isOpen, setIsOpen, onLogin }: LoginProps) {
   };
 
   const login = async () => {
+    const passwordHash = await sha256(password);
     const result = await fetch("/api/auth/login", {
       method: "POST",
-      body: JSON.stringify({ password }),
+      body: JSON.stringify({ passwordHash }),
     });
 
     if (result.ok) {

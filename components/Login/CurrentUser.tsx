@@ -6,16 +6,16 @@ import Login from "./Login";
 import { BsPersonFillLock, BsPersonFillCheck, BsBoxArrowInRight } from "react-icons/bs";
 
 type CurrentUserProps = {
-  isLoggedIn: boolean;
-  setIsLoggedIn: (isLoggedIn: boolean) => any;
+  isAdmin: boolean;
+  setIsAdmin: (isAdmin: boolean) => any;
 };
-export default function CurrentUser({ isLoggedIn, setIsLoggedIn }: CurrentUserProps) {
+export default function CurrentUser({ isAdmin, setIsAdmin }: CurrentUserProps) {
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
 
   const logout = async () => {
     await fetch("/api/auth/logout");
     document.cookie = `user=null; Max-Age=0; Secure; SameSite=Strict; Path=/`;
-    setIsLoggedIn(false);
+    setIsAdmin(false);
   };
 
   useEffect(() => {
@@ -24,12 +24,12 @@ export default function CurrentUser({ isLoggedIn, setIsLoggedIn }: CurrentUserPr
       .find((row) => row.startsWith("user="))
       ?.split("=")[1];
 
-    setIsLoggedIn(username === "Admin");
+    setIsAdmin(username === "Admin");
   }, []);
 
   return (
     <div className="grid grid-cols-[1fr_auto] gap-2 h-8">
-      <Login isOpen={isLoginOpen} setIsOpen={setIsLoginOpen} onLogin={() => setIsLoggedIn(true)} />
+      <Login isOpen={isLoginOpen} setIsOpen={setIsLoginOpen} onLogin={() => setIsAdmin(true)} />
 
       <Button
         theme="flat"
@@ -37,21 +37,21 @@ export default function CurrentUser({ isLoggedIn, setIsLoggedIn }: CurrentUserPr
           "flex justify-center items-center gap-2 " +
           (isLoginOpen ? "border-2 border-el2Accent" : "")
         }
-        disabled={isLoggedIn}
+        disabled={isAdmin}
         onClick={() => setIsLoginOpen(true)}
       >
-        {isLoggedIn ? (
+        {isAdmin ? (
           <BsPersonFillCheck className="text-2xl text-el2Accent" />
         ) : (
           <BsPersonFillLock className="text-2xl" />
         )}
 
-        <span>{isLoggedIn ? "Admin" : "Guest"}</span>
+        <span>{isAdmin ? "Admin" : "Guest"}</span>
       </Button>
       <Button
         theme="flat"
         className="flex justify-center items-center px-2"
-        disabled={!isLoggedIn}
+        disabled={!isAdmin}
         onClick={logout}
       >
         <BsBoxArrowInRight className="text-2xl ml-[-0.25rem]" />

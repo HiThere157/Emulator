@@ -12,7 +12,7 @@ import Button from "../Button";
 import { BsCapslockFill, BsPencilFill } from "react-icons/bs";
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -30,10 +30,10 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!isAdmin) {
       setIsEditing(false);
     }
-  }, [isLoggedIn]);
+  }, [isAdmin]);
 
   return (
     <nav className="grid grid-rows-[auto_1fr_auto] gap-2 p-2 h-full w-48 bg-lightBg whitespace-nowrap">
@@ -45,7 +45,7 @@ export default function Navbar() {
           className={
             "flex justify-center items-center " + (isUploadOpen ? "border-2 border-el2Accent" : "")
           }
-          disabled={!isLoggedIn}
+          disabled={!isAdmin}
           onClick={() => setIsUploadOpen(true)}
         >
           <BsCapslockFill />
@@ -55,7 +55,7 @@ export default function Navbar() {
           className={
             "flex justify-center items-center " + (isEditing ? "border-2 border-el2Accent" : "")
           }
-          disabled={!isLoggedIn}
+          disabled={!isAdmin}
           onClick={() => setIsEditing(!isEditing)}
         >
           <BsPencilFill />
@@ -81,7 +81,7 @@ export default function Navbar() {
         {isEditing && <NavbarItem core="Trash" files={[]} isEditing={true} onMove={fetchNav} />}
       </div>
 
-      <CurrentUser isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <CurrentUser isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
     </nav>
   );
 }

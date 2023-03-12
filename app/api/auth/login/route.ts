@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken";
-require("dotenv").config();
+import crypto from "crypto";
+import dotenv from "dotenv";
+dotenv.config();
 
 import { NextRequest } from "next/server";
 import { getBody } from "@/helpers/api";
@@ -9,17 +11,19 @@ export const revalidate = 0;
 export async function POST(request: NextRequest) {
   // dont sign if the secret is not configured (500)
   const secret = process.env.JWT_SECRET;
-  if (!secret) {
+  const adminPW = process.env.ADMIN_PW;
+  if (!secret || !adminPW) {
     return new Response(null, { status: 500 });
   }
 
   // verify body and body props (400)
-  const body: { password: string } | undefined = await getBody(request);
-  if (!body || !body.password) {
+  const body: { passwordHash: string } | undefined = await getBody(request);
+  if (!body || !body.passwordHash) {
     return new Response(null, { status: 400 });
   }
 
-  if (body.password === process.env.ADMIN_PW) {
+  const adminHash = crypto.createHash("sha256").update(adminPW).digest("hex");
+  if (body.passwordHash === adminHash) {
     const payload = { username: "Admin" };
     const token = jwt.sign(payload, secret, { expiresIn: "12h" });
 
