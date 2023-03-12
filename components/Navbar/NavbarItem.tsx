@@ -57,7 +57,7 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
   };
 
   return (
-    <div>
+    <div className="mb-1">
       <div onDragOver={handleDragOver} onDrop={handleDrop} onDragLeave={handleDragLeave}>
         <Button
           theme="flat"
