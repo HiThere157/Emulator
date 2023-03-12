@@ -28,9 +28,9 @@ export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
   };
 
   const uploadFiles = async () => {
-    const progress = files.map(async (file) => {
+    const progress = files.map((file) => {
       const fileName = makeFileName(file.friendlyName, file.file.name.split(".").at(-1) ?? "rom");
-      await fetch(`/api/rom/${file.core}/${fileName}`, {
+      return fetch(`/api/rom/${file.core}/${fileName}`, {
         method: "POST",
         body: file.file,
       });

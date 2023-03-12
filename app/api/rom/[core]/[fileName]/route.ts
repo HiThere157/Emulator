@@ -18,17 +18,17 @@ export async function GET(request: NextRequest, { params }: Props) {
 }
 
 export async function POST(request: NextRequest, { params }: Props) {
-  // auth verification
+  // check auth (403)
   if (!verifyToken(request)) {
     return new Response(null, { status: 403 });
   }
 
-  // core param verification
+  // verify core uri prop (400)
   if (!isCore(params.core)) {
     return new Response(null, { status: 400 });
   }
 
-  // file param verification
+  // verify fileName uri prop (400)
   const romPath = getRomPath(params.core, params.fileName);
   if (await exists(romPath)) {
     return new Response(null, { status: 400 });
@@ -41,19 +41,19 @@ export async function POST(request: NextRequest, { params }: Props) {
 }
 
 export async function PATCH(request: NextRequest, { params }: Props) {
-  // auth verification
+  // check auth (403)
   if (!verifyToken(request)) {
     return new Response(null, { status: 403 });
   }
 
-  // request body verification
-  // core param verification
+  // verify body and body props (400)
+  // verify core uri prop (400)
   const body: { targetCore: string } | undefined = await getBody(request);
   if (!body || !body.targetCore || !isCore(body.targetCore) || !isCore(params.core)) {
     return new Response(null, { status: 400 });
   }
 
-  // file param verification
+  // verify fileName uri prop (400)
   const romPath = getRomPath(params.core, params.fileName);
   const targetRomPath = getRomPath(body.targetCore, params.fileName);
   if ((await exists(targetRomPath)) || !(await exists(romPath))) {
@@ -66,17 +66,17 @@ export async function PATCH(request: NextRequest, { params }: Props) {
 }
 
 export async function DELETE(request: NextRequest, { params }: Props) {
-  // auth verification
+  // check auth (403)
   if (!verifyToken(request)) {
     return new Response(null, { status: 403 });
   }
 
-  // core param verification
+  // verify core uri prop (400)
   if (!isCore(params.core)) {
     return new Response(null, { status: 400 });
   }
 
-  // file param verification
+  // verify fileName uri prop (400)
   const romPath = getRomPath(params.core, params.fileName);
   if (!(await exists(romPath))) {
     return new Response(null, { status: 400 });

@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import jwt from "jsonwebtoken";
+require("dotenv").config();
 
 import { NextRequest } from "next/server";
 import { cores } from "@/config/cores";
@@ -35,13 +36,14 @@ async function getBody(request: NextRequest) {
 }
 
 function verifyToken(request: NextRequest) {
+  const secret = process.env.JWT_SECRET;
+  if (!secret) return false;
+
   const tokenCookie = request.cookies.get("token");
-  if (!tokenCookie) {
-    return false;
-  }
+  if (!tokenCookie) return false;
 
   try {
-    jwt.verify(tokenCookie.value, "shhhhh");
+    jwt.verify(tokenCookie.value, secret);
     return true;
   } catch {
     return false;

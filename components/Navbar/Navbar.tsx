@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 
 import { cores } from "@/config/cores";
 
-import NavbarItem from "./NavbarItem";
 import UploadFiles from "../FileUpload/UploadFiles";
 import CurrentUser from "../Login/CurrentUser";
+import NavbarItem from "./NavbarItem";
 import Button from "../Button";
 
 import { BsCapslockFill, BsPencilFill } from "react-icons/bs";
 
 export default function Navbar() {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isUploadOpen, setIsUploadOpen] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -38,6 +39,7 @@ export default function Navbar() {
           className={
             "flex justify-center items-center " + (isUploadOpen ? "border-2 border-el2Accent" : "")
           }
+          disabled={!isLoggedIn}
           onClick={() => setIsUploadOpen(true)}
         >
           <BsCapslockFill />
@@ -47,6 +49,7 @@ export default function Navbar() {
           className={
             "flex justify-center items-center " + (isEditing ? "border-2 border-el2Accent" : "")
           }
+          disabled={!isLoggedIn}
           onClick={() => setIsEditing(!isEditing)}
         >
           <BsPencilFill />
@@ -72,7 +75,7 @@ export default function Navbar() {
         {isEditing && <NavbarItem core="Trash" files={[]} isEditing={true} onMove={fetchNav} />}
       </div>
 
-      <CurrentUser />
+      <CurrentUser isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
     </nav>
   );
 }
