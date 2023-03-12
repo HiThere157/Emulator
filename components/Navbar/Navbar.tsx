@@ -29,6 +29,12 @@ export default function Navbar() {
     fetchNav();
   }, []);
 
+  useEffect(() => {
+    if (!isLoggedIn) {
+      setIsEditing(false);
+    }
+  }, [isLoggedIn]);
+
   return (
     <nav className="grid grid-rows-[auto_1fr_auto] gap-2 p-2 h-full w-48 bg-lightBg whitespace-nowrap">
       <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} onSubmit={fetchNav} />
