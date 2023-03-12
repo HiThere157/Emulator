@@ -14,10 +14,12 @@ export default function FileItem({ file, onFileChange }: FileItemProps) {
     <div className="flex items-center gap-8 mx-10">
       <div className="flex flex-col items-center gap-1 text-center w-36">
         <BsFileEarmarkZip className="text-7xl text-el2Accent" />
-        <span className=" text-sm text-whiteColorAccent">{file.file.name}</span>
+        <span className="text-sm text-whiteColorAccent break-all whitespace-normal">
+          {file.file.name}
+        </span>
       </div>
 
-      <div className="grid grid-cols-[auto_1fr] flex-grow gap-2 mr-10">
+      <div className="grid grid-cols-[auto_1fr] flex-grow gap-2 mr-7">
         <span className="text-whiteColorAccent">Friendly Name:</span>
         <Input
           value={file.friendlyName}

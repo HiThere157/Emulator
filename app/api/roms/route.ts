@@ -1,7 +1,7 @@
 import path from "path";
 import { promises as fs } from "fs";
 
-import { createDirectory } from "@/helpers/fs";
+import { createDirectory } from "@/helpers/api";
 import { makeFriendlyName } from "@/helpers/upload";
 
 export const revalidate = 0;

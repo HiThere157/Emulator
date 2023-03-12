@@ -1,10 +1,27 @@
+import { HTMLInputTypeAttribute } from "react";
+
 type InputProps = {
   value: string;
   className?: string;
   placeholder?: string;
+  type?: HTMLInputTypeAttribute;
   onChange: (value: string) => any;
+  onEnter?: () => any;
 };
-export default function Input({ value, className, placeholder, onChange }: InputProps) {
+export default function Input({
+  value,
+  className,
+  placeholder,
+  type,
+  onChange,
+  onEnter,
+}: InputProps) {
+  const onKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      onEnter?.();
+    }
+  };
+
   return (
     <input
       className={
@@ -12,7 +29,9 @@ export default function Input({ value, className, placeholder, onChange }: Input
       }
       value={value}
       onChange={(event) => onChange(event.target.value)}
+      onKeyDown={onKeyDown}
       placeholder={placeholder}
+      type={type}
     />
   );
 }

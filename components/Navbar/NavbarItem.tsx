@@ -81,7 +81,7 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
         </Button>
       </div>
       {!isCollapsed && (
-        <div className="flex flex-col mx-2.5">
+        <div className="flex flex-col mx-2.5 mb-2">
           {files
             .sort((a: RomFile, b: RomFile) => a.friendlyName.localeCompare(b.friendlyName))
             .map((file, index) => {

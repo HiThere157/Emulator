@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 
 import { cores } from "@/config/cores";
 
-import Button from "../Button";
 import NavbarItem from "./NavbarItem";
-import UploadFiles from "../UploadFile/UploadFiles";
+import UploadFiles from "../FileUpload/UploadFiles";
+import CurrentUser from "../Login/CurrentUser";
+import Button from "../Button";
 
 import { BsCapslockFill, BsPencilFill } from "react-icons/bs";
 
@@ -28,7 +29,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="flex flex-col gap-2 bg-lightBg p-2 h-full w-48 whitespace-nowrap">
+    <nav className="grid grid-rows-[auto_1fr_auto] gap-2 p-2 h-full w-48 bg-lightBg whitespace-nowrap">
       <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} onSubmit={fetchNav} />
 
       <div className="grid grid-cols-2 gap-2 h-8">
@@ -52,22 +53,26 @@ export default function Navbar() {
         </Button>
       </div>
 
-      {files &&
-        Object.keys(cores)
-          .filter((core) => files.some((file) => file.core === core) || isEditing)
-          .map((core, index) => {
-            return (
-              <NavbarItem
-                key={index}
-                core={core}
-                files={files.filter((file) => file.core === core)}
-                isEditing={isEditing}
-                onMove={fetchNav}
-              />
-            );
-          })}
+      <div>
+        {files &&
+          Object.keys(cores)
+            .filter((core) => files.some((file) => file.core === core) || isEditing)
+            .map((core, index) => {
+              return (
+                <NavbarItem
+                  key={index}
+                  core={core}
+                  files={files.filter((file) => file.core === core)}
+                  isEditing={isEditing}
+                  onMove={fetchNav}
+                />
+              );
+            })}
 
-      {isEditing && <NavbarItem core="Trash" files={[]} isEditing={true} onMove={fetchNav} />}
+        {isEditing && <NavbarItem core="Trash" files={[]} isEditing={true} onMove={fetchNav} />}
+      </div>
+
+      <CurrentUser />
     </nav>
   );
 }
