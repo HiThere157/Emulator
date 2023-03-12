@@ -3,7 +3,6 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 import { cores } from "@/config/cores";
-import { makeFriendlyName } from "@/helpers/upload";
 
 import Button from "../Button";
 
@@ -69,7 +68,7 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
           }
           onClick={() => setIsCollapsed(!isCollapsed)}
         >
-          <div className="flex items-center gap-1 whitespace-nowrap">
+          <div className="flex items-center gap-1">
             {core === "Trash" ? (
               <div className="text-redColor mr-1">
                 <BsFillTrashFill />
@@ -83,28 +82,30 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
       </div>
       {!isCollapsed && (
         <div className="flex flex-col mx-2.5">
-          {files.map((file, index) => {
-            const itemPath = `/player/${file.core}/${file.fileName}`;
-            return (
-              <Link
-                draggable={isEditing}
-                onDragStart={(event: DragEvent) => handleDragStart(event, file.fileName)}
-                key={index}
-                href={itemPath}
-                className={
-                  "flex items-center justify-between group " +
-                  (itemPath === path
-                    ? "text-whiteColor"
-                    : "text-whiteColorAccent hover:text-whiteColor")
-                }
-              >
-                {makeFriendlyName(file.fileName)}
-                {isEditing && (
-                  <BsGrid3X2GapFill className="rotate-90 invisible group-hover:visible" />
-                )}
-              </Link>
-            );
-          })}
+          {files
+            .sort((a: RomFile, b: RomFile) => a.friendlyName.localeCompare(b.friendlyName))
+            .map((file, index) => {
+              const itemPath = `/player/${file.core}/${file.fileName}`;
+              return (
+                <Link
+                  key={index}
+                  draggable={isEditing}
+                  onDragStart={(event: DragEvent) => handleDragStart(event, file.fileName)}
+                  href={itemPath}
+                  className={
+                    "flex items-center justify-between group " +
+                    (itemPath === path
+                      ? "text-whiteColor"
+                      : "text-whiteColorAccent hover:text-whiteColor")
+                  }
+                >
+                  {file.friendlyName}
+                  {isEditing && (
+                    <BsGrid3X2GapFill className="rotate-90 invisible group-hover:visible" />
+                  )}
+                </Link>
+              );
+            })}
         </div>
       )}
     </div>

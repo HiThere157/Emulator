@@ -2,6 +2,7 @@ import path from "path";
 import { promises as fs } from "fs";
 
 import { createDirectory } from "@/helpers/fs";
+import { makeFriendlyName } from "@/helpers/upload";
 
 export const revalidate = 0;
 
@@ -18,8 +19,9 @@ export async function GET() {
     const files = await fs.readdir(`${romDBPath}/${folder}`);
     files.forEach((file) => {
       roms.push({
-        fileName: file,
         core: folder,
+        fileName: file,
+        friendlyName: makeFriendlyName(file),
       });
     });
   }

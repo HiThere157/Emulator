@@ -1,6 +1,7 @@
 type RomFile = {
   core: string;
   fileName: string;
+  friendlyName: string;
 };
 
 type UploadedFile = {

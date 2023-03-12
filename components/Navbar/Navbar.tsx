@@ -28,7 +28,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="flex flex-col gap-2 bg-lightBg p-2 h-full w-48">
+    <nav className="flex flex-col gap-2 bg-lightBg p-2 h-full w-48 whitespace-nowrap">
       <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} onSubmit={fetchNav} />
 
       <div className="grid grid-cols-2 gap-2 h-8">

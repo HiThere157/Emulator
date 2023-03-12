@@ -1,8 +1,10 @@
 import { promises as fs } from "fs";
 
 async function createDirectory(path: string) {
-  if (!(await exists(path))) {
+  try {
     await fs.mkdir(path);
+  } catch (error) {
+    console.warn(error);
   }
 }
 
