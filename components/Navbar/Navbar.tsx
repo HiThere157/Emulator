@@ -36,7 +36,7 @@ export default function Navbar() {
   }, [isAdmin]);
 
   return (
-    <nav className="grid grid-rows-[auto_1fr_auto] gap-2 p-2 h-full w-48 bg-lightBg whitespace-nowrap">
+    <nav className="flex flex-col gap-2 p-2 w-full bg-lightBg whitespace-nowrap sm:w-48 sm:h-screen">
       <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} onSubmit={fetchNav} />
 
       <div className="grid grid-cols-2 gap-2 h-8">
@@ -62,7 +62,7 @@ export default function Navbar() {
         </Button>
       </div>
 
-      <div>
+      <div className="flex-grow">
         {files &&
           Object.keys(cores)
             .filter((core) => files.some((file) => file.core === core) || isEditing)

@@ -49,8 +49,8 @@ export default function Login({ isOpen, setIsOpen, onLogin }: LoginProps) {
 
   return (
     <Popup isOpen={isOpen} onBackgroundClick={closePopup}>
-      <div className="flex flex-col w-[30rem] bg-lightBg rounded-md p-5">
-        <div className="flex items-center justify-center gap-2 py-5 bg-darkBg rounded-md">
+      <div className="flex flex-col w-[30rem] max-w-[100vw] bg-lightBg rounded-md p-5">
+        <div className="flex flex-col items-center justify-center gap-2 py-5 bg-darkBg rounded-md sm:flex-row">
           <BsPersonFillCheck className="text-7xl text-el2Accent mr-4" />
           <div className="flex flex-col items-center gap-2">
             <div className="flex gap-2">

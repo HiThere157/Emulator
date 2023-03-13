@@ -19,7 +19,7 @@ export default function UploadFiles({ isOpen, setIsOpen, onSubmit }: UploadFiles
 
   return (
     <Popup isOpen={isOpen} onBackgroundClick={closePopup}>
-      <div className="w-[45rem] bg-lightBg rounded-md p-5">
+      <div className="w-[45rem] max-w-[100vw] bg-lightBg rounded-md p-5">
         {fileList.length === 0 ? (
           <DragDropFile onUpload={setFileList} />
         ) : (

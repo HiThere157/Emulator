@@ -23,6 +23,7 @@ export default function FileItem({ file, onFileChange }: FileItemProps) {
         <span className="text-whiteColorAccent">Friendly Name:</span>
         <Input
           value={file.friendlyName}
+          className="mr-5"
           onChange={(friendlyName: string) => onFileChange({ ...file, friendlyName })}
         />
 
