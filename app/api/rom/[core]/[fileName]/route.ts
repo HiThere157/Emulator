@@ -14,7 +14,7 @@ type Props = {
 
 export async function GET(request: NextRequest, { params }: Props) {
   const fileBlob = await fs.readFile(getRomPath(params.core, params.fileName));
-  return new Response(fileBlob);
+  return new Response(fileBlob, { headers: [["Cache-Control", "max-age=21600"]] });
 }
 
 export async function POST(request: NextRequest, { params }: Props) {
