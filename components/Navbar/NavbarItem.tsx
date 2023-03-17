@@ -3,6 +3,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 import { cores } from "@/config/cores";
+import { makeFriendlyName } from "@/helpers/upload";
 
 import Button from "../Button";
 
@@ -83,7 +84,9 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
       {!isCollapsed && (
         <div className="flex flex-col mx-2.5 mb-2">
           {files
-            .sort((a: RomFile, b: RomFile) => a.friendlyName.localeCompare(b.friendlyName))
+            .sort((a: RomFile, b: RomFile) =>
+              a.fileName.split(".")[0].localeCompare(b.fileName.split(".")[0]),
+            )
             .map((file, index) => {
               const itemPath = `/player/${file.core}/${file.fileName}`;
               return (
@@ -99,7 +102,7 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
                       : "text-whiteColorAccent hover:text-whiteColor")
                   }
                 >
-                  {file.friendlyName}
+                  {makeFriendlyName(file.fileName)}
                   {isEditing && (
                     <BsGrid3X2GapFill className="rotate-90 invisible group-hover:visible" />
                   )}

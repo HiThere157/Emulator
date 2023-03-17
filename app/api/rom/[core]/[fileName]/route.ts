@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 
 import { NextRequest } from "next/server";
-import { createDirectory, exists, getBody, getRomPath, verifyToken, isCore } from "@/helpers/api";
+import { createDirectory, exists, getBody, sanitizePath, verifyToken, isCore } from "@/helpers/api";
 
 export const revalidate = 0;
 
@@ -13,7 +13,9 @@ type Props = {
 };
 
 export async function GET(request: NextRequest, { params }: Props) {
-  const fileBlob = await fs.readFile(getRomPath(params.core, params.fileName));
+  const fileBlob = await fs.readFile(
+    sanitizePath("data/roms/", `${params.core}/${params.fileName}`),
+  );
   return new Response(fileBlob, { headers: [["Cache-Control", "max-age=21600"]] });
 }
 
@@ -29,7 +31,7 @@ export async function POST(request: NextRequest, { params }: Props) {
   }
 
   // verify fileName uri prop (400)
-  const romPath = getRomPath(params.core, params.fileName);
+  const romPath = sanitizePath("data/roms/", `${params.core}/${params.fileName}`);
   if (await exists(romPath)) {
     return new Response(null, { status: 400 });
   }
@@ -49,13 +51,13 @@ export async function PATCH(request: NextRequest, { params }: Props) {
   // verify body and body props (400)
   // verify core uri prop (400)
   const body: { targetCore: string } | undefined = await getBody(request);
-  if (!body || !body.targetCore || !isCore(body.targetCore) || !isCore(params.core)) {
+  if (!body || !body.targetCore || !isCore(body.targetCore)) {
     return new Response(null, { status: 400 });
   }
 
   // verify fileName uri prop (400)
-  const romPath = getRomPath(params.core, params.fileName);
-  const targetRomPath = getRomPath(body.targetCore, params.fileName);
+  const romPath = sanitizePath("data/roms/", `${params.core}/${params.fileName}`);
+  const targetRomPath = sanitizePath("data/roms/", `${body.targetCore}/${params.fileName}`);
   if ((await exists(targetRomPath)) || !(await exists(romPath))) {
     return new Response(null, { status: 400 });
   }
@@ -71,13 +73,8 @@ export async function DELETE(request: NextRequest, { params }: Props) {
     return new Response(null, { status: 403 });
   }
 
-  // verify core uri prop (400)
-  if (!isCore(params.core)) {
-    return new Response(null, { status: 400 });
-  }
-
   // verify fileName uri prop (400)
-  const romPath = getRomPath(params.core, params.fileName);
+  const romPath = sanitizePath("data/roms/", `${params.core}/${params.fileName}`);
   if (!(await exists(romPath))) {
     return new Response(null, { status: 400 });
   }

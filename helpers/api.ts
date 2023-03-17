@@ -21,8 +21,8 @@ async function exists(path: string) {
   }
 }
 
-function getRomPath(core: string, fileName: string) {
-  const unsafePath = `data/roms/${core}/${fileName}`;
+function sanitizePath(prefix: string, subPath: string) {
+  const unsafePath = prefix + subPath;
   const safePath = path.normalize(unsafePath).replace(/^(\.\.(\/|\\|$))+/, "");
   return path.join(process.cwd(), safePath);
 }
@@ -54,4 +54,4 @@ function isCore(core: string) {
   return Object.keys(cores).includes(core);
 }
 
-export { createDirectory, exists, getRomPath, getBody, verifyToken, isCore };
+export { createDirectory, exists, sanitizePath, getBody, verifyToken, isCore };

@@ -1,4 +1,5 @@
 import { cores } from "@/config/cores";
+import { makeFileName, makeFriendlyName } from "@/helpers/upload";
 
 import Dropdown from "../Dropdown";
 import Input from "../Input";
@@ -37,7 +38,12 @@ export default function FileItem({ file, onFileChange }: FileItemProps) {
         <Input
           value={file.friendlyName}
           className="mr-5"
-          onChange={(friendlyName: string) => onFileChange({ ...file, friendlyName })}
+          onChange={(friendlyName: string) => {
+            onFileChange({
+              ...file,
+              friendlyName: makeFriendlyName(makeFileName(friendlyName, "rom")),
+            });
+          }}
         />
 
         <span className="text-whiteColorAccent">Core:</span>
