@@ -11,6 +11,7 @@ type FilesProps = {
   onFileSubmit: () => any;
 };
 export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [files, setFiles] = useState<UploadedFile[]>(
     fileList.map((file) => {
       return {
@@ -28,6 +29,8 @@ export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
   };
 
   const uploadFiles = async () => {
+    setIsLoading(true);
+
     const progress = files.map((file) => {
       const fileName = makeFileName(file.friendlyName, file.file.name.split(".").at(-1) ?? "rom");
       return fetch(`/api/rom/${file.core}/${fileName}`, {
@@ -35,8 +38,9 @@ export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
         body: file.file,
       });
     });
-
     await Promise.all(progress);
+
+    setIsLoading(false);
     onFileSubmit();
   };
 
@@ -60,7 +64,7 @@ export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
         <Button theme="color" className="px-2" onClick={onBack}>
           Back
         </Button>
-        <Button theme="color" className="px-2" onClick={uploadFiles}>
+        <Button theme="color" className="px-2" disabled={isLoading} onClick={uploadFiles}>
           Submit
         </Button>
       </div>
