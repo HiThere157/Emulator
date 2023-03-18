@@ -38,7 +38,7 @@ async function getStates() {
   const values = await makeRequest<Uint8Array[]>(store.getAll());
 
   return keys.map((key, index): State => {
-    const [game, slot] = key.split("_");
+    const [game, slot] = key.split("-");
 
     return {
       game,

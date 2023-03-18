@@ -9,9 +9,10 @@ import { BsCloudArrowUpFill, BsPlusSquare, BsFillTrashFill } from "react-icons/b
 type LocalItemProps = {
   game: string;
   state?: State;
+  freeSlot?: number;
   onChange: () => any;
 };
-export default function LocalItem({ game, state, onChange }: LocalItemProps) {
+export default function LocalItem({ game, state, freeSlot, onChange }: LocalItemProps) {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const uploadState = async (data: Uint8Array) => {
@@ -31,27 +32,31 @@ export default function LocalItem({ game, state, onChange }: LocalItemProps) {
     setIsDragOver(true);
   };
 
+  const saveRemoteState = async (sourceGame: string, fileName: string, slot: number) => {
+    const response = await fetch(`/api/state/${sourceGame}/${fileName}`);
+    const blob = await response.arrayBuffer();
+
+    await putState({
+      game: sourceGame,
+      slot: slot,
+      data: new Uint8Array(blob),
+    });
+  };
+
   const handleDrop = async (event: DragEvent) => {
     const sourceGame = event.dataTransfer.getData("game");
     const fileName = event.dataTransfer.getData("fileName");
 
     setIsDragOver(false);
     if (game === "Add") {
+      await saveRemoteState(sourceGame, fileName, freeSlot ?? 9);
     } else if (game === "Trash") {
       await fetch(`/api/state/${sourceGame}/${fileName}`, {
         method: "DELETE",
       });
     } else {
       if (sourceGame !== game) return;
-
-      const response = await fetch(`/api/state/${sourceGame}/${fileName}`);
-      const blob = await response.arrayBuffer();
-
-      await putState({
-        game: sourceGame,
-        slot: state?.slot ?? 9,
-        data: new Uint8Array(blob),
-      });
+      await saveRemoteState(sourceGame, fileName, state?.slot ?? 9);
     }
 
     onChange();

@@ -19,18 +19,13 @@ export default function GameItem({ game, remoteState, localState, onChange }: Ga
   const path = usePathname();
   const currentGame = path.split("/").at(-1)?.split(".")[0];
   const [isCollapsed, setIsCollapsed] = useState<boolean>(game != currentGame);
-  const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
-  const handleDragStart = () => {
-    setIsDragOver(true);
-  };
-
-  const handleDragEnd = () => {
-    setIsDragOver(false);
-  };
+  const freeSlots = Array.from({ length: 9 }, (_, i) => i + 1).filter(
+    (slot) => !localState.some((state) => state.slot == slot),
+  );
 
   return (
-    <div className="mb-1" onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <div className="mb-1">
       <div>
         <Button className="px-2 w-full" onClick={() => setIsCollapsed(!isCollapsed)}>
           <div className="flex items-center gap-1">
@@ -47,12 +42,10 @@ export default function GameItem({ game, remoteState, localState, onChange }: Ga
               return <LocalItem key={index} game={game} state={state} onChange={onChange} />;
             })}
 
-            {isDragOver && (
-              <>
-                <LocalItem game="Add" onChange={onChange} />
-                <LocalItem game="Trash" onChange={onChange} />
-              </>
+            {freeSlots.length !== 0 && (
+              <LocalItem game="Add" freeSlot={freeSlots[0]} onChange={onChange} />
             )}
+            <LocalItem game="Trash" onChange={onChange} />
           </div>
 
           <span className="text-whiteColorAccent text-sm mx-1">Remote State:</span>
