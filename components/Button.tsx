@@ -1,11 +1,17 @@
 type ButtonProps = {
   children: React.ReactNode;
-  theme: "flat" | "color";
+  theme?: "flat" | "color";
   className?: string;
   disabled?: boolean;
   onClick?: () => any;
 };
-export default function Button({ children, theme, className, disabled, onClick }: ButtonProps) {
+export default function Button({
+  children,
+  theme = "flat",
+  className,
+  disabled,
+  onClick,
+}: ButtonProps) {
   return (
     <button
       className={

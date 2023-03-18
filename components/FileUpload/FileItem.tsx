@@ -26,7 +26,7 @@ export default function FileItem({ file, onFileChange }: FileItemProps) {
 
   return (
     <div className="flex items-center gap-8 mx-10">
-      <div className="flex flex-col items-center gap-1 text-center w-36">
+      <div className="flex flex-col items-center gap-1 w-36">
         <BsFileEarmarkZip className="text-7xl text-el2Accent" />
         <span className="text-sm text-whiteColorAccent break-all whitespace-normal">
           {file.file.name}

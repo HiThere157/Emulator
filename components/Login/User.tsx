@@ -5,11 +5,11 @@ import Login from "./Login";
 
 import { BsPersonFillLock, BsPersonFillCheck, BsBoxArrowInRight } from "react-icons/bs";
 
-type CurrentUserProps = {
+type UserProps = {
   isAdmin: boolean;
   setIsAdmin: (isAdmin: boolean) => any;
 };
-export default function CurrentUser({ isAdmin, setIsAdmin }: CurrentUserProps) {
+export default function User({ isAdmin, setIsAdmin }: UserProps) {
   const [isLoginOpen, setIsLoginOpen] = useState<boolean>(false);
 
   const logout = async () => {
@@ -28,13 +28,12 @@ export default function CurrentUser({ isAdmin, setIsAdmin }: CurrentUserProps) {
   }, []);
 
   return (
-    <div className="grid grid-cols-[1fr_auto] gap-2 h-8">
+    <div className="flex gap-2 h-8">
       <Login isOpen={isLoginOpen} setIsOpen={setIsLoginOpen} onLogin={() => setIsAdmin(true)} />
 
       <Button
-        theme="flat"
         className={
-          "flex justify-center items-center gap-2 " +
+          "flex items-center justify-center flex-grow gap-2 " +
           (isLoginOpen ? "border-2 border-el2Accent" : "")
         }
         disabled={isAdmin}
@@ -48,12 +47,7 @@ export default function CurrentUser({ isAdmin, setIsAdmin }: CurrentUserProps) {
 
         <span>{isAdmin ? "Admin" : "Guest"}</span>
       </Button>
-      <Button
-        theme="flat"
-        className="flex justify-center items-center px-2"
-        disabled={!isAdmin}
-        onClick={logout}
-      >
+      <Button className="px-2" disabled={!isAdmin} onClick={logout}>
         <BsBoxArrowInRight className="text-2xl ml-[-0.25rem]" />
       </Button>
     </div>

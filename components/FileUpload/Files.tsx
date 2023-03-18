@@ -13,7 +13,7 @@ type FilesProps = {
 export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [files, setFiles] = useState<UploadedFile[]>(
-    fileList.map((file) => {
+    fileList.map((file): UploadedFile => {
       return {
         friendlyName: file.name.split(".")[0],
         core: "none",
@@ -45,8 +45,8 @@ export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
   };
 
   return (
-    <div className="flex flex-col max-h-[65vh]">
-      <div className="flex flex-col py-5 flex-grow bg-darkBg rounded-md overflow-auto">
+    <div className="max-h-[65vh]">
+      <div className="py-5 rounded-md overflow-auto bg-darkBg">
         {files.map((file, index) => {
           return (
             <div key={index}>

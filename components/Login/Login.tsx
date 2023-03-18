@@ -49,12 +49,12 @@ export default function Login({ isOpen, setIsOpen, onLogin }: LoginProps) {
 
   return (
     <Popup isOpen={isOpen} onBackgroundClick={closePopup}>
-      <div className="flex flex-col w-[30rem] max-w-[100vw] bg-lightBg rounded-md p-5">
-        <div className="flex flex-col items-center justify-center gap-2 py-5 bg-darkBg rounded-md sm:flex-row">
-          <BsPersonFillCheck className="text-7xl text-el2Accent mr-4" />
+      <div className="w-[30rem] max-w-[100vw] rounded-md p-5 bg-lightBg">
+        <div className="flex flex-col items-center justify-center gap-5 py-5 bg-darkBg rounded-md sm:flex-row">
+          <BsPersonFillCheck className="text-7xl text-el2Accent" />
           <div className="flex flex-col items-center gap-2">
-            <div className="flex gap-2">
-              <span className="text-whiteColorAccent">Password:</span>
+            <div>
+              <span className="text-whiteColorAccent mr-2">Password:</span>
               <Input value={password} onChange={setPassword} onEnter={login} type="password" />
             </div>
             <Error message={error} />

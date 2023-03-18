@@ -61,7 +61,6 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
     <div className="mb-1">
       <div onDragOver={handleDragOver} onDrop={handleDrop} onDragLeave={handleDragLeave}>
         <Button
-          theme="flat"
           className={
             "px-2 w-full " +
             (isEditing ? "border-2 border-dashed my-1 " : " ") +

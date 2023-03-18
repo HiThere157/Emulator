@@ -13,3 +13,9 @@ type StateFile = {
   game: string;
   fileName: string;
 };
+
+type State = {
+  game: string;
+  slot: number;
+  data: Blob;
+};

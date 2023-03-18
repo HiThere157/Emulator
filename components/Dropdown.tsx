@@ -33,8 +33,8 @@ export default function Dropdown({ items, friendlyLookup, value, onChange }: Dro
 
   return (
     <div ref={ref} className="relative w-fit z-[10]">
-      <Button theme="flat" className="px-2" onClick={() => setIsOpen(!isOpen)}>
-        <div className="flex items-center justify-between">
+      <Button className="px-2" onClick={() => setIsOpen(!isOpen)}>
+        <div className="flex items-center">
           <span className="mr-2">{friendlyLookup?.[value] ?? value}</span>
           {isOpen ? <BsCaretUpFill /> : <BsCaretDownFill />}
         </div>
@@ -57,15 +57,13 @@ type DropdownBodyProps = {
 };
 function DropdownBody({ items, friendlyLookup, onSelection }: DropdownBodyProps) {
   return (
-    <div className="absolute flex flex-col min-w-full rounded-md overflow-hidden mt-1">
+    <div className="absolute flex flex-col rounded-md overflow-hidden mt-1">
       {items.map((item, index) => {
         return (
           <Button
             key={index}
-            theme="flat"
             className={
-              "px-2 text-start border-el1Active rounded-none whitespace-nowrap " +
-              (index !== 0 ? "border-t-2" : "")
+              "px-2 text-start rounded-none border-el1Active " + (index !== 0 ? "border-t-2" : "")
             }
             onClick={() => onSelection(item)}
           >
