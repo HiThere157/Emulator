@@ -19,7 +19,7 @@ export default function LocalItem({ game, state, freeSlot, onChange }: LocalItem
     const date = new Date();
     const time = date.toISOString().replace("T", "_").replace(/:/g, "-").split(".")[0];
 
-    await fetch(`/api/state/${game}/${time}.state`, {
+    await fetch(`/api/state/${game}/${time}`, {
       method: "POST",
       body: data,
     });
@@ -80,7 +80,7 @@ export default function LocalItem({ game, state, freeSlot, onChange }: LocalItem
         <>
           <div className="flex items-center gap-2">
             <span className="text-whiteColorAccent">Slot:</span>
-            <span>{state?.slot}</span>
+            <span>{state.slot}</span>
           </div>
 
           <Button theme="color" className="px-1" onClick={() => uploadState(state.data)}>
