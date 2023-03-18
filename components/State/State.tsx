@@ -37,17 +37,18 @@ export default function State({ isOpen, setIsOpen }: StateProps) {
               ...remoteStates.map((state) => state.game),
               ...localStates.map((state) => state.game),
             ]),
-          ).map((game, index) => {
-            return (
-              <GameItem
-                key={index}
-                game={game}
-                remoteState={remoteStates.filter((state) => state.game == game)}
-                localState={localStates.filter((state) => state.game == game)}
-                onChange={fetchStates}
-              />
-            );
-          })}
+          )
+            .sort((a: string, b: string) => a.localeCompare(b)).map((game, index) => {
+              return (
+                <GameItem
+                  key={index}
+                  game={game}
+                  remoteState={remoteStates.filter((state) => state.game == game)}
+                  localState={localStates.filter((state) => state.game == game)}
+                  onChange={fetchStates}
+                />
+              );
+            })}
         </div>
       </div>
     </Popup>
