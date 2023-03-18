@@ -39,11 +39,19 @@ export default function GameItem({ game, remoteState, localState, onChange }: Ga
           <span className="text-whiteColorAccent text-sm mx-1">Local State:</span>
           <div className="grid grid-cols-5 gap-2 px-2 mb-2">
             {localState.map((state, index) => {
-              return <LocalItem key={index} game={game} state={state} onChange={onChange} />;
+              return (
+                <LocalItem
+                  key={index}
+                  game={game}
+                  slot={state.slot}
+                  data={state.data}
+                  onChange={onChange}
+                />
+              );
             })}
 
             {freeSlots.length !== 0 && (
-              <LocalItem game="Add" freeSlot={freeSlots[0]} onChange={onChange} />
+              <LocalItem game="Add" slot={freeSlots[0]} onChange={onChange} />
             )}
             <LocalItem game="Trash" onChange={onChange} />
           </div>

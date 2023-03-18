@@ -8,14 +8,14 @@ import { BsCloudArrowUpFill, BsPlusSquare, BsFillTrashFill } from "react-icons/b
 
 type LocalItemProps = {
   game: string;
-  state?: State;
-  freeSlot?: number;
+  slot?: number;
+  data?: Uint8Array;
   onChange: () => any;
 };
-export default function LocalItem({ game, state, freeSlot, onChange }: LocalItemProps) {
+export default function LocalItem({ game, slot, data, onChange }: LocalItemProps) {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
-  const uploadState = async (data: Uint8Array) => {
+  const uploadState = async () => {
     const date = new Date();
     const time = date.toISOString().replace("T", "_").replace(/:/g, "-").split(".")[0];
 
@@ -32,13 +32,13 @@ export default function LocalItem({ game, state, freeSlot, onChange }: LocalItem
     setIsDragOver(true);
   };
 
-  const saveRemoteState = async (sourceGame: string, fileName: string, slot: number) => {
+  const saveRemoteState = async (sourceGame: string, fileName: string) => {
     const response = await fetch(`/api/state/${sourceGame}/${fileName}`);
     const blob = await response.arrayBuffer();
 
     await putState({
       game: sourceGame,
-      slot: slot,
+      slot: slot ?? 0,
       data: new Uint8Array(blob),
     });
   };
@@ -49,14 +49,14 @@ export default function LocalItem({ game, state, freeSlot, onChange }: LocalItem
 
     setIsDragOver(false);
     if (game === "Add") {
-      await saveRemoteState(sourceGame, fileName, freeSlot ?? 9);
+      await saveRemoteState(sourceGame, fileName);
     } else if (game === "Trash") {
       await fetch(`/api/state/${sourceGame}/${fileName}`, {
         method: "DELETE",
       });
     } else {
       if (sourceGame !== game) return;
-      await saveRemoteState(sourceGame, fileName, state?.slot ?? 9);
+      await saveRemoteState(sourceGame, fileName);
     }
 
     onChange();
@@ -76,14 +76,14 @@ export default function LocalItem({ game, state, freeSlot, onChange }: LocalItem
       onDrop={handleDrop}
       onDragLeave={handleDragLeave}
     >
-      {state && (
+      {data && (
         <>
           <div className="flex items-center gap-2">
             <span className="text-whiteColorAccent">Slot:</span>
-            <span>{state.slot}</span>
+            <span>{slot}</span>
           </div>
 
-          <Button theme="color" className="px-1" onClick={() => uploadState(state.data)}>
+          <Button theme="color" className="px-1" onClick={uploadState}>
             <BsCloudArrowUpFill />
           </Button>
         </>
