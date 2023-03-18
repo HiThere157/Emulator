@@ -20,9 +20,9 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
-  const handleDragStart = (event: DragEvent, filename: string) => {
+  const handleDragStart = (event: DragEvent, fileName: string) => {
     event.dataTransfer.setData("core", core);
-    event.dataTransfer.setData("filename", filename);
+    event.dataTransfer.setData("fileName", fileName);
   };
 
   const handleDragOver = (event: DragEvent) => {
@@ -32,7 +32,7 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
 
   const handleDrop = async (event: DragEvent) => {
     const sourceCore = event.dataTransfer.getData("core");
-    const fileName = event.dataTransfer.getData("filename");
+    const fileName = event.dataTransfer.getData("fileName");
 
     setIsDragOver(false);
     if (sourceCore === core) return;
@@ -83,9 +83,7 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
       {!isCollapsed && (
         <div className="flex flex-col mx-2.5 mb-2">
           {files
-            .sort((a: RomFile, b: RomFile) =>
-              a.fileName.split(".")[0].localeCompare(b.fileName.split(".")[0]),
-            )
+            .sort((a: RomFile, b: RomFile) => a.fileName.localeCompare(b.fileName))
             .map((file, index) => {
               const itemPath = `/player/${file.core}/${file.fileName}`;
               return (
@@ -95,7 +93,8 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
                   onDragStart={(event: DragEvent) => handleDragStart(event, file.fileName)}
                   href={itemPath}
                   className={
-                    "flex items-center justify-between group " +
+                    "group flex items-center justify-between gap-2 " +
+                    (isEditing ? "cursor-move	" : " ") +
                     (itemPath === path
                       ? "text-whiteColor"
                       : "text-whiteColorAccent hover:text-whiteColor")
@@ -103,7 +102,7 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
                 >
                   {makeFriendlyName(file.fileName)}
                   {isEditing && (
-                    <BsGrid3X2GapFill className="rotate-90 invisible group-hover:visible" />
+                    <BsGrid3X2GapFill className="rotate-90 flex-shrink-0 invisible group-hover:visible" />
                   )}
                 </Link>
               );

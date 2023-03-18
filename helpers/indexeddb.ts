@@ -38,14 +38,19 @@ async function getStates() {
   const values = await makeRequest<Uint8Array[]>(store.getAll());
 
   return keys.map((key, index): State => {
-    const [game, suffix] = key.split(".");
+    const [game, slot] = key.split("_");
 
     return {
       game,
-      slot: Number(suffix.split("-")[1]),
-      data: new Blob([values[index]]),
+      slot: Number(slot),
+      data: values[index],
     };
   });
 }
 
-export { getStates };
+async function putState(state: State) {
+  const store = await getStore("ejs-states", "states", "readwrite");
+  await makeRequest(store.put(state.data, `${state.game}-${state.slot}`));
+}
+
+export { getStates, putState };

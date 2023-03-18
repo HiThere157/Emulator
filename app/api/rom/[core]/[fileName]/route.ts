@@ -14,7 +14,7 @@ type Props = {
 
 export async function GET(request: NextRequest, { params }: Props) {
   const fileBlob = await fs.readFile(
-    sanitizePath("data/roms/", `${params.core}/${params.fileName}`),
+    sanitizePath("data/roms/", `${params.core}/${params.fileName}.rom`),
   );
   return new Response(fileBlob, { headers: [["Cache-Control", "max-age=21600"]] });
 }
@@ -31,7 +31,7 @@ export async function POST(request: NextRequest, { params }: Props) {
   }
 
   // verify fileName uri prop (400)
-  const romPath = sanitizePath("data/roms/", `${params.core}/${params.fileName}`);
+  const romPath = sanitizePath("data/roms/", `${params.core}/${params.fileName}.rom`);
   if (await exists(romPath)) {
     return new Response(null, { status: 400 });
   }
@@ -56,8 +56,8 @@ export async function PATCH(request: NextRequest, { params }: Props) {
   }
 
   // verify fileName uri prop (400)
-  const romPath = sanitizePath("data/roms/", `${params.core}/${params.fileName}`);
-  const targetRomPath = sanitizePath("data/roms/", `${body.targetCore}/${params.fileName}`);
+  const romPath = sanitizePath("data/roms/", `${params.core}/${params.fileName}.rom`);
+  const targetRomPath = sanitizePath("data/roms/", `${body.targetCore}/${params.fileName}.rom`);
   if ((await exists(targetRomPath)) || !(await exists(romPath))) {
     return new Response(null, { status: 400 });
   }
@@ -74,11 +74,16 @@ export async function DELETE(request: NextRequest, { params }: Props) {
   }
 
   // verify fileName uri prop (400)
-  const romPath = sanitizePath("data/roms/", `${params.core}/${params.fileName}`);
+  const romPath = sanitizePath("data/roms/", `${params.core}/${params.fileName}.rom`);
   if (!(await exists(romPath))) {
     return new Response(null, { status: 400 });
   }
 
-  await fs.unlink(romPath);
+  const statePath = sanitizePath("data/states/", `${params.fileName}`);
+  if (await exists(statePath)) {
+    await fs.rm(statePath, { recursive: true });
+  }
+
+  await fs.rm(romPath);
   return new Response();
 }

@@ -23,8 +23,10 @@ export default function State({ isOpen, setIsOpen }: StateProps) {
   };
 
   useEffect(() => {
-    fetchStates();
-  }, []);
+    if (isOpen) {
+      fetchStates();
+    }
+  }, [isOpen]);
 
   return (
     <Popup isOpen={isOpen} onBackgroundClick={() => setIsOpen(false)}>
@@ -42,7 +44,7 @@ export default function State({ isOpen, setIsOpen }: StateProps) {
                 game={game}
                 remoteState={remoteStates.filter((state) => state.game == game)}
                 localState={localStates.filter((state) => state.game == game)}
-                onUpload={fetchStates}
+                onChange={fetchStates}
               />
             );
           })}

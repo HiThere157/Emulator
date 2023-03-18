@@ -17,7 +17,7 @@ export async function GET() {
 
     const files = await fs.readdir(`${romDBPath}/${core}`);
     files.forEach((fileName) => {
-      roms.push({ core, fileName });
+      roms.push({ core, fileName: fileName.split(".")[0] });
     });
   }
 

@@ -17,5 +17,5 @@ type StateFile = {
 type State = {
   game: string;
   slot: number;
-  data: Blob;
+  data: Uint8Array;
 };

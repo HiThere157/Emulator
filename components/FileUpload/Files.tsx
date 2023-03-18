@@ -32,7 +32,7 @@ export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
     setIsLoading(true);
 
     const progress = files.map((file) => {
-      const fileName = makeFileName(file.friendlyName, file.file.name.split(".").at(-1) ?? "rom");
+      const fileName = makeFileName(file.friendlyName);
       return fetch(`/api/rom/${file.core}/${fileName}`, {
         method: "POST",
         body: file.file,

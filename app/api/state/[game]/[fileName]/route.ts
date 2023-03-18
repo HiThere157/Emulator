@@ -14,7 +14,7 @@ type Props = {
 
 export async function GET(request: NextRequest, { params }: Props) {
   const fileBlob = await fs.readFile(
-    sanitizePath("data/states/", `${params.game}/${params.fileName}`),
+    sanitizePath("data/states/", `${params.game}/${params.fileName}.state`),
   );
   return new Response(fileBlob);
 }
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest, { params }: Props) {
   }
 
   // verify game and fileName uri prop (400)
-  const statePath = sanitizePath("data/states/", `${params.game}/${params.fileName}`);
+  const statePath = sanitizePath("data/states/", `${params.game}/${params.fileName}.state`);
   if (await exists(statePath)) {
     return new Response(null, { status: 400 });
   }
@@ -44,11 +44,11 @@ export async function DELETE(request: NextRequest, { params }: Props) {
   }
 
   // verify game and fileName uri prop (400)
-  const statePath = sanitizePath("data/states/", `${params.game}/${params.fileName}`);
+  const statePath = sanitizePath("data/states/", `${params.game}/${params.fileName}.state`);
   if (!(await exists(statePath))) {
     return new Response(null, { status: 400 });
   }
 
-  await fs.unlink(statePath);
+  await fs.rm(statePath);
   return new Response();
 }
