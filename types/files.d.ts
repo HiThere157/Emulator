@@ -22,7 +22,7 @@ type State = {
   data: Uint8Array;
 };
 
-type FsStatus = {
+type DiskUsage = {
   roms: number;
   states: number;
 };

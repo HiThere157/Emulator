@@ -8,8 +8,9 @@ import GameItem from "./GameItem";
 type StateProps = {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => any;
+  onChange: () => any;
 };
-export default function State({ isOpen, setIsOpen }: StateProps) {
+export default function State({ isOpen, setIsOpen, onChange }: StateProps) {
   const [remoteStates, setRemoteStates] = useState<StateFile[]>([]);
   const [localStates, setLocalStates] = useState<State[]>([]);
 
@@ -20,6 +21,8 @@ export default function State({ isOpen, setIsOpen }: StateProps) {
 
     const localStates = await getStates();
     setLocalStates(localStates);
+
+    onChange();
   };
 
   useEffect(() => {

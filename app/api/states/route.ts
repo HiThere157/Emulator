@@ -20,14 +20,11 @@ export async function GET(request: NextRequest) {
   const games = await fs.readdir(stateDBPath);
   const states: StateFile[] = [];
 
-  for (let i = 0; i < games.length; i++) {
-    const game = games[i];
+  for (const game of games) {
     const stateFiles = await fs.readdir(`${stateDBPath}/${game}`);
 
-    for (let j = 0; j < stateFiles.length; j++) {
-      const stateFile = stateFiles[j];
+    for (const stateFile of stateFiles) {
       const stateStats = await fs.stat(`${stateDBPath}/${game}/${stateFile}`);
-
       states.push({ game, fileName: stateFile.split(".")[0], size: stateStats.size });
     }
   }

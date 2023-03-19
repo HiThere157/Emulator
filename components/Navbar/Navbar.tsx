@@ -11,6 +11,7 @@ import NavbarItem from "./NavbarItem";
 import Button from "../Button";
 
 import { BsCapslockFill, BsPencilFill, BsFolderFill } from "react-icons/bs";
+import DiskUsage from "./DiskUsage";
 
 export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -19,16 +20,21 @@ export default function Navbar() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [isState, setIsState] = useState<boolean>(false);
 
-  const [games, setGames] = useState<RomFile[]>();
+  const [roms, setRoms] = useState<RomFile[]>([]);
+  const [diskUsage, setDisUsage] = useState<DiskUsage>();
 
-  const fetchGames = async () => {
-    const result = await fetch("/api/roms");
-    const games: RomFile[] = await result.json();
-    setGames(games);
+  const fetchInfos = async () => {
+    const romResult = await fetch("/api/roms");
+    const roms: RomFile[] = await romResult.json();
+    setRoms(roms);
+
+    const usageResut = await fetch("/api/fs");
+    const diskUsage = await usageResut.json();
+    setDisUsage(diskUsage);
   };
 
   useEffect(() => {
-    fetchGames();
+    fetchInfos();
   }, []);
 
   useEffect(() => {
@@ -38,9 +44,9 @@ export default function Navbar() {
   }, [isAdmin]);
 
   return (
-    <nav className="flex flex-col gap-2 p-2 whitespace-nowrap bg-lightBg w-full sm:w-fit sm:h-screen">
-      <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} onSubmit={fetchGames} />
-      <State isOpen={isState} setIsOpen={setIsState} />
+    <nav className="flex flex-col gap-2 p-2 whitespace-nowrap bg-lightBg min-w-[12rem] w-full sm:w-fit sm:h-screen">
+      <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} onSubmit={fetchInfos} />
+      <State isOpen={isState} setIsOpen={setIsState} onChange={fetchInfos} />
 
       <div className="grid grid-cols-3 gap-2 h-8">
         <Button
@@ -76,24 +82,24 @@ export default function Navbar() {
       </div>
 
       <div className="flex-grow">
-        {games &&
-          Object.keys(cores)
-            .filter((core) => games.some((game) => game.core === core) || isEditing)
-            .map((core, index) => {
-              return (
-                <NavbarItem
-                  key={index}
-                  core={core}
-                  files={games.filter((game) => game.core === core)}
-                  isEditing={isEditing}
-                  onMove={fetchGames}
-                />
-              );
-            })}
+        {Object.keys(cores)
+          .filter((core) => roms.some((rom) => rom.core === core) || isEditing)
+          .map((core, index) => {
+            return (
+              <NavbarItem
+                key={index}
+                core={core}
+                files={roms.filter((rom) => rom.core === core)}
+                isEditing={isEditing}
+                onMove={fetchInfos}
+              />
+            );
+          })}
 
-        {isEditing && <NavbarItem core="Trash" files={[]} isEditing={true} onMove={fetchGames} />}
+        {isEditing && <NavbarItem core="Trash" files={[]} isEditing={true} onMove={fetchInfos} />}
       </div>
 
+      <DiskUsage usage={diskUsage} />
       <User isAdmin={isAdmin} setIsAdmin={setIsAdmin} />
     </nav>
   );
