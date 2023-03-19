@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import { NextRequest } from "next/server";
 
 import { info, warn } from "@/helpers/logging";
-import { createDirectory, exists, sanitizePath, verifyToken } from "@/helpers/api";
+import { createDirectory, exists, getBody, sanitizePath, verifyToken } from "@/helpers/api";
 
 export const revalidate = 0;
 
@@ -47,6 +47,41 @@ export async function POST(request: NextRequest, { params }: Props) {
   await fs.writeFile(statePath, fileBuffer);
 
   info(`successful POST request for /state/${params.game}/${params.fileName}, file added`);
+  return new Response();
+}
+
+export async function PATCH(request: NextRequest, { params }: Props) {
+  // check auth (403)
+  if (!verifyToken(request)) {
+    warn(`unauthorized PATCH request for /state/${params.game}/${params.fileName}`);
+    return new Response(null, { status: 403 });
+  }
+
+  // verify body and body props (400)
+  const body: { targetFileName: string } | undefined = await getBody(request);
+  if (!body || !body.targetFileName) {
+    warn(
+      `invalid PATCH request for /state/${params.game}/${params.fileName}, invalid targetFileName`,
+    );
+    return new Response(null, { status: 400 });
+  }
+
+  // verify fileName uri prop (400)
+  const statePath = sanitizePath("data/states/", `${params.game}/${params.fileName}.state`);
+  const targetStatePath = sanitizePath(
+    "data/states/",
+    `${params.game}/${body.targetFileName}.state`,
+  );
+  if ((await exists(targetStatePath)) || !(await exists(statePath))) {
+    warn(`invalid PATCH request for /states/${params.game}/${params.fileName}, invalid fileName`);
+    return new Response(null, { status: 400 });
+  }
+
+  await fs.rename(statePath, targetStatePath);
+
+  info(
+    `successful PATCH request for /states/${params.game}/${params.fileName}, file renamed to "${body.targetFileName}"`,
+  );
   return new Response();
 }
 

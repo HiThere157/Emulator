@@ -1,5 +1,5 @@
 import { cores } from "@/config/cores";
-import { makeRomFileName, makeRomFriendlyName, formatFileSize } from "@/helpers/format";
+import { getRomFileName, getRomFriendlyName, formatFileSize } from "@/helpers/format";
 
 import Dropdown from "../Dropdown";
 import Input from "../Input";
@@ -28,7 +28,7 @@ export default function FileItem({ file, onFileChange }: FileItemProps) {
           onChange={(friendlyName: string) => {
             onFileChange({
               ...file,
-              friendlyName: makeRomFriendlyName(makeRomFileName(friendlyName)),
+              friendlyName: getRomFriendlyName(getRomFileName(friendlyName)),
             });
           }}
         />

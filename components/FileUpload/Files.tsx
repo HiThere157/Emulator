@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { makeRomFileName } from "@/helpers/format";
+import { getRomFileName } from "@/helpers/format";
 
 import FileItem from "./FileItem";
 import Button from "../Button";
@@ -32,7 +32,7 @@ export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
     setIsLoading(true);
 
     const progress = files.map((file) => {
-      const fileName = makeRomFileName(file.friendlyName);
+      const fileName = getRomFileName(file.friendlyName);
       return fetch(`/api/rom/${file.core}/${fileName}`, {
         method: "POST",
         body: file.file,

@@ -16,6 +16,11 @@ type StateFile = {
   size: number;
 };
 
+type StateFileMeta = {
+  date: Date;
+  identifier: string;
+};
+
 type State = {
   game: string;
   slot: string;

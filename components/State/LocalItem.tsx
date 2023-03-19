@@ -1,7 +1,7 @@
 import { DragEvent, useState } from "react";
 
 import { deleteState, moveState, putState } from "@/helpers/indexeddb";
-import { makeStateFileName } from "@/helpers/format";
+import { getStateFileName } from "@/helpers/format";
 
 import Button from "../Button";
 
@@ -18,9 +18,8 @@ export default function LocalItem({ role, game, slot, data, onChange }: LocalIte
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const uploadState = async () => {
-    const time = makeStateFileName(new Date());
-
-    await fetch(`/api/state/${game}/${time}`, {
+    const fileName = getStateFileName({ date: new Date(), identifier: "" });
+    await fetch(`/api/state/${game}/${fileName}`, {
       method: "POST",
       body: data,
     });

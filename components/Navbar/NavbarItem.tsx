@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 import { cores } from "@/config/cores";
-import { formatFileSize, makeRomFriendlyName } from "@/helpers/format";
+import { formatFileSize, getRomFriendlyName } from "@/helpers/format";
 
 import Button from "../Button";
 
@@ -100,7 +100,7 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
                       : "text-whiteColorAccent hover:text-whiteColor")
                   }
                 >
-                  {makeRomFriendlyName(file.fileName)}
+                  {getRomFriendlyName(file.fileName)}
                   {isEditing && (
                     <div className="flex items-center gap-1">
                       <span className="text-sm">[{formatFileSize(file.size)}]</span>
