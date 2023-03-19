@@ -15,15 +15,19 @@ type LocalItemProps = {
   onChange: () => any;
 };
 export default function LocalItem({ role, game, slot, data, onChange }: LocalItemProps) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const uploadState = async () => {
+    setIsLoading(true);
+
     const fileName = getStateFileName({ date: new Date(), identifier: "" });
     await fetch(`/api/state/${game}/${fileName}`, {
       method: "POST",
       body: data,
     });
 
+    setIsLoading(false);
     onChange();
   };
 
@@ -113,7 +117,7 @@ export default function LocalItem({ role, game, slot, data, onChange }: LocalIte
             <span>{slot}</span>
           </div>
 
-          <Button theme="color" className="px-1" onClick={uploadState}>
+          <Button theme="color" className="px-1" disabled={isLoading} onClick={uploadState}>
             <BsCloudArrowUpFill />
           </Button>
         </>
