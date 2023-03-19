@@ -13,6 +13,11 @@ type Props = {
 };
 
 export async function GET(request: NextRequest, { params }: Props) {
+  // check auth (403)
+  if (!verifyToken(request)) {
+    return new Response(null, { status: 403 });
+  }
+
   const fileBlob = await fs.readFile(
     sanitizePath("data/states/", `${params.game}/${params.fileName}.state`),
   );
