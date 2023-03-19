@@ -20,9 +20,9 @@ export default function GameItem({ game, remoteState, localState, onChange }: Ga
   const currentGame = path.split("/").at(-1)?.split(".")[0];
   const [isCollapsed, setIsCollapsed] = useState<boolean>(game != currentGame);
 
-  const freeSlots = Array.from({ length: 9 }, (_, i) => i + 1).filter(
-    (slot) => !localState.some((state) => state.slot == slot),
-  );
+  const freeSlots = Array.from({ length: 9 }, (_, i) => i + 1)
+    .map((i) => i.toString())
+    .filter((slot) => !localState.some((state) => state.slot == slot));
 
   return (
     <div className="mb-1">

@@ -38,7 +38,8 @@ export default function State({ isOpen, setIsOpen }: StateProps) {
               ...localStates.map((state) => state.game),
             ]),
           )
-            .sort((a: string, b: string) => a.localeCompare(b)).map((game, index) => {
+            .sort((a: string, b: string) => a.localeCompare(b))
+            .map((game, index) => {
               return (
                 <GameItem
                   key={index}

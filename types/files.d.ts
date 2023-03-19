@@ -16,6 +16,6 @@ type StateFile = {
 
 type State = {
   game: string;
-  slot: number;
+  slot: string;
   data: Uint8Array;
 };

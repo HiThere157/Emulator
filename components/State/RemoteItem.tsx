@@ -8,6 +8,7 @@ type RemoteItemProps = {
 };
 export default function RemoteItem({ game, state }: RemoteItemProps) {
   const handleDragStart = (event: DragEvent) => {
+    event.dataTransfer.setData("source", "remote");
     event.dataTransfer.setData("game", game);
     event.dataTransfer.setData("fileName", state.fileName);
   };

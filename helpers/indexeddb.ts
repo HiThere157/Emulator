@@ -42,7 +42,7 @@ async function getStates() {
 
     return {
       game,
-      slot: Number(slot),
+      slot: slot,
       data: values[index],
     };
   });
@@ -53,4 +53,17 @@ async function putState(state: State) {
   await makeRequest(store.put(state.data, `${state.game}-${state.slot}`));
 }
 
-export { getStates, putState };
+async function deleteState(game: string, slot: string) {
+  const store = await getStore("ejs-states", "states", "readwrite");
+  await makeRequest(store.delete(`${game}-${slot}`));
+}
+
+async function moveState(game: string, sourceSlot: string, slot: string) {
+  const store = await getStore("ejs-states", "states", "readwrite");
+
+  const data: Uint8Array = await makeRequest(store.get(`${game}-${sourceSlot}`));
+  await deleteState(game, sourceSlot);
+  await putState({ game, slot, data });
+}
+
+export { getStates, putState, deleteState, moveState };
