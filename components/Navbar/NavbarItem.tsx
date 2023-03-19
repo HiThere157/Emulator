@@ -3,7 +3,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 
 import { cores } from "@/config/cores";
-import { makeFriendlyName } from "@/helpers/upload";
+import { formatFileSize, makeRomFriendlyName } from "@/helpers/format";
 
 import Button from "../Button";
 
@@ -32,17 +32,17 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
 
   const handleDrop = async (event: DragEvent) => {
     const sourceCore = event.dataTransfer.getData("core");
-    const fileName = event.dataTransfer.getData("fileName");
+    const sourceFileName = event.dataTransfer.getData("fileName");
 
     setIsDragOver(false);
     if (sourceCore === core) return;
 
     if (core === "Trash") {
-      await fetch(`/api/rom/${sourceCore}/${fileName}`, {
+      await fetch(`/api/rom/${sourceCore}/${sourceFileName}`, {
         method: "DELETE",
       });
     } else {
-      await fetch(`/api/rom/${sourceCore}/${fileName}`, {
+      await fetch(`/api/rom/${sourceCore}/${sourceFileName}`, {
         method: "PATCH",
         body: JSON.stringify({
           targetCore: core,
@@ -93,16 +93,19 @@ export default function NavbarItem({ core, files, isEditing, onMove }: NavbarIte
                   onDragStart={(event: DragEvent) => handleDragStart(event, file.fileName)}
                   href={itemPath}
                   className={
-                    "group flex items-center justify-between gap-2 " +
+                    "group flex items-center justify-between gap-4 " +
                     (isEditing ? "cursor-move	" : " ") +
                     (itemPath === path
                       ? "text-whiteColor"
                       : "text-whiteColorAccent hover:text-whiteColor")
                   }
                 >
-                  {makeFriendlyName(file.fileName)}
+                  {makeRomFriendlyName(file.fileName)}
                   {isEditing && (
-                    <BsGrid3X2GapFill className="rotate-90 flex-shrink-0 invisible group-hover:visible" />
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm">[{formatFileSize(file.size)}]</span>
+                      <BsGrid3X2GapFill className="rotate-90 flex-shrink-0 invisible group-hover:visible" />
+                    </div>
                   )}
                 </Link>
               );

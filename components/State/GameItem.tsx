@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 
-import { makeFriendlyName } from "@/helpers/upload";
+import { makeRomFriendlyName } from "@/helpers/format";
 
 import LocalItem from "./LocalItem";
 import RemoteItem from "./RemoteItem";
@@ -30,7 +30,7 @@ export default function GameItem({ game, remoteState, localState, onChange }: Ga
         <Button className="px-2 w-full" onClick={() => setIsCollapsed(!isCollapsed)}>
           <div className="flex items-center gap-1">
             <div className="text-xl">{isCollapsed ? <BsPlus /> : <BsDash />}</div>
-            <span className="text-lg">{makeFriendlyName(game)}</span>
+            <span className="text-lg">{makeRomFriendlyName(game)}</span>
           </div>
         </Button>
       </div>
@@ -51,9 +51,9 @@ export default function GameItem({ game, remoteState, localState, onChange }: Ga
             })}
 
             {freeSlots.length !== 0 && (
-              <LocalItem game="Add" slot={freeSlots[0]} onChange={onChange} />
+              <LocalItem role="Add" game={game} slot={freeSlots[0]} onChange={onChange} />
             )}
-            <LocalItem game="Trash" onChange={onChange} />
+            <LocalItem role="Trash" game={game} slot="0" onChange={onChange} />
           </div>
 
           <span className="text-whiteColorAccent text-sm mx-1">Remote State:</span>

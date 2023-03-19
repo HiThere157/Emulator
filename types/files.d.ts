@@ -1,6 +1,7 @@
 type RomFile = {
   core: string;
   fileName: string;
+  size: number;
 };
 
 type UploadedFile = {
@@ -12,6 +13,7 @@ type UploadedFile = {
 type StateFile = {
   game: string;
   fileName: string;
+  size: number;
 };
 
 type State = {

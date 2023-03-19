@@ -16,16 +16,19 @@ export async function GET(request: NextRequest) {
   await createDirectory(stateDBPath);
 
   const games = await fs.readdir(stateDBPath);
-  const roms: StateFile[] = [];
+  const states: StateFile[] = [];
 
   for (let i = 0; i < games.length; i++) {
     const game = games[i];
+    const stateFiles = await fs.readdir(`${stateDBPath}/${game}`);
 
-    const files = await fs.readdir(`${stateDBPath}/${game}`);
-    files.forEach((fileName) => {
-      roms.push({ game, fileName: fileName.split(".")[0] });
-    });
+    for (let j = 0; j < stateFiles.length; j++) {
+      const stateFile = stateFiles[j];
+      const stateStats = await fs.stat(`${stateDBPath}/${game}/${stateFile}`);
+
+      states.push({ game, fileName: stateFile.split(".")[0], size: stateStats.size });
+    }
   }
 
-  return new Response(JSON.stringify(roms));
+  return new Response(JSON.stringify(states));
 }

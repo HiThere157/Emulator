@@ -1,5 +1,7 @@
 import { DragEvent } from "react";
 
+import { formatFileSize, makeStateFriendlyName } from "@/helpers/format";
+
 import { BsGrid3X2GapFill } from "react-icons/bs";
 
 type RemoteItemProps = {
@@ -15,16 +17,19 @@ export default function RemoteItem({ game, state }: RemoteItemProps) {
 
   return (
     <div
-      className="group flex items-center justify-between gap-2 px-2 bg-lightBg rounded-md cursor-move"
+      className="group flex items-center justify-between gap-2 px-2 rounded-md cursor-move bg-lightBg"
       draggable
       onDragStart={handleDragStart}
     >
       <div className="flex-grow">
-        <span className="text-whiteColorAccent mr-2">Name:</span>
-        <span>{state.fileName}</span>
+        <span className="text-whiteColorAccent mr-2">Time:</span>
+        <span>{makeStateFriendlyName(state.fileName).toLocaleString("de-de")}</span>
       </div>
 
-      <BsGrid3X2GapFill className="rotate-90 text-whiteColorAccent group-hover:text-whiteColor" />
+      <div className="flex items-center gap-1 text-whiteColorAccent group-hover:text-whiteColor">
+        <span className="text-sm">[{formatFileSize(state.size)}]</span>
+        <BsGrid3X2GapFill className="rotate-90" />
+      </div>
     </div>
   );
 }

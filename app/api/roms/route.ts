@@ -14,11 +14,14 @@ export async function GET() {
 
   for (let i = 0; i < cores.length; i++) {
     const core = cores[i];
+    const romFiles = await fs.readdir(`${romDBPath}/${core}`);
 
-    const files = await fs.readdir(`${romDBPath}/${core}`);
-    files.forEach((fileName) => {
-      roms.push({ core, fileName: fileName.split(".")[0] });
-    });
+    for (let j = 0; j < romFiles.length; j++) {
+      const romFile = romFiles[j];
+      const romStats = await fs.stat(`${romDBPath}/${core}/${romFile}`);
+
+      roms.push({ core, fileName: romFile.split(".")[0], size: romStats.size });
+    }
   }
 
   return new Response(JSON.stringify(roms));

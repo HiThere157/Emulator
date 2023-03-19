@@ -38,7 +38,7 @@ export default function Navbar() {
   }, [isAdmin]);
 
   return (
-    <nav className="flex flex-col gap-2 p-2 whitespace-nowrap bg-lightBg w-full sm:w-48 sm:h-screen">
+    <nav className="flex flex-col gap-2 p-2 whitespace-nowrap bg-lightBg w-full sm:w-fit sm:h-screen">
       <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} onSubmit={fetchGames} />
       <State isOpen={isState} setIsOpen={setIsState} />
 

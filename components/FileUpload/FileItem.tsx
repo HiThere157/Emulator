@@ -1,5 +1,5 @@
 import { cores } from "@/config/cores";
-import { makeFileName, makeFriendlyName } from "@/helpers/upload";
+import { makeRomFileName, makeRomFriendlyName, formatFileSize } from "@/helpers/format";
 
 import Dropdown from "../Dropdown";
 import Input from "../Input";
@@ -11,19 +11,6 @@ type FileItemProps = {
   onFileChange: (file: UploadedFile) => any;
 };
 export default function FileItem({ file, onFileChange }: FileItemProps) {
-  const formatFileSize = (bytes: number) => {
-    const units = ["bytes", "KB", "MB", "GB", "TB"];
-    let size = bytes;
-    let i = 0;
-
-    while (size >= 1024 && i < units.length - 1) {
-      size /= 1024;
-      i++;
-    }
-
-    return `${size.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${units[i]}`;
-  };
-
   return (
     <div className="flex items-center gap-8 mx-10">
       <div className="flex flex-col items-center gap-1 w-36">
@@ -41,7 +28,7 @@ export default function FileItem({ file, onFileChange }: FileItemProps) {
           onChange={(friendlyName: string) => {
             onFileChange({
               ...file,
-              friendlyName: makeFriendlyName(makeFileName(friendlyName, "rom")),
+              friendlyName: makeRomFriendlyName(makeRomFileName(friendlyName)),
             });
           }}
         />

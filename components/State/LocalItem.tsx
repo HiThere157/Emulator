@@ -1,23 +1,24 @@
 import { DragEvent, useState } from "react";
 
 import { deleteState, moveState, putState } from "@/helpers/indexeddb";
+import { makeStateFileName } from "@/helpers/format";
 
 import Button from "../Button";
 
 import { BsCloudArrowUpFill, BsPlusSquare, BsFillTrashFill } from "react-icons/bs";
 
 type LocalItemProps = {
+  role?: string;
   game: string;
-  slot?: string;
+  slot: string;
   data?: Uint8Array;
   onChange: () => any;
 };
-export default function LocalItem({ game, slot, data, onChange }: LocalItemProps) {
+export default function LocalItem({ role, game, slot, data, onChange }: LocalItemProps) {
   const [isDragOver, setIsDragOver] = useState<boolean>(false);
 
   const uploadState = async () => {
-    const date = new Date();
-    const time = date.toISOString().replace("T", "_").replace(/:/g, "-").split(".")[0];
+    const time = makeStateFileName(new Date());
 
     await fetch(`/api/state/${game}/${time}`, {
       method: "POST",
@@ -27,35 +28,27 @@ export default function LocalItem({ game, slot, data, onChange }: LocalItemProps
     onChange();
   };
 
-  const saveRemoteState = async (sourceGame: string, sourceFileName: string) => {
-    const response = await fetch(`/api/state/${sourceGame}/${sourceFileName}`);
-    const blob = await response.arrayBuffer();
-
-    await putState({
-      game: sourceGame,
-      slot: slot ?? "0",
-      data: new Uint8Array(blob),
-    });
-  };
-
   const handleRemoteDrop = async (event: DragEvent) => {
     const sourceGame = event.dataTransfer.getData("game");
     const sourceFileName = event.dataTransfer.getData("fileName");
 
     setIsDragOver(false);
+    if (sourceGame !== game) return;
 
-    if (game === "Add") {
-      return await saveRemoteState(sourceGame, sourceFileName);
-    }
-
-    if (game === "Trash") {
+    if (role === "Trash") {
       return await fetch(`/api/state/${sourceGame}/${sourceFileName}`, {
         method: "DELETE",
       });
     }
 
-    if (sourceGame !== game) return;
-    return await saveRemoteState(sourceGame, sourceFileName);
+    const response = await fetch(`/api/state/${sourceGame}/${sourceFileName}`);
+    const blob = await response.arrayBuffer();
+
+    await putState({
+      game: sourceGame,
+      slot: slot,
+      data: new Uint8Array(blob),
+    });
   };
 
   const handleLocalDrop = async (event: DragEvent) => {
@@ -63,17 +56,13 @@ export default function LocalItem({ game, slot, data, onChange }: LocalItemProps
     const sourceSlot = event.dataTransfer.getData("slot");
 
     setIsDragOver(false);
-
-    if (game === "Add") {
-      await moveState(sourceGame, sourceSlot, slot ?? "0");
-    }
-
-    if (game === "Trash") {
-      await deleteState(sourceGame, sourceSlot);
-    }
-
     if (sourceGame !== game || sourceSlot === slot) return;
-    await moveState(sourceGame, sourceSlot, slot ?? "0");
+
+    if (role === "Trash") {
+      return await deleteState(sourceGame, sourceSlot);
+    }
+
+    await moveState(sourceGame, sourceSlot, slot);
   };
 
   const handleDrop = async (event: DragEvent) => {
@@ -93,7 +82,7 @@ export default function LocalItem({ game, slot, data, onChange }: LocalItemProps
   const handleDragStart = (event: DragEvent) => {
     event.dataTransfer.setData("source", "local");
     event.dataTransfer.setData("game", game);
-    event.dataTransfer.setData("slot", slot ?? "0");
+    event.dataTransfer.setData("slot", slot);
   };
 
   const handleDragOver = (event: DragEvent) => {
@@ -131,13 +120,13 @@ export default function LocalItem({ game, slot, data, onChange }: LocalItemProps
         </>
       )}
 
-      {game === "Add" && (
+      {role === "Add" && (
         <div className="flex items-center justify-center flex-grow">
           <BsPlusSquare className="pointer-events-none text-xl text-el1Active" />
         </div>
       )}
 
-      {game === "Trash" && (
+      {role === "Trash" && (
         <div className="flex items-center justify-center flex-grow">
           <BsFillTrashFill className="pointer-events-none text-xl text-redColor" />
         </div>
