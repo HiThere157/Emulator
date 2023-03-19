@@ -58,7 +58,12 @@ export default function RemoteItem({ game, state, onRename }: RemoteItemProps) {
 
         <span className="text-whiteColorAccent mr-2 ml-3">Identifier:</span>
         {isEditing ? (
-          <Input value={identifier} className="mr-1 w-36" onChange={onIdentifierChange} onEnter={toggleIsEditing} />
+          <Input
+            value={identifier}
+            className="mr-1 w-36"
+            onChange={onIdentifierChange}
+            onEnter={toggleIsEditing}
+          />
         ) : (
           <span className="mr-2">{meta.identifier}</span>
         )}

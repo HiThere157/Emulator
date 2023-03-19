@@ -6,6 +6,7 @@ import { getStateFileName } from "@/helpers/format";
 import Button from "../Button";
 
 import { BsCloudArrowUpFill, BsPlusSquare, BsFillTrashFill } from "react-icons/bs";
+import { ClipLoader } from "react-spinners";
 
 type LocalItemProps = {
   role?: string;
@@ -44,6 +45,8 @@ export default function LocalItem({ role, game, slot, data, onChange }: LocalIte
       });
     }
 
+    setIsLoading(true);
+
     const response = await fetch(`/api/state/${sourceGame}/${sourceFileName}`);
     const blob = await response.arrayBuffer();
 
@@ -52,6 +55,8 @@ export default function LocalItem({ role, game, slot, data, onChange }: LocalIte
       slot: slot,
       data: new Uint8Array(blob),
     });
+
+    setIsLoading(false);
   };
 
   const handleLocalDrop = async (event: DragEvent) => {
@@ -115,6 +120,8 @@ export default function LocalItem({ role, game, slot, data, onChange }: LocalIte
           <div className="flex items-center gap-2">
             <span className="text-whiteColorAccent">Slot:</span>
             <span>{slot}</span>
+
+            {isLoading && <ClipLoader color="#208CF0" size={20} speedMultiplier={0.5} />}
           </div>
 
           <Button theme="color" className="px-1" disabled={isLoading} onClick={uploadState}>
@@ -125,7 +132,11 @@ export default function LocalItem({ role, game, slot, data, onChange }: LocalIte
 
       {role === "Add" && (
         <div className="flex items-center justify-center flex-grow">
-          <BsPlusSquare className="pointer-events-none text-xl text-el1Active" />
+          {isLoading ? (
+            <ClipLoader color="#208CF0" size={20} speedMultiplier={0.5} />
+          ) : (
+            <BsPlusSquare className="pointer-events-none text-xl text-el1Active" />
+          )}
         </div>
       )}
 

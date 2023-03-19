@@ -5,6 +5,8 @@ import { getRomFileName } from "@/helpers/format";
 import FileItem from "./FileItem";
 import Button from "../Button";
 
+import ClipLoader from "react-spinners/ClipLoader";
+
 type FilesProps = {
   fileList: File[];
   onBack: () => any;
@@ -64,8 +66,14 @@ export default function Files({ fileList, onBack, onFileSubmit }: FilesProps) {
         <Button theme="color" className="px-2" onClick={onBack}>
           Back
         </Button>
-        <Button theme="color" className="px-2" disabled={isLoading} onClick={uploadFiles}>
-          Submit
+        <Button
+          theme="color"
+          className="flex items-center gap-2 px-2"
+          disabled={isLoading}
+          onClick={uploadFiles}
+        >
+          <span>Submit</span>
+          {isLoading && <ClipLoader color="#208CF0" size={20} speedMultiplier={0.5} />}
         </Button>
       </div>
     </div>

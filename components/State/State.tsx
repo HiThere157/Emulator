@@ -11,16 +11,16 @@ type StateProps = {
   onChange: () => any;
 };
 export default function State({ isOpen, setIsOpen, onChange }: StateProps) {
-  const [remoteStates, setRemoteStates] = useState<StateFile[]>([]);
   const [localStates, setLocalStates] = useState<State[]>([]);
+  const [remoteStates, setRemoteStates] = useState<StateFile[]>([]);
 
   const fetchStates = async () => {
+    const localStates = await getStates();
+    setLocalStates(localStates);
+
     const result = await fetch("/api/states");
     const remoteStates: StateFile[] = await result.json();
     setRemoteStates(remoteStates);
-
-    const localStates = await getStates();
-    setLocalStates(localStates);
 
     onChange();
   };
@@ -37,8 +37,8 @@ export default function State({ isOpen, setIsOpen, onChange }: StateProps) {
         <div className="max-h-[65vh] p-5 rounded-md overflow-auto bg-darkBg">
           {Array.from(
             new Set([
-              ...remoteStates.map((state) => state.game),
               ...localStates.map((state) => state.game),
+              ...remoteStates.map((state) => state.game),
             ]),
           )
             .sort((a: string, b: string) => a.localeCompare(b))

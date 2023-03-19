@@ -5,13 +5,13 @@ import { useEffect, useState } from "react";
 import { cores } from "@/config/cores";
 
 import UploadFiles from "../FileUpload/UploadFiles";
+import DiskUsage from "./DiskUsage";
 import State from "../State/State";
 import User from "../Login/User";
 import NavbarItem from "./NavbarItem";
 import Button from "../Button";
 
 import { BsCapslockFill, BsPencilFill, BsFolderFill } from "react-icons/bs";
-import DiskUsage from "./DiskUsage";
 
 export default function Navbar() {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
@@ -23,18 +23,21 @@ export default function Navbar() {
   const [roms, setRoms] = useState<RomFile[]>([]);
   const [diskUsage, setDisUsage] = useState<DiskUsage>();
 
-  const fetchInfos = async () => {
+  const fetchRoms = async () => {
     const romResult = await fetch("/api/roms");
     const roms: RomFile[] = await romResult.json();
     setRoms(roms);
+  };
 
+  const fetchUsage = async () => {
     const usageResut = await fetch("/api/fs");
     const diskUsage = await usageResut.json();
     setDisUsage(diskUsage);
   };
 
   useEffect(() => {
-    fetchInfos();
+    fetchRoms();
+    fetchUsage();
   }, []);
 
   useEffect(() => {
@@ -45,8 +48,15 @@ export default function Navbar() {
 
   return (
     <nav className="flex flex-col gap-2 p-2 whitespace-nowrap bg-lightBg min-w-[12rem] w-full sm:w-fit sm:h-screen">
-      <UploadFiles isOpen={isUploadOpen} setIsOpen={setIsUploadOpen} onSubmit={fetchInfos} />
-      <State isOpen={isState} setIsOpen={setIsState} onChange={fetchInfos} />
+      <UploadFiles
+        isOpen={isUploadOpen}
+        setIsOpen={setIsUploadOpen}
+        onSubmit={() => {
+          fetchRoms();
+          fetchUsage();
+        }}
+      />
+      <State isOpen={isState} setIsOpen={setIsState} onChange={fetchUsage} />
 
       <div className="grid grid-cols-3 gap-2 h-8">
         <Button
@@ -91,12 +101,12 @@ export default function Navbar() {
                 core={core}
                 files={roms.filter((rom) => rom.core === core)}
                 isEditing={isEditing}
-                onMove={fetchInfos}
+                onMove={fetchRoms}
               />
             );
           })}
 
-        {isEditing && <NavbarItem core="Trash" files={[]} isEditing={true} onMove={fetchInfos} />}
+        {isEditing && <NavbarItem core="Trash" files={[]} isEditing={true} onMove={fetchRoms} />}
       </div>
 
       <DiskUsage usage={diskUsage} />
