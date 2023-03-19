@@ -2,10 +2,15 @@ import path from "path";
 import { promises as fs } from "fs";
 
 import { info } from "@/helpers/logging";
+import { exists } from "@/helpers/api";
 
 export const revalidate = 0;
 
 async function getDirectorySize(directoryPath: string): Promise<number> {
+  if (!(await exists(directoryPath))) {
+    return 0;
+  }
+
   let totalSize = 0;
   const files = await fs.readdir(directoryPath);
 
