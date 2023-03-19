@@ -1,6 +1,7 @@
 import path from "path";
 import { promises as fs } from "fs";
 
+import { info } from "@/helpers/logging";
 import { createDirectory } from "@/helpers/api";
 
 export const revalidate = 0;
@@ -24,5 +25,6 @@ export async function GET() {
     }
   }
 
+  info("successful GET request for /roms");
   return new Response(JSON.stringify(roms));
 }

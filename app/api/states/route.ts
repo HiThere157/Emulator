@@ -2,6 +2,8 @@ import path from "path";
 import { promises as fs } from "fs";
 
 import { NextRequest } from "next/server";
+
+import { info } from "@/helpers/logging";
 import { createDirectory, verifyToken } from "@/helpers/api";
 
 export const revalidate = 0;
@@ -30,5 +32,6 @@ export async function GET(request: NextRequest) {
     }
   }
 
+  info("successful GET request for /states");
   return new Response(JSON.stringify(states));
 }

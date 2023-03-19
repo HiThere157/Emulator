@@ -21,3 +21,8 @@ type State = {
   slot: string;
   data: Uint8Array;
 };
+
+type FsStatus = {
+  roms: number;
+  states: number;
+};
