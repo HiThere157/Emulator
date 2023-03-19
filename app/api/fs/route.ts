@@ -40,8 +40,6 @@ export async function GET() {
     states: statesSize,
   };
 
-  console.log(result);
-
   info("successful GET request for /fs");
   return new Response(JSON.stringify(result));
 }
