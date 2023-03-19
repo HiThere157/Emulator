@@ -8,10 +8,11 @@ import RemoteItem from "./RemoteItem";
 import Button from "../Button";
 
 import { BsPlus, BsDash } from "react-icons/bs";
+import { PulseLoader } from "react-spinners";
 
 type GameItemProps = {
   game: string;
-  remoteState: StateFile[];
+  remoteState?: StateFile[];
   localState: State[];
   onChange: () => any;
 };
@@ -58,7 +59,13 @@ export default function GameItem({ game, remoteState, localState, onChange }: Ga
 
           <span className="text-whiteColorAccent text-sm mx-1">Remote State:</span>
           <div className="flex flex-col gap-2 px-2 mb-4">
-            {remoteState.map((state, index) => {
+            {!remoteState && (
+              <div className="text-center">
+                <PulseLoader color="#208CF0" size={8} speedMultiplier={0.75} />
+              </div>
+            )}
+
+            {remoteState?.map((state, index) => {
               return <RemoteItem key={index} game={game} state={state} onRename={onChange} />;
             })}
           </div>
