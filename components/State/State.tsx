@@ -20,7 +20,7 @@ export default function State({ isOpen, setIsOpen, onChange }: StateProps) {
 
     setRemoteStates(undefined);
     // UX
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 300));
 
     const result = await fetch("/api/states");
     const remoteStates: StateFile[] = await result.json();

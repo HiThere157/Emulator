@@ -56,7 +56,7 @@ export default function RemoteItem({ game, state, onRename }: RemoteItemProps) {
         <span className="text-whiteColorAccent mr-2">Time:</span>
         <span>{meta.date.toLocaleString("de-de")}</span>
 
-        <span className="text-whiteColorAccent mr-2 ml-3">Identifier:</span>
+        <span className="text-whiteColorAccent mx-2">Identifier:</span>
         {isEditing ? (
           <Input
             value={identifier}

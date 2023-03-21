@@ -38,7 +38,7 @@ export default function GameItem({ game, remoteState, localState, onChange }: Ga
       {!isCollapsed && (
         <>
           <span className="text-whiteColorAccent text-sm mx-1">Local State:</span>
-          <div className="grid grid-cols-5 gap-2 px-2 mb-2">
+          <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 px-2 mb-2">
             {localState.map((state, index) => {
               return (
                 <LocalItem
