@@ -1,10 +1,12 @@
-import { info } from "@/helpers/logging";
-
-export const revalidate = 0;
-
-export async function GET() {
-  info("successful GET request for /auth/logout");
+/*
+  Response: cookie
+*/
+export async function POST() {
   return new Response(null, {
-    headers: [["Set-Cookie", `token=null; Max-Age=0; Secure; HttpOnly; SameSite=Strict; Path=/`]],
+    headers: {
+      "Content-Type": "application/json",
+      "Set-Cookie": `login_token=; Max-Age=0; Path=/; HttpOnly; SameSite=Strict`,
+    },
+    status: 200,
   });
 }

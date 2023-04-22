@@ -1,76 +1,86 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useState } from "react";
+import useOutsideClick from "@/hooks/useOutsideClick";
 
-import Button from "./Button";
+import Button from "@/components/Button";
 
-import { BsCaretDownFill, BsCaretUpFill } from "react-icons/bs";
+import { FiChevronDown } from "react-icons/fi";
+import { BsCheckLg } from "react-icons/bs";
 
 type DropdownProps = {
-  items: string[];
-  friendlyLookup?: { [key: string]: string };
+  values: string[];
+  icons?: React.ReactNode[];
   value: string;
-  onChange: (value: string) => any;
+  label?: string;
+  onChange: (value: string, index: number) => void;
 };
-export default function Dropdown({ items, friendlyLookup, value, onChange }: DropdownProps) {
+export default function Dropdown({ values, icons, value, label, onChange }: DropdownProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  useEffect(() => {
-    function handleClickOutside({ target }: MouseEvent) {
-      if (ref.current && !ref.current.contains(target as Node)) {
-        setIsOpen(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [ref]);
-
-  const changeSelectedItem = (item: string) => {
-    onChange(item);
-    setIsOpen(false);
-  };
+  useOutsideClick(ref, () => setIsOpen(false));
 
   return (
-    <div ref={ref} className="relative w-fit z-[10]">
-      <Button className="px-2" onClick={() => setIsOpen(!isOpen)}>
-        <div className="flex items-center">
-          <span className="mr-2">{friendlyLookup?.[value] ?? value}</span>
-          {isOpen ? <BsCaretUpFill /> : <BsCaretDownFill />}
-        </div>
-      </Button>
-      {isOpen && (
-        <DropdownBody
-          items={items}
-          friendlyLookup={friendlyLookup}
-          onSelection={changeSelectedItem}
-        />
-      )}
+    <div ref={ref} className="relative z-[10]">
+      <div className="flex items-center gap-2.5">
+        {label && <span className="font-bold">{label}</span>}
+        <Button theme="flat" onClick={() => setIsOpen(!isOpen)}>
+          <div className="flex items-center gap-1">
+            <span>{value}</span>
+            <FiChevronDown
+              className={
+                "text-xl transition-transform duration-150 " + (isOpen ? "rotate-180" : "rotate-0")
+              }
+            />
+          </div>
+        </Button>
+      </div>
+
+      <DrowdownBody
+        isOpen={isOpen}
+        values={values}
+        icons={icons}
+        value={value}
+        onChange={(value: string, index: number) => {
+          onChange(value, index);
+          setIsOpen(false);
+        }}
+      />
     </div>
   );
 }
 
-type DropdownBodyProps = {
-  items: string[];
-  friendlyLookup?: { [key: string]: string };
-  onSelection: (value: string) => any;
+type DrowdownBodyProps = {
+  isOpen: boolean;
+  values: string[];
+  icons?: React.ReactNode[];
+  value: string;
+  onChange: (value: string, index: number) => void;
 };
-function DropdownBody({ items, friendlyLookup, onSelection }: DropdownBodyProps) {
+function DrowdownBody({ isOpen, values, icons, value, onChange }: DrowdownBodyProps) {
   return (
-    <div className="absolute flex flex-col rounded-md overflow-hidden mt-1">
-      {items.map((item, index) => {
-        return (
-          <Button
-            key={index}
-            className={
-              "px-2 text-start rounded-none border-el1Active " + (index !== 0 ? "border-t-2" : "")
-            }
-            onClick={() => onSelection(item)}
-          >
-            {friendlyLookup?.[item] ?? item}
-          </Button>
-        );
-      })}
+    <div
+      className={
+        "absolute top-8 right-0 overflow-hidden transition-size duration-200 " +
+        (isOpen ? "max-h-screen" : "max-h-0")
+      }
+    >
+      <div className="flex flex-col rounded bg-el1 p-2">
+        {values.map((item, index) => {
+          return (
+            <Button
+              key={index}
+              theme={item === value ? "color" : "flat"}
+              className="flex justify-between items-center gap-2 [&>svg]:text-xl"
+              onClick={() => onChange(item, index)}
+            >
+              {icons && icons[index] && icons[index]}
+
+              <span className="flex-grow text-start whitespace-nowrap">{item}</span>
+              <BsCheckLg className={"text-xl " + (item === value ? "visible" : "invisible")} />
+            </Button>
+          );
+        })}
+      </div>
     </div>
   );
 }

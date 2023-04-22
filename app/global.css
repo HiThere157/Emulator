@@ -28,3 +28,21 @@ button,
 input {
   outline: unset;
 }
+
+@layer components {
+  .ctrl-el0 {
+    @apply hover:bg-el1Accent active:bg-el1Active;
+  }
+
+  .ctrl-el1 {
+    @apply bg-el1 hover:bg-el1Accent active:bg-el1Active;
+  }
+
+  .ctrl-el2 {
+    @apply bg-el2 hover:bg-el2Accent active:bg-el2Active;
+  }
+
+  .ctrl-el3 {
+    @apply bg-el3 hover:bg-el3Accent active:bg-el3Active;
+  }
+}

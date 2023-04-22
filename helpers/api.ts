@@ -1,57 +1,26 @@
-import { promises as fs } from "fs";
-import path from "path";
-import jwt from "jsonwebtoken";
-require("dotenv").config();
+export default async function makeApiCall<T>(
+  url: string,
+  init?: RequestInit,
+): Promise<[string | null, T | null]> {
+  const response = await fetch(url, init);
 
-import { NextRequest } from "next/server";
-import { cores } from "@/config/cores";
+  // If the response is ok, return the result
+  if (response.ok) {
+    // If the response is ok but there is no result, return null
+    try {
+      const result = (await response.json()) as T;
+      return [null, result];
+    } catch (error) {
+      return [null, null];
+    }
+  }
 
-async function createDirectory(path: string) {
+  // If the response is not ok, try to get the error message from the response
   try {
-    await fs.mkdir(path);
-  } catch {}
-}
-
-async function exists(path: string) {
-  try {
-    await fs.access(path, fs.constants.F_OK);
-    return true;
-  } catch {
-    return false;
+    const result = await response.json();
+    return [result.error, null];
+  } catch (error) {
+    // If the response is not ok and there is no error message, return a generic error message
+    return ["Something went wrong", null];
   }
 }
-
-function sanitizePath(prefix: string, subPath: string) {
-  const unsafePath = prefix + subPath;
-  const safePath = path.normalize(unsafePath).replace(/^(\.\.(\/|\\|$))+/, "");
-  return path.join(process.cwd(), safePath);
-}
-
-async function getBody(request: NextRequest) {
-  try {
-    return await request.json();
-  } catch {
-    return null;
-  }
-}
-
-function verifyToken(request: NextRequest) {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) return false;
-
-  const tokenCookie = request.cookies.get("token");
-  if (!tokenCookie) return false;
-
-  try {
-    jwt.verify(tokenCookie.value, secret);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
-function isCore(core: string) {
-  return Object.keys(cores).includes(core);
-}
-
-export { createDirectory, exists, sanitizePath, getBody, verifyToken, isCore };
