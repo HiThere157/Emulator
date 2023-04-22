@@ -92,10 +92,10 @@ export default function Library() {
               .sort(sortFunctionLookup[sortType])
               .map((rom) => rom.core),
           ),
-        ).map((core, index) => {
+        ).map((core) => {
           return (
             <Category
-              key={index}
+              key={core}
               name={core}
               roms={roms.filter(
                 (rom) => rom.core === core && rom.name.toLowerCase().includes(search.toLowerCase()),

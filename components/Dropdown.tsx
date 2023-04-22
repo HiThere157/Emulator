@@ -68,7 +68,7 @@ function DrowdownBody({ isOpen, values, icons, value, onChange }: DrowdownBodyPr
         {values.map((item, index) => {
           return (
             <Button
-              key={index}
+              key={item}
               theme={item === value ? "color" : "flat"}
               className="flex justify-between items-center gap-2 [&>svg]:text-xl"
               onClick={() => onChange(item, index)}
