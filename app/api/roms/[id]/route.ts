@@ -25,14 +25,14 @@ export async function PUT(request: NextRequest, { params }: Props) {
   // [Auth] Validate token
   const token = await validateToken(request);
   if (!token) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+    return new Response("Unauthorized", {
       status: 401,
     });
   }
 
   // [Auth] Validate role
   if (token.role !== "Administrator") {
-    return new Response(JSON.stringify({ error: "Administrator role required" }), {
+    return new Response("Administrator role required", {
       status: 403,
     });
   }
@@ -41,8 +41,8 @@ export async function PUT(request: NextRequest, { params }: Props) {
   const { name, core, image, image_resolution }: RomFileCR = await request.json();
 
   // [Validation] Check for missing fields
-  if (!name || !core || !image || !image_resolution) {
-    return new Response(JSON.stringify({ error: "Missing fields" }), {
+  if (!name || !core || !image_resolution) {
+    return new Response("Missing fields", {
       status: 400,
     });
   }
@@ -62,7 +62,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
 
   // [Validation] Check if rom exists
   if (currentRomIndex === -1) {
-    return new Response(JSON.stringify({ error: "Rom not found" }), {
+    return new Response("Rom not found", {
       status: 404,
     });
   }
@@ -90,14 +90,14 @@ export async function DELETE(request: NextRequest, { params }: Props) {
   // [Auth] Validate token
   const token = await validateToken(request);
   if (!token) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+    return new Response("Unauthorized", {
       status: 401,
     });
   }
 
   // [Auth] Validate role
   if (token.role !== "Administrator") {
-    return new Response(JSON.stringify({ error: "Administrator role required" }), {
+    return new Response("Administrator role required", {
       status: 403,
     });
   }
@@ -111,7 +111,7 @@ export async function DELETE(request: NextRequest, { params }: Props) {
 
   // [Validation] Check if rom exists
   if (currentRomIndex === -1) {
-    return new Response(JSON.stringify({ error: "Rom not found" }), {
+    return new Response("Rom not found", {
       status: 404,
     });
   }

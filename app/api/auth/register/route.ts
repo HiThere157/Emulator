@@ -23,14 +23,14 @@ export async function POST(request: NextRequest) {
     (user: User) => user.username.toLowerCase() === username.toLowerCase(),
   );
   if (existingUser) {
-    return new Response(JSON.stringify({ error: "User already exists" }), {
+    return new Response("User already exists", {
       status: 400,
     });
   }
 
   // [Validation] Check for maximum users
   if (users.length >= 50) {
-    return new Response(JSON.stringify({ error: "Maximum users reached" }), {
+    return new Response("Maximum users reached", {
       status: 400,
     });
   }

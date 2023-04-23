@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
-import makeApiCall from "@/helpers/api";
 import { getLoginCookie, clearLoginCookie } from "@/helpers/cookie";
+import makeApiCall from "@/helpers/api";
 
 import OptionLink from "@/components/Header/OptionLink";
 import Button from "@/components/Button";
@@ -57,9 +57,10 @@ type UserBodyProps = {
 };
 function UserBody({ isOpen }: UserBodyProps) {
   const logout = async () => {
-    const [error] = await makeApiCall<LoginCookiePayload>("/api/auth/logout", {
+    const { error } = await makeApiCall<LoginCookiePayload>("/api/auth/logout", {
       method: "POST",
     });
+
     if (!error) {
       clearLoginCookie();
       location.href = "/login";

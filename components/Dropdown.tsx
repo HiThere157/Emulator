@@ -24,7 +24,7 @@ export default function Dropdown({ values, icons, lookup, value, label, onChange
     <div ref={ref} className="relative w-fit z-[10]">
       <div className="flex items-center gap-2.5">
         {label && <span className="font-bold">{label}</span>}
-        <Button className="ctrl-flat" onClick={() => setIsOpen(!isOpen)}>
+        <Button className="ctrl-flat min-h-[1.75rem]" onClick={() => setIsOpen(!isOpen)}>
           <div className="flex items-center gap-1">
             <span>{lookup?.[value] ?? value}</span>
             <FiChevronDown

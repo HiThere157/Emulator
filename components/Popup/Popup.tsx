@@ -1,7 +1,7 @@
 type PopupProps = {
   children: React.ReactNode;
   isOpen: boolean;
-  onBackgroundClick: () => any;
+  onBackgroundClick?: () => any;
 };
 export default function Popup({ children, isOpen, onBackgroundClick }: PopupProps) {
   return (

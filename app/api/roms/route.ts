@@ -14,7 +14,7 @@ const romDBPath = path.join(process.cwd(), "data/roms.json");
 export async function GET(request: NextRequest) {
   // [Auth] Validate token
   if (!(await validateToken(request))) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+    return new Response("Unauthorized", {
       status: 401,
     });
   }
@@ -41,14 +41,14 @@ export async function POST(request: NextRequest) {
   // [Auth] Validate token
   const token = await validateToken(request);
   if (!token) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+    return new Response("Unauthorized", {
       status: 401,
     });
   }
 
   // [Auth] Validate role
   if (token.role !== "Administrator") {
-    return new Response(JSON.stringify({ error: "Administrator role required" }), {
+    return new Response("Administrator role required", {
       status: 403,
     });
   }
@@ -61,8 +61,8 @@ export async function POST(request: NextRequest) {
   const { name, core, image, image_resolution }: RomFileCR = await request.json();
 
   // [Validation] Check for missing fields
-  if (!name || !core || !image || !image_resolution) {
-    return new Response(JSON.stringify({ error: "Missing fields" }), {
+  if (!name || !core || !image_resolution) {
+    return new Response("Missing fields", {
       status: 400,
     });
   }

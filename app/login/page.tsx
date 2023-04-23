@@ -13,7 +13,7 @@ import { PulseLoader } from "react-spinners";
 
 export default function Login() {
   const [isRegistering, setIsRegistering] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [username, setUsername] = useState<string>("");
@@ -35,6 +35,7 @@ export default function Login() {
     if (!username || !password) return;
 
     setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // Prevent flashing of spinner
 
     if (isRegistering) {
       await register();
@@ -42,34 +43,28 @@ export default function Login() {
       await login();
     }
 
-    // wait for 1 second to prevent flashing of spinner
-    // UX improvement
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     setIsLoading(false);
   };
 
   const login = async () => {
-    // make api call
-    const [error, response] = await makeApiCall<LoginCookiePayload>("/api/auth/login", {
+    const { result, error } = await makeApiCall<LoginCookiePayload>("/api/auth/login", {
       method: "POST",
       body: JSON.stringify({
         username: username,
         password: await sha256(password),
-      }),
+      } as UserLogin),
     });
 
     if (error) {
       setError(error);
 
-      // clear fields
       setPassword("");
       setConfirmPassword("");
       return;
     }
 
-    if (response) {
-      setLoginCookie(response);
+    if (result) {
+      setLoginCookie(result);
 
       // redirect to callback url
       const urlParams = new URLSearchParams(window.location.search);
@@ -80,7 +75,7 @@ export default function Login() {
   };
 
   const register = async () => {
-    // check if passwords match if registering
+    // check if passwords match
     if (isRegistering && password !== confirmPassword) {
       setError("Passwords do not match");
       return;
@@ -92,8 +87,7 @@ export default function Login() {
       return;
     }
 
-    // make api call
-    const [error] = await makeApiCall<LoginCookiePayload>("/api/auth/register", {
+    const { error } = await makeApiCall<LoginCookiePayload>("/api/auth/register", {
       method: "POST",
       body: JSON.stringify({
         username: username,
@@ -144,7 +138,7 @@ export default function Login() {
         >
           {isRegistering ? "Login Instead" : "No Account? Register"}
         </Button>
-        <Button className="ctrl-blue" onClick={onSubmit}>
+        <Button className="ctrl-blue" onClick={onSubmit} disabled={isLoading}>
           {isLoading ? <PulseLoader size="8px" color="#F0F0F0" speedMultiplier={0.6} /> : "Login"}
         </Button>
       </div>

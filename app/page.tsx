@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import makeApiCall from "@/helpers/api";
 import { sortTypes } from "@/config/static";
+import makeApiCall from "@/helpers/api";
 
 import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";
@@ -10,7 +10,7 @@ import Input from "@/components/Input";
 import Error from "@/components/Error";
 import Category from "@/components/Card/Category";
 import GameCard from "@/components/Card/GameCard";
-import EditRomPopup from "@/components/Popup/EditRomPopup";
+import RomPopup from "@/components/Popup/RomPopup";
 
 import {
   BsArrowBarUp,
@@ -23,9 +23,9 @@ import { FiRefreshCw } from "react-icons/fi";
 import { PulseLoader } from "react-spinners";
 
 export default function Library() {
-  const [roms, setRoms] = useState<RomFile[] | null>(null);
+  const [roms, setRoms] = useState<ApiResult<RomFile[]>>({});
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [selectedRom, setSelectedRom] = useState<RomFile | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const [search, setSearch] = useState<string>("");
   const searchFilter = (rom: RomFile) => rom.name.toLowerCase().includes(search.toLowerCase());
@@ -44,17 +44,12 @@ export default function Library() {
   };
 
   const fetchRoms = async () => {
-    setError(null);
-    setRoms(null);
+    setIsLoading(true);
+    setRoms({});
+    await new Promise((resolve) => setTimeout(resolve, 1000)); // Prevent flashing of spinner
 
-    const [error, result] = await makeApiCall<RomFile[]>("/api/roms");
-
-    // wait for 1 second to prevent flashing of spinner
-    // UX improvement
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    if (error) return setError(error);
-    setRoms(result);
+    setRoms(await makeApiCall<RomFile[]>("/api/roms"));
+    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -63,10 +58,44 @@ export default function Library() {
 
   return (
     <div>
-      <EditRomPopup rom={selectedRom} onClose={() => setSelectedRom(null)} />
+      <RomPopup
+        rom={selectedRom}
+        onClose={() => setSelectedRom(null)}
+        onRomUpload={(newRom: RomFile) => {
+          setRoms({
+            error: roms.error,
+            result: roms.result ? [...roms.result, newRom] : [newRom],
+          });
+        }}
+        onRomUpdate={(changedRom: RomFile) => {
+          setRoms({
+            error: roms.error,
+            result: roms.result?.map((rom) => (rom.id === changedRom.id ? changedRom : rom)),
+          });
+        }}
+        onRomDelete={(id: number) => {
+          setRoms({
+            error: roms.error,
+            result: roms.result?.filter((rom) => rom.id !== id),
+          });
+        }}
+      />
 
       <div className="flex justify-between gap-2 m-2">
-        <Button className="ctrl-blue flex items-center gap-2" onClick={() => {}}>
+        <Button
+          className="ctrl-blue flex items-center gap-2"
+          onClick={() => {
+            setSelectedRom({
+              id: -1,
+              name: "",
+              core: "",
+              image: "",
+              image_resolution: "200x275",
+              uploaded_by: -1,
+              size: 0,
+            } as RomFile);
+          }}
+        >
           <BsArrowBarUp className="text-xl" />
           <span className="font-bold">Upload Rom</span>
         </Button>
@@ -93,14 +122,14 @@ export default function Library() {
       </div>
 
       <div className="flex flex-col justify-center items-center gap-2">
-        {roms === null && !error && (
+        {isLoading && (
           <PulseLoader size="15px" color="#208CF0" className="mt-8" speedMultiplier={0.6} />
         )}
-        <Error className="text-2xl mt-6" message={error} />
+        <Error className="text-2xl mt-6" message={roms.error} />
       </div>
 
-      {roms &&
-        roms
+      {roms.result &&
+        roms.result
           .filter(searchFilter)
           .sort(sortFunctionLookup[sortType])
           .reduce(uniqueReducer, [] as string[])
@@ -109,10 +138,10 @@ export default function Library() {
               <Category
                 key={core}
                 name={core}
-                count={roms.filter((rom) => rom.core === core).length}
+                count={roms.result?.filter((rom) => rom.core === core).length ?? 0}
               >
-                {roms
-                  .filter((rom) => rom.core === core)
+                {roms.result
+                  ?.filter((rom) => rom.core === core)
                   .filter(searchFilter)
                   .map((rom) => (
                     <GameCard key={rom.id} rom={rom} onDetailsClick={() => setSelectedRom(rom)} />

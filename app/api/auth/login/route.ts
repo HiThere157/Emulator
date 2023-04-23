@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
   // [Validation] Check if user exists
   const user = users.find((user: User) => user.username.toLowerCase() === username.toLowerCase());
   if (!user) {
-    return new Response(JSON.stringify({ error: "Invalid credentials" }), {
+    return new Response("Invalid credentials", {
       status: 401,
     });
   }
@@ -32,14 +32,14 @@ export async function POST(request: NextRequest) {
   // [Validation] Check if passwords match
   const isMatch = await bcrypt.compare(password, user.hash);
   if (!isMatch) {
-    return new Response(JSON.stringify({ error: "Invalid credentials" }), {
+    return new Response("Invalid credentials", {
       status: 401,
     });
   }
 
   // [Validation] Check if user is enabled
   if (!user.enabled) {
-    return new Response(JSON.stringify({ error: "User is not enabled" }), {
+    return new Response("User is not enabled", {
       status: 401,
     });
   }

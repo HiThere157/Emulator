@@ -1,7 +1,7 @@
 import { BsExclamationOctagon } from "react-icons/bs";
 
 type ErrorProps = {
-  message: string | null;
+  message?: string;
   className?: string;
 };
 export default function Error({ message, className }: ErrorProps) {
