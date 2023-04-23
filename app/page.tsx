@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useLocalStorage } from "@/hooks/useStorage";
 import { sortTypes } from "@/config/static";
 import makeApiCall from "@/helpers/api";
 
@@ -31,7 +30,7 @@ export default function Library() {
   const [search, setSearch] = useState<string>("");
   const searchFilter = (rom: RomFile) => rom.name.toLowerCase().includes(search.toLowerCase());
 
-  const [sortType, setSortType] = useLocalStorage<string>("emulator_library_sortType", "platform");
+  const [sortType, setSortType] = useState<string>("name-asc");
   const sortFunctionLookup: { [key: string]: (a: RomFile, b: RomFile) => number } = {
     platform: (a: RomFile, b: RomFile) => b.core.localeCompare(a.core),
     "name-asc": (a: RomFile, b: RomFile) => a.name.localeCompare(b.name),
@@ -146,11 +145,7 @@ export default function Library() {
                     ?.filter((rom) => rom.core === core)
                     .filter(searchFilter)
                     .map((rom) => (
-                      <GameCard
-                        key={rom.id}
-                        rom={rom}
-                        onDetailsClick={() => setSelectedRom(rom)}
-                      />
+                      <GameCard key={rom.id} rom={rom} onDetailsClick={() => setSelectedRom(rom)} />
                     ))}
                 </div>
               </Category>
