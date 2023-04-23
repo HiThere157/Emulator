@@ -147,19 +147,28 @@ export default function Library() {
               <Category
                 key={core}
                 name={core}
-                isGrid={isGrid}
                 count={roms.result?.filter((rom) => rom.core === core).length ?? 0}
               >
-                {roms.result
-                  ?.filter((rom) => rom.core === core)
-                  .filter(searchFilter)
-                  .map((rom) => {
-                    return isGrid ? (
-                      <GameCard key={rom.id} rom={rom} onDetailsClick={() => setSelectedRom(rom)} />
-                    ) : (
-                      <GameRow key={rom.id} rom={rom} onDetailsClick={() => setSelectedRom(rom)} />
-                    );
-                  })}
+                <div className={"flex " + (isGrid ? "flex-wrap gap-2" : "flex-col")}>
+                  {roms.result
+                    ?.filter((rom) => rom.core === core)
+                    .filter(searchFilter)
+                    .map((rom) => {
+                      return isGrid ? (
+                        <GameCard
+                          key={rom.id}
+                          rom={rom}
+                          onDetailsClick={() => setSelectedRom(rom)}
+                        />
+                      ) : (
+                        <GameRow
+                          key={rom.id}
+                          rom={rom}
+                          onDetailsClick={() => setSelectedRom(rom)}
+                        />
+                      );
+                    })}
+                </div>
               </Category>
             );
           })}

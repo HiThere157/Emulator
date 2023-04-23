@@ -43,10 +43,12 @@ function useStorage<T>(
 }
 
 function useSessionStorage<T>(key: string, initialValue: any): [T, (value: T) => void, string] {
+  if (typeof window === "undefined") return [initialValue, () => {}, key];
   return [...useStorage<T>(window.sessionStorage, key, initialValue), key];
 }
 
 function useLocalStorage<T>(key: string, initialValue: any): [T, (value: T) => void, string] {
+  if (typeof window === "undefined") return [initialValue, () => {}, key];
   return [...useStorage<T>(window.localStorage, key, initialValue), key];
 }
 
