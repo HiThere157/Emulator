@@ -10,9 +10,10 @@ import { FiChevronDown } from "react-icons/fi";
 type CategoryProps = {
   name: string;
   count: number;
+  isGrid: boolean;
   children?: React.ReactNode;
 };
-export default function Category({ name, count, children }: CategoryProps) {
+export default function Category({ name, count, isGrid, children }: CategoryProps) {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   return (
@@ -35,8 +36,10 @@ export default function Category({ name, count, children }: CategoryProps) {
 
       <div
         className={
-          "flex flex-wrap gap-2 overflow-hidden transition-size duration-200 " +
-          (isOpen ? "max-h-screen" : "max-h-0")
+          "flex overflow-hidden transition-size duration-200 " +
+          (isOpen ? "max-h-screen" : "max-h-0") +
+          " " +
+          (isGrid ? "flex-wrap gap-2" : "flex-col")
         }
       >
         {children}

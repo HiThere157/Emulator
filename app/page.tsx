@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useLocalStorage } from "@/hooks/useStorage";
 import { sortTypes } from "@/config/static";
 import makeApiCall from "@/helpers/api";
 
@@ -10,6 +11,7 @@ import Input from "@/components/Input";
 import Error from "@/components/Error";
 import Category from "@/components/Card/Category";
 import GameCard from "@/components/Card/GameCard";
+import GameRow from "@/components/Card/GameRow";
 import RomPopup from "@/components/Popup/RomPopup";
 
 import {
@@ -18,6 +20,8 @@ import {
   BsSortDown,
   BsSortAlphaDown,
   BsSortAlphaDownAlt,
+  BsGridFill,
+  BsListUl,
 } from "react-icons/bs";
 import { FiRefreshCw } from "react-icons/fi";
 import { PulseLoader } from "react-spinners";
@@ -30,7 +34,9 @@ export default function Library() {
   const [search, setSearch] = useState<string>("");
   const searchFilter = (rom: RomFile) => rom.name.toLowerCase().includes(search.toLowerCase());
 
-  const [sortType, setSortType] = useState<string>("platform");
+  const [isGrid, setIsGrid] = useLocalStorage<boolean>("emulator_library_isGrid", true);
+
+  const [sortType, setSortType] = useLocalStorage<string>("emulator_library_sortType", "platform");
   const sortFunctionLookup: { [key: string]: (a: RomFile, b: RomFile) => number } = {
     platform: (a: RomFile, b: RomFile) => b.core.localeCompare(a.core),
     "name-asc": (a: RomFile, b: RomFile) => a.name.localeCompare(b.name),
@@ -119,6 +125,9 @@ export default function Library() {
           label="Sort By"
           onChange={setSortType}
         />
+        <Button className="ctrl-flat px-1" onClick={() => setIsGrid(!isGrid)}>
+          {isGrid ? <BsListUl className="text-xl w-5" /> : <BsGridFill className="text-lg w-5" />}
+        </Button>
       </div>
 
       <div className="flex flex-col justify-center items-center gap-2">
@@ -138,14 +147,19 @@ export default function Library() {
               <Category
                 key={core}
                 name={core}
+                isGrid={isGrid}
                 count={roms.result?.filter((rom) => rom.core === core).length ?? 0}
               >
                 {roms.result
                   ?.filter((rom) => rom.core === core)
                   .filter(searchFilter)
-                  .map((rom) => (
-                    <GameCard key={rom.id} rom={rom} onDetailsClick={() => setSelectedRom(rom)} />
-                  ))}
+                  .map((rom) => {
+                    return isGrid ? (
+                      <GameCard key={rom.id} rom={rom} onDetailsClick={() => setSelectedRom(rom)} />
+                    ) : (
+                      <GameRow key={rom.id} rom={rom} onDetailsClick={() => setSelectedRom(rom)} />
+                    );
+                  })}
               </Category>
             );
           })}

@@ -53,7 +53,7 @@ export default function FileUpload({ fileName, disabled, onUpload }: FileUploadP
 
       {fileName ? (
         <>
-          <BsFillFileEarmarkCheckFill className="text-blueColor text-xl" />
+          <BsFillFileEarmarkCheckFill className="text-blueColor text-4xl" />
           <span className="text-greyColor">{fileName}</span>
         </>
       ) : (

@@ -22,7 +22,7 @@ export default function GameImage({ src, alt }: GameImageProps) {
         <Image
           src={placeholderSvg}
           alt="Image not found"
-          className="grayscale opacity-20 scale-50 mb-10"
+          className="grayscale opacity-20 scale-50"
         />
       </div>
     );
