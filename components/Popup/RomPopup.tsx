@@ -25,6 +25,7 @@ export default function RomPopup({
   onRomUpdate,
   onRomDelete,
 }: RomPopupProps) {
+  const [isBusy, setIsBusy] = useState<boolean>(false);
   const [error, setError] = useState<string>();
 
   const [name, setName] = useState<string>("");
@@ -49,7 +50,12 @@ export default function RomPopup({
   };
 
   return (
-    <Popup isOpen={rom !== null}>
+    <Popup
+      isOpen={rom !== null}
+      onBackgroundClick={() => {
+        if (!isBusy) onClose();
+      }}
+    >
       <div className="p-4 rounded border-2 bg-lightBg border-el1">
         <div className="flex">
           <div className="flex flex-col items-center justify-center">
@@ -68,6 +74,7 @@ export default function RomPopup({
                 romCR={{ name, core, image, image_resolution: resolution } as RomFileCR}
                 romFile={romFile}
                 setError={setError}
+                setIsBusy={setIsBusy}
                 onClose={onClose}
                 onRomUpload={onRomUpload}
               />
@@ -76,6 +83,7 @@ export default function RomPopup({
                 romCR={{ name, core, image, image_resolution: resolution } as RomFileCR}
                 id={rom?.id ?? -1}
                 setError={setError}
+                setIsBusy={setIsBusy}
                 onClose={onClose}
                 onRomUpdate={onRomUpdate}
                 onRomDelete={onRomDelete}
@@ -90,21 +98,26 @@ export default function RomPopup({
             {rom?.id === -1 && (
               <div>
                 <h3 className="text-lg font-bold">Rom File</h3>
-                <FileUpload fileName={romFile?.name} onUpload={setRomFile} />
+                <FileUpload fileName={romFile?.name} onUpload={setRomFile} disabled={isBusy} />
               </div>
             )}
 
             <SettingCategory name="Image">
               <span className="text-greyColor">Image Url:</span>
-              <Input value={image} onChange={setImage} />
+              <Input value={image} onChange={setImage} disabled={isBusy} />
 
               <span className="text-greyColor">Resolution:</span>
-              <Dropdown values={resolutions} value={resolution} onChange={setResolution} />
+              <Dropdown
+                values={resolutions}
+                value={resolution}
+                onChange={setResolution}
+                disabled={isBusy}
+              />
             </SettingCategory>
 
             <SettingCategory name="General Settings">
               <span className="text-greyColor">Name:</span>
-              <Input value={name} onChange={setName} />
+              <Input value={name} onChange={setName} disabled={isBusy} />
 
               <span className="text-greyColor">Platform:</span>
               <Dropdown
@@ -112,6 +125,7 @@ export default function RomPopup({
                 value={core}
                 lookup={cores}
                 onChange={setCore}
+                disabled={isBusy}
               />
             </SettingCategory>
           </div>

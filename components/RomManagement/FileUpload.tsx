@@ -4,9 +4,10 @@ import { BsFillFileEarmarkCheckFill, BsPlusSquare } from "react-icons/bs";
 
 type FileUploadProps = {
   fileName?: string;
+  disabled?: boolean;
   onUpload: (fileList: File) => any;
 };
-export default function FileUpload({ fileName, onUpload }: FileUploadProps) {
+export default function FileUpload({ fileName, disabled, onUpload }: FileUploadProps) {
   const [isDragging, setIsDragging] = useState<boolean>(false);
 
   const handleDragOver = (event: DragEvent) => {
@@ -42,7 +43,13 @@ export default function FileUpload({ fileName, onUpload }: FileUploadProps) {
       onDrop={handleDrop}
       onDragLeave={handleDragLeave}
     >
-      <input className="hidden" type="file" multiple={true} onChange={handleChange} />
+      <input
+        className="can-disable hidden"
+        type="file"
+        multiple={true}
+        onChange={handleChange}
+        disabled={disabled}
+      />
 
       {fileName ? (
         <>

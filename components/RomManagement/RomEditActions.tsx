@@ -1,8 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import makeApiCall from "@/helpers/api";
 
 import Button from "@/components/Button";
-import Error from "@/components/Error";
 
 import { BsFillTrashFill, BsSave } from "react-icons/bs";
 import { PulseLoader } from "react-spinners";
@@ -11,6 +10,7 @@ type RomEditActionsProps = {
   romCR: RomFileCR;
   id: number;
   setError: (error?: string) => any;
+  setIsBusy: (isBusy: boolean) => any;
   onClose: () => any;
   onRomUpdate: (rom: RomFile) => any;
   onRomDelete: (id: number) => any;
@@ -19,6 +19,7 @@ export default function RomEditActions({
   romCR,
   id,
   setError,
+  setIsBusy,
   onClose,
   onRomUpdate,
   onRomDelete,
@@ -58,6 +59,10 @@ export default function RomEditActions({
     setError(error);
     setIsDeleteLoading(false);
   };
+
+  useEffect(() => {
+    setIsBusy(isSaveLoading || isDeleteLoading);
+  }, [isSaveLoading, isDeleteLoading]);
 
   return (
     <div className="flex gap-2 mt-2">

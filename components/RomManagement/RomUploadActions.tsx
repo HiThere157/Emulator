@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import makeApiCall from "@/helpers/api";
 
 import Button from "@/components/Button";
@@ -10,6 +10,7 @@ type RomUploadActionsProps = {
   romCR: RomFileCR;
   romFile?: File;
   setError: (error?: string) => any;
+  setIsBusy: (isBusy: boolean) => any;
   onClose: () => any;
   onRomUpload: (rom: RomFile) => any;
 };
@@ -17,6 +18,7 @@ export default function RomUploadActions({
   romCR,
   romFile,
   setError,
+  setIsBusy,
   onClose,
   onRomUpload,
 }: RomUploadActionsProps) {
@@ -26,7 +28,11 @@ export default function RomUploadActions({
     setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000)); // Prevent flashing of spinner
 
-    if (!romFile) return setError("No ROM file uploaded");
+    if (!romFile) {
+      setError("No ROM file uploaded");
+      setIsLoading(false);
+      return;
+    }
 
     const { error: db_error, result: db_result } = await makeApiCall<RomFile>(`/api/roms`, {
       method: "POST",
@@ -48,6 +54,10 @@ export default function RomUploadActions({
 
     setIsLoading(false);
   };
+
+  useEffect(() => {
+    setIsBusy(isLoading);
+  }, [isLoading]);
 
   return (
     <div className="flex justify-end gap-2 mt-2">
