@@ -24,7 +24,7 @@ export default function Category({ name, count, children }: CategoryProps) {
         <h2 className="text-2xl font-bold mr-1">{cores[name] ?? name}</h2>
         <span className="text-greyColor">({count})</span>
 
-        <hr className="flex-grow mx-3 border-t-2 rounded text-greyColor" />
+        <hr className="flex-grow mx-3 border-t-2 rounded text-el1" />
 
         <FiChevronDown
           className={
