@@ -23,15 +23,14 @@ export default function User() {
 
   const classLookup = {
     Administrator: "text-redColor",
-    Player: "text-el2Accent",
+    Player: "text-blueColor",
     Guest: "text-greyColor",
   };
 
   return (
     <div ref={ref} className="relative z-[15]">
       <Button
-        theme="invisible"
-        className="flex items-center gap-2 text-start"
+        className="ctrl-invisible flex items-center gap-2 text-start"
         onClick={() => setIsOpen(!isOpen)}
       >
         <BsPersonCircle className={"text-3xl " + classLookup[user?.role ?? "Guest"]} />
@@ -84,7 +83,7 @@ function UserBody({ isOpen }: UserBodyProps) {
 
         <hr className="my-2 text-el1Active" />
 
-        <Button theme="flat" className="flex items-center gap-2 text-redColor" onClick={logout}>
+        <Button className="ctrl-flat flex items-center gap-2 text-redColor" onClick={logout}>
           <BsBoxArrowRight className="text-xl w-5" />
           <span>Logout</span>
         </Button>

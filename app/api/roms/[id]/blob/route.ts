@@ -67,7 +67,7 @@ export async function POST(request: NextRequest, { params }: Props) {
 
   // [Auth] Validate role
   if (token.role !== "Administrator") {
-    return new Response(JSON.stringify({ error: "Forbidden" }), {
+    return new Response(JSON.stringify({ error: "Administrator role required" }), {
       status: 403,
     });
   }

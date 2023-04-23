@@ -98,7 +98,7 @@ export default function Login() {
       body: JSON.stringify({
         username: username,
         password: await sha256(password),
-      }),
+      } as UserLogin),
     });
 
     if (error) {
@@ -113,7 +113,7 @@ export default function Login() {
 
   return (
     <div className="absolute top-1/4 left-1/2 translate-x-[-50%] translate-y-[-50%] flex flex-col items-center rounded">
-      <BsPersonBoundingBox className="text-8xl text-el2Accent mb-7" />
+      <BsPersonBoundingBox className="text-8xl text-blueColor mb-7" />
 
       <div className="grid grid-cols-[auto_auto] gap-2">
         <span>Username:</span>
@@ -139,13 +139,12 @@ export default function Login() {
 
       <div className="flex gap-2 mt-4">
         <Button
-          theme="invisible"
-          className="underline underline-offset-2"
+          className="ctrl-invisible underline underline-offset-2"
           onClick={() => setIsRegistering(!isRegistering)}
         >
           {isRegistering ? "Login Instead" : "No Account? Register"}
         </Button>
-        <Button theme="color" onClick={onSubmit}>
+        <Button className="ctrl-blue" onClick={onSubmit}>
           {isLoading ? <PulseLoader size="8px" color="#F0F0F0" speedMultiplier={0.6} /> : "Login"}
         </Button>
       </div>

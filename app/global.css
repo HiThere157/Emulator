@@ -30,19 +30,23 @@ input {
 }
 
 @layer components {
-  .ctrl-el0 {
+  .ctrl-invisible {
     @apply hover:bg-el1Accent active:bg-el1Active;
   }
 
-  .ctrl-el1 {
+  .ctrl-flat {
     @apply bg-el1 hover:bg-el1Accent active:bg-el1Active;
   }
 
-  .ctrl-el2 {
+  .ctrl-blue-hover {
     @apply bg-el2 hover:bg-el2Accent active:bg-el2Active;
   }
 
-  .ctrl-el3 {
+  .ctrl-blue {
     @apply bg-el3 hover:bg-el3Accent active:bg-el3Active;
+  }
+
+  .ctrl-red {
+    @apply bg-el4 hover:bg-el4Accent active:bg-el4Active;
   }
 }

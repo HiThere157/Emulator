@@ -13,7 +13,7 @@ export default function NavLink({ href, children }: NavLinkProps) {
   return (
     <Link
       className={
-        "ctrl-el0 flex items-center h-full rounded px-2 text-lg font-bold " +
+        "ctrl-invisible flex items-center h-full rounded px-2 text-lg font-bold " +
         (pathname == href ? "text-whiteColor" : "text-greyColor")
       }
       href={href}

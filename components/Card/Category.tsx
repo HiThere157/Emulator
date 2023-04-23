@@ -1,31 +1,30 @@
 "use client";
 
 import { useState } from "react";
-import { cores } from "@/config/lookups";
+import { cores } from "@/config/static";
 
 import Button from "@/components/Button";
-import GameCard from "@/components/Card/GameCard";
 
 import { FiChevronDown } from "react-icons/fi";
 
 type CategoryProps = {
   name: string;
-  roms: RomFile[];
+  count: number;
+  children?: React.ReactNode;
 };
-export default function Category({ name, roms }: CategoryProps) {
+export default function Category({ name, count, children }: CategoryProps) {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   return (
     <div className="p-2">
       <Button
-        theme="invisible"
-        className="flex items-center w-full"
+        className="ctrl-invisible flex items-center w-full"
         onClick={() => setIsOpen(!isOpen)}
       >
         <h2 className="text-2xl font-bold mr-1">{cores[name] ?? name}</h2>
-        <span className="text-greyColor">({roms.length})</span>
+        <span className="text-greyColor">({count})</span>
 
-        <hr className="flex-grow mx-3 text-greyColor" />
+        <hr className="flex-grow mx-3 border-t-2 rounded text-greyColor" />
 
         <FiChevronDown
           className={
@@ -40,9 +39,7 @@ export default function Category({ name, roms }: CategoryProps) {
           (isOpen ? "max-h-screen" : "max-h-0")
         }
       >
-        {roms.map((rom, index) => (
-          <GameCard key={index} rom={rom} />
-        ))}
+        {children}
       </div>
     </div>
   );

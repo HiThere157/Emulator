@@ -8,24 +8,25 @@ import { BsCheckLg } from "react-icons/bs";
 
 type DropdownProps = {
   values: string[];
-  icons?: React.ReactNode[];
   value: string;
+  icons?: React.ReactNode[];
+  lookup?: { [key: string]: string };
   label?: string;
-  onChange: (value: string, index: number) => void;
+  onChange: (value: string) => void;
 };
-export default function Dropdown({ values, icons, value, label, onChange }: DropdownProps) {
+export default function Dropdown({ values, icons, lookup, value, label, onChange }: DropdownProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   useOutsideClick(ref, () => setIsOpen(false));
 
   return (
-    <div ref={ref} className="relative z-[10]">
+    <div ref={ref} className="relative w-fit z-[10]">
       <div className="flex items-center gap-2.5">
         {label && <span className="font-bold">{label}</span>}
-        <Button theme="flat" onClick={() => setIsOpen(!isOpen)}>
+        <Button className="ctrl-flat" onClick={() => setIsOpen(!isOpen)}>
           <div className="flex items-center gap-1">
-            <span>{value}</span>
+            <span>{lookup?.[value] ?? value}</span>
             <FiChevronDown
               className={
                 "text-xl transition-transform duration-150 " + (isOpen ? "rotate-180" : "rotate-0")
@@ -39,9 +40,10 @@ export default function Dropdown({ values, icons, value, label, onChange }: Drop
         isOpen={isOpen}
         values={values}
         icons={icons}
+        lookup={lookup}
         value={value}
-        onChange={(value: string, index: number) => {
-          onChange(value, index);
+        onChange={(value: string) => {
+          onChange(value);
           setIsOpen(false);
         }}
       />
@@ -52,11 +54,12 @@ export default function Dropdown({ values, icons, value, label, onChange }: Drop
 type DrowdownBodyProps = {
   isOpen: boolean;
   values: string[];
-  icons?: React.ReactNode[];
   value: string;
-  onChange: (value: string, index: number) => void;
+  icons?: React.ReactNode[];
+  lookup?: { [key: string]: string };
+  onChange: (value: string) => void;
 };
-function DrowdownBody({ isOpen, values, icons, value, onChange }: DrowdownBodyProps) {
+function DrowdownBody({ isOpen, values, icons, lookup, value, onChange }: DrowdownBodyProps) {
   return (
     <div
       className={
@@ -69,13 +72,17 @@ function DrowdownBody({ isOpen, values, icons, value, onChange }: DrowdownBodyPr
           return (
             <Button
               key={item}
-              theme={item === value ? "color" : "flat"}
-              className="flex justify-between items-center gap-2 [&>svg]:text-xl"
-              onClick={() => onChange(item, index)}
+              className={
+                "flex justify-between items-center gap-2 [&>svg]:text-xl " +
+                (item === value ? "ctrl-blue" : "ctrl-flat")
+              }
+              onClick={() => onChange(item)}
             >
               {icons && icons[index] && icons[index]}
 
-              <span className="flex-grow text-start whitespace-nowrap">{item}</span>
+              <span className="flex-grow text-start whitespace-nowrap">
+                {lookup?.[item] ?? item}
+              </span>
               <BsCheckLg className={"text-xl " + (item === value ? "visible" : "invisible")} />
             </Button>
           );

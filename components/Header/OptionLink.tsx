@@ -15,7 +15,7 @@ export default function OptionLink({ href, icon, children }: OptionLinkProps) {
     <Link
       className={
         "flex items-center whitespace-nowrap rounded gap-2 py-0.5 px-2 " +
-        (pathname === href ? "ctrl-el3" : "ctrl-el1")
+        (pathname === href ? "ctrl-blue" : "ctrl-flat")
       }
       href={href}
     >
