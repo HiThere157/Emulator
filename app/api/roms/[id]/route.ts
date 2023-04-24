@@ -16,66 +16,35 @@ type Props = {
 
 /*
   Params: id
-  Role: Administrator
-  Body: RomFileCR
-  Response: RomFile
-  Codes: 400, 401, 403, 404
+  Response: blob
+  Codes: 401, 404
 */
-export async function PUT(request: NextRequest, { params }: Props) {
+export async function GET(request: NextRequest, { params }: Props) {
   // [Auth] Validate token
-  const token = await validateToken(request);
-  if (!token) {
+  if (!(await validateToken(request))) {
     return new Response("Unauthorized", {
       status: 401,
     });
   }
 
-  // [Auth] Validate role
-  if (token.role !== "Administrator") {
-    return new Response("Administrator role required", {
-      status: 403,
-    });
-  }
+  // [Request] Get rom path
+  const romPath = path.join(romFilePath, `${params.id}.rom`);
 
-  // [Request] Get rom details
-  const { name, core, image, image_resolution }: RomFileCR = await request.json();
-
-  // [Validation] Check for missing fields
-  if (!name || !core || !image_resolution) {
-    return new Response("Missing fields", {
-      status: 400,
-    });
-  }
-
-  // [DB] Read roms
-  const romDB = await fs.readFile(romDBPath, "utf-8");
-  const roms: RomFile[] = JSON.parse(romDB);
-
-  // [DB] Update rom (1/2 - Create new rom)
-  const newRom: RomFileCR = {
-    name,
-    core,
-    image,
-    image_resolution,
-  };
-  const currentRomIndex = roms.findIndex((rom) => rom.id.toString() === params.id);
-
-  // [Validation] Check if rom exists
-  if (currentRomIndex === -1) {
+  // [Validation] Check if rom file exists
+  const romExists = await fs.stat(romPath).catch(() => false);
+  if (!romExists) {
     return new Response("Rom not found", {
       status: 404,
     });
   }
 
-  // [DB] Update rom (2/2 - Update roms)
-  roms[currentRomIndex] = { ...roms[currentRomIndex], ...newRom };
+  // [FS] Read rom blob
+  const blob = await fs.readFile(romPath);
 
-  // [DB] Write roms
-  await fs.writeFile(romDBPath, JSON.stringify(roms, null, 2));
-
-  return new Response(JSON.stringify(roms[currentRomIndex]), {
+  return new Response(blob, {
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/octet-stream",
+      "Cache-Control": "max-age=43200",
     },
     status: 200,
   });
@@ -84,9 +53,10 @@ export async function PUT(request: NextRequest, { params }: Props) {
 /*
   Params: id
   Role: Administrator
-  Codes: 401, 403, 404
+  Body: blob
+  Codes: 400, 401, 403, 404
 */
-export async function DELETE(request: NextRequest, { params }: Props) {
+export async function POST(request: NextRequest, { params }: Props) {
   // [Auth] Validate token
   const token = await validateToken(request);
   if (!token) {
@@ -102,28 +72,31 @@ export async function DELETE(request: NextRequest, { params }: Props) {
     });
   }
 
-  // [DB] Read roms
+  // [Validation] Check if rom id is valid
   const romDB = await fs.readFile(romDBPath, "utf-8");
   const roms: RomFile[] = JSON.parse(romDB);
-
-  // [DB] Delete rom (1/2 - Find rom)
   const currentRomIndex = roms.findIndex((rom) => rom.id.toString() === params.id);
-
-  // [Validation] Check if rom exists
   if (currentRomIndex === -1) {
     return new Response("Rom not found", {
       status: 404,
     });
   }
 
-  // [DB] Delete rom (2/2 - Delete rom)
-  roms.splice(currentRomIndex, 1);
-  await fs.writeFile(romDBPath, JSON.stringify(roms, null, 2));
+  // [Validation] Check if rom blob is valid
+  if (!request.body) {
+    return new Response("Rom blob is required", {
+      status: 400,
+    });
+  }
 
-  // [FS] Delete rom file
-  try {
-    await fs.unlink(path.join(romFilePath, `${params.id}.rom`));
-  } catch {}
+  // [FS] Update rom
+  const romPath = path.join(romFilePath, `${params.id}.rom`);
+  const rom = new Uint8Array(await request.arrayBuffer());
+  await fs.writeFile(romPath, rom);
+
+  // [DB] Update rom database
+  roms[currentRomIndex].size = rom.length;
+  await fs.writeFile(romDBPath, JSON.stringify(roms, null, 2));
 
   return new Response(null, {
     status: 200,

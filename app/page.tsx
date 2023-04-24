@@ -23,8 +23,7 @@ import { FiRefreshCw } from "react-icons/fi";
 import { PulseLoader } from "react-spinners";
 
 export default function Library() {
-  const [roms, setRoms] = useState<ApiResult<RomFile[]>>({});
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [roms, setRoms] = useState<ApiResult<RomFile[]> | null>(null);
   const [selectedRom, setSelectedRom] = useState<RomFile | null>(null);
 
   const [search, setSearch] = useState<string>("");
@@ -44,12 +43,10 @@ export default function Library() {
   };
 
   const fetchRoms = async () => {
-    setIsLoading(true);
-    setRoms({});
+    setRoms(null);
     await new Promise((resolve) => setTimeout(resolve, 1000)); // Prevent flashing of spinner
 
     setRoms(await makeApiCall<RomFile[]>("/api/roms"));
-    setIsLoading(false);
   };
 
   useEffect(() => {
@@ -63,20 +60,20 @@ export default function Library() {
         onClose={() => setSelectedRom(null)}
         onRomUpload={(newRom: RomFile) => {
           setRoms({
-            error: roms.error,
-            result: roms.result ? [...roms.result, newRom] : [newRom],
+            error: roms?.error,
+            result: roms?.result ? [...roms.result, newRom] : [newRom],
           });
         }}
         onRomUpdate={(changedRom: RomFile) => {
           setRoms({
-            error: roms.error,
-            result: roms.result?.map((rom) => (rom.id === changedRom.id ? changedRom : rom)),
+            error: roms?.error,
+            result: roms?.result?.map((rom) => (rom.id === changedRom.id ? changedRom : rom)),
           });
         }}
         onRomDelete={(id: number) => {
           setRoms({
-            error: roms.error,
-            result: roms.result?.filter((rom) => rom.id !== id),
+            error: roms?.error,
+            result: roms?.result?.filter((rom) => rom.id !== id),
           });
         }}
       />
@@ -122,13 +119,13 @@ export default function Library() {
       </div>
 
       <div className="flex flex-col justify-center items-center gap-2">
-        {isLoading && (
+        {roms === null && (
           <PulseLoader size="15px" color="#208CF0" className="mt-8" speedMultiplier={0.6} />
         )}
-        <Error className="text-2xl mt-6" message={roms.error} />
+        <Error className="text-2xl mt-6" message={roms?.error} />
       </div>
 
-      {roms.result &&
+      {roms?.result &&
         roms.result
           .filter(searchFilter)
           .sort(sortFunctionLookup[sortType])

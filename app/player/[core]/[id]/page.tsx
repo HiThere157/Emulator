@@ -21,7 +21,7 @@ export default function Player({ params }: PlayerProps) {
     const playerWindow = playerRef.current?.contentWindow as PlayerWindow;
     if (!playerWindow) return;
 
-    playerWindow.EJS_gameUrl = `/api/roms/${params.id}/blob`;
+    playerWindow.EJS_gameUrl = `/api/roms/${params.id}`;
     playerWindow.EJS_core = params.core;
     playerWindow.init();
   };

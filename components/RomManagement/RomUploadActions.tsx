@@ -42,7 +42,7 @@ export default function RomUploadActions({
     setError(db_error);
 
     if (db_result && !db_error) {
-      const { error: blob_error } = await makeApiCall<RomFile>(`/api/roms/${db_result.id}/blob`, {
+      const { error: blob_error } = await makeApiCall<RomFile>(`/api/roms/${db_result.id}`, {
         method: "POST",
         body: romFile,
       });

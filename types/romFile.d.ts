@@ -5,12 +5,8 @@ type RomFileCR = {
   image_resolution: string;
 };
 
-type RomFile = {
+type RomFile = RomFileCR & {
   id: number;
-  name: string;
-  core: string;
-  image: string;
-  image_resolution: string;
   uploaded_by: number;
   size: number;
 };
