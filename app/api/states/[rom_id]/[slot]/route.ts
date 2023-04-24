@@ -55,7 +55,7 @@ export async function GET(request: NextRequest, { params }: Props) {
   Body: blob
   Codes: 400, 401, 403, 404
 */
-export async function POST(request: NextRequest, { params }: Props) {
+export async function PUT(request: NextRequest, { params }: Props) {
   // [Auth] Validate token
   const token = await validateToken(request);
   if (!token) {

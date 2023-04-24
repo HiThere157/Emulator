@@ -4,8 +4,3 @@ type StateFile = {
   uploaded_by: number;
   size: number;
 };
-
-type State = {
-  remote?: StateFile[];
-  local?: StateFile[];
-};
