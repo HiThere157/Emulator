@@ -31,7 +31,7 @@ export default function RomEditActions({
     setIsSaveLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000)); // Prevent flashing of spinner
 
-    const { error, result } = await makeApiCall<RomFile>(`/api/roms/${id}/meta`, {
+    const { error, result } = await makeApiCall<RomFile>(`/api/roms/${id}/meta`, "json", {
       method: "POST",
       body: JSON.stringify(romCR),
     });
@@ -47,7 +47,7 @@ export default function RomEditActions({
     setIsDeleteLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 1000)); // Prevent flashing of spinner
 
-    const { error } = await makeApiCall(`/api/roms/${id}/meta`, {
+    const { error } = await makeApiCall(`/api/roms/${id}/meta`, "text", {
       method: "DELETE",
     });
 

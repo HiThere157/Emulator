@@ -34,7 +34,7 @@ export default function RomUploadActions({
       return;
     }
 
-    const { error: db_error, result: db_result } = await makeApiCall<RomFile>(`/api/roms`, {
+    const { error: db_error, result: db_result } = await makeApiCall<RomFile>(`/api/roms`, "json", {
       method: "POST",
       body: JSON.stringify(romCR),
     });
@@ -42,10 +42,14 @@ export default function RomUploadActions({
     setError(db_error);
 
     if (db_result && !db_error) {
-      const { error: blob_error } = await makeApiCall<RomFile>(`/api/roms/${db_result.id}`, {
-        method: "POST",
-        body: romFile,
-      });
+      const { error: blob_error } = await makeApiCall<RomFile>(
+        `/api/roms/${db_result.id}`,
+        "text",
+        {
+          method: "POST",
+          body: romFile,
+        },
+      );
 
       onRomUpload(db_result);
       if (!blob_error) onClose();
