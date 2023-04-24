@@ -7,7 +7,6 @@ import { getStates } from "@/helpers/indexeddb";
 import Dropdown from "@/components/Dropdown";
 import Button from "@/components/Button";
 import Error from "@/components/Error";
-import StateSlot from "@/components/StateManagement/StateSlot";
 
 import { FiRefreshCw } from "react-icons/fi";
 import { PulseLoader } from "react-spinners";
@@ -25,8 +24,8 @@ export default function States() {
     await new Promise((resolve) => setTimeout(resolve, 1000)); // Prevent flashing of spinner
 
     const [newRoms, remoteStates, localStates] = await Promise.all([
-      makeApiCall<RomFile[]>("/api/roms", "json"),
-      makeApiCall<StateFile[]>("/api/states", "json"),
+      makeApiCall<RomFile[]>("/api/roms"),
+      makeApiCall<StateFile[]>("/api/states"),
       getStates(),
     ]);
 
@@ -38,18 +37,6 @@ export default function States() {
       },
     });
     setRoms(newRoms);
-  };
-
-  const appendIfNotExists = (arr: StateFile[], state: StateFile) => {
-    const index = arr.findIndex((s) => s.rom_id === state.rom_id && s.slot === state.slot);
-
-    if (index === -1) {
-      arr.push(state);
-    } else {
-      arr[index] = state;
-    }
-
-    return arr;
   };
 
   useEffect(() => {
@@ -79,35 +66,6 @@ export default function States() {
           <PulseLoader size="15px" color="#208CF0" className="mt-8" speedMultiplier={0.6} />
         )}
         <Error className="text-2xl mt-6" message={state?.error ?? roms?.error} />
-      </div>
-
-      <div className="flex flex-wrap justify-center gap-6">
-        {[1, 2, 3, 4, 5].map((i) => (
-          <StateSlot
-            key={i}
-            slot={i}
-            remote={state?.result?.remote?.find((state) => state.slot === i)}
-            local={state?.result?.local?.find((state) => state.slot === i)}
-            onDownload={(stateFile: StateFile) => {
-              setState({
-                error: state?.error,
-                result: {
-                  remote: state?.result?.remote,
-                  local: appendIfNotExists(state?.result?.local ?? [], stateFile),
-                },
-              });
-            }}
-            onUpload={(stateFile: StateFile) => {
-              setState({
-                error: state?.error,
-                result: {
-                  remote: appendIfNotExists(state?.result?.remote ?? [], stateFile),
-                  local: state?.result?.local,
-                },
-              });
-            }}
-          />
-        ))}
       </div>
     </div>
   );

@@ -46,7 +46,7 @@ export default function Library() {
     setRoms(null);
     await new Promise((resolve) => setTimeout(resolve, 1000)); // Prevent flashing of spinner
 
-    setRoms(await makeApiCall<RomFile[]>("/api/roms", "json"));
+    setRoms(await makeApiCall<RomFile[]>("/api/roms"));
   };
 
   useEffect(() => {
@@ -137,7 +137,7 @@ export default function Library() {
                 name={core}
                 count={roms.result?.filter((rom) => rom.core === core).length ?? 0}
               >
-                <div className="flex flex-wrap gap-2">
+                <div className={"flex flex-wrap gap-2"}>
                   {roms.result
                     ?.filter((rom) => rom.core === core)
                     .filter(searchFilter)

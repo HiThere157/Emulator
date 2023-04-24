@@ -47,7 +47,7 @@ export default function Login() {
   };
 
   const login = async () => {
-    const { result, error } = await makeApiCall<LoginCookiePayload>("/api/auth/login", "json", {
+    const { result, error } = await makeApiCall<LoginCookiePayload>("/api/auth/login", {
       method: "POST",
       body: JSON.stringify({
         username: username,
@@ -87,7 +87,7 @@ export default function Login() {
       return;
     }
 
-    const { error } = await makeApiCall<LoginCookiePayload>("/api/auth/register", "text", {
+    const { error } = await makeApiCall<LoginCookiePayload>("/api/auth/register", {
       method: "POST",
       body: JSON.stringify({
         username: username,
