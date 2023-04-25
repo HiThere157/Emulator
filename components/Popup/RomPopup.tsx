@@ -6,6 +6,7 @@ import Popup from "@/components/Popup/Popup";
 import Input from "@/components/Input";
 import Dropdown from "@/components/Dropdown";
 import Error from "@/components/Error";
+import Loader from "@/components/Loader";
 import GameImage from "@/components/Card/GameImage";
 import RomEditActions from "@/components/RomManagement/RomEditActions";
 import RomUploadActions from "@/components/RomManagement/RomUploadActions";
@@ -14,8 +15,8 @@ import FileUpload from "@/components/RomManagement/FileUpload";
 type RomPopupProps = {
   rom: RomFile | null;
   onClose: () => any;
-  onRomUpload: (rom: RomFile) => any;
-  onRomUpdate: (rom: RomFile) => any;
+  onRomUpload: (newRom: RomFile) => any;
+  onRomUpdate: (changedRom: RomFile) => any;
   onRomDelete: (id: number) => any;
 };
 export default function RomPopup({
@@ -25,8 +26,7 @@ export default function RomPopup({
   onRomUpdate,
   onRomDelete,
 }: RomPopupProps) {
-  const [isBusy, setIsBusy] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
+  const [result, setResult] = useState<ApiResult<RomFile>>({});
 
   const [name, setName] = useState<string>("");
   const [core, setCore] = useState<string>("");
@@ -35,7 +35,7 @@ export default function RomPopup({
   const [romFile, setRomFile] = useState<File>();
 
   useEffect(() => {
-    setError(undefined);
+    setResult({});
 
     setName(rom?.name ?? "");
     setCore(rom?.core ?? "");
@@ -53,7 +53,7 @@ export default function RomPopup({
     <Popup
       isOpen={rom !== null}
       onBackgroundClick={() => {
-        if (!isBusy) onClose();
+        if (result !== null) onClose();
       }}
     >
       <div className="p-4 rounded border-2 bg-lightBg border-el1">
@@ -73,8 +73,8 @@ export default function RomPopup({
               <RomUploadActions
                 romCR={{ name, core, image, image_resolution: resolution } as RomFileCR}
                 romFile={romFile}
-                setError={setError}
-                setIsBusy={setIsBusy}
+                isLoading={result === null}
+                setResult={setResult}
                 onClose={onClose}
                 onRomUpload={onRomUpload}
               />
@@ -82,8 +82,8 @@ export default function RomPopup({
               <RomEditActions
                 romCR={{ name, core, image, image_resolution: resolution } as RomFileCR}
                 id={rom?.id ?? -1}
-                setError={setError}
-                setIsBusy={setIsBusy}
+                isLoading={result === null}
+                setResult={setResult}
                 onClose={onClose}
                 onRomUpdate={onRomUpdate}
                 onRomDelete={onRomDelete}
@@ -91,33 +91,38 @@ export default function RomPopup({
             )}
 
             <div className="flex justify-center">
-              <Error message={error} />
+              <Loader isVisible={result === null} />
+              <Error message={result?.error} />
             </div>
             <div className="flex-grow" />
 
             {rom?.id === -1 && (
               <div>
                 <h3 className="text-lg font-bold">Rom File</h3>
-                <FileUpload fileName={romFile?.name} onUpload={setRomFile} disabled={isBusy} />
+                <FileUpload
+                  fileName={romFile?.name}
+                  onUpload={setRomFile}
+                  disabled={result === null}
+                />
               </div>
             )}
 
             <SettingCategory name="Image">
               <span className="text-greyColor">Image Url:</span>
-              <Input value={image} onChange={setImage} disabled={isBusy} />
+              <Input value={image} onChange={setImage} disabled={result === null} />
 
               <span className="text-greyColor">Resolution:</span>
               <Dropdown
                 values={resolutions}
                 value={resolution}
                 onChange={setResolution}
-                disabled={isBusy}
+                disabled={result === null}
               />
             </SettingCategory>
 
             <SettingCategory name="General Settings">
               <span className="text-greyColor">Name:</span>
-              <Input value={name} onChange={setName} disabled={isBusy} />
+              <Input value={name} onChange={setName} disabled={result === null} />
 
               <span className="text-greyColor">Platform:</span>
               <Dropdown
@@ -125,7 +130,7 @@ export default function RomPopup({
                 value={core}
                 lookup={cores}
                 onChange={setCore}
-                disabled={isBusy}
+                disabled={result === null}
               />
             </SettingCategory>
           </div>

@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";
 import Input from "@/components/Input";
 import Error from "@/components/Error";
+import Loader from "@/components/Loader";
 import Category from "@/components/Card/Category";
 import GameCard from "@/components/Card/GameCard";
 import RomPopup from "@/components/Popup/RomPopup";
@@ -20,10 +21,9 @@ import {
   BsSortAlphaDownAlt,
 } from "react-icons/bs";
 import { FiRefreshCw } from "react-icons/fi";
-import { PulseLoader } from "react-spinners";
 
 export default function Library() {
-  const [roms, setRoms] = useState<ApiResult<RomFile[]> | null>(null);
+  const [roms, setRoms] = useState<ApiResult<RomFile[]>>(null);
   const [selectedRom, setSelectedRom] = useState<RomFile | null>(null);
 
   const [search, setSearch] = useState<string>("");
@@ -44,7 +44,6 @@ export default function Library() {
 
   const fetchRoms = async () => {
     setRoms(null);
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Prevent flashing of spinner
 
     setRoms(await makeApiCall<RomFile[]>("/api/roms"));
   };
@@ -60,19 +59,16 @@ export default function Library() {
         onClose={() => setSelectedRom(null)}
         onRomUpload={(newRom: RomFile) => {
           setRoms({
-            error: roms?.error,
             result: roms?.result ? [...roms.result, newRom] : [newRom],
           });
         }}
         onRomUpdate={(changedRom: RomFile) => {
           setRoms({
-            error: roms?.error,
             result: roms?.result?.map((rom) => (rom.id === changedRom.id ? changedRom : rom)),
           });
         }}
         onRomDelete={(id: number) => {
           setRoms({
-            error: roms?.error,
             result: roms?.result?.filter((rom) => rom.id !== id),
           });
         }}
@@ -119,10 +115,8 @@ export default function Library() {
       </div>
 
       <div className="flex flex-col justify-center items-center gap-2">
-        {roms === null && (
-          <PulseLoader size="15px" color="#208CF0" className="mt-8" speedMultiplier={0.6} />
-        )}
-        <Error className="text-2xl mt-6" message={roms?.error} />
+        <Loader isVisible={roms === null} />
+        <Error className="text-2xl" message={roms?.error} />
       </div>
 
       {roms?.result &&

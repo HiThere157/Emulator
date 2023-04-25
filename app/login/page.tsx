@@ -7,14 +7,13 @@ import { setLoginCookie } from "@/helpers/cookie";
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Error from "@/components/Error";
+import Loader from "@/components/Loader";
 
 import { BsPersonBoundingBox } from "react-icons/bs";
-import { PulseLoader } from "react-spinners";
 
 export default function Login() {
+  const [result, setResult] = useState<ApiResult<LoginCookiePayload>>({});
   const [isRegistering, setIsRegistering] = useState<boolean>(false);
-  const [error, setError] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -34,37 +33,60 @@ export default function Login() {
     // check if username and password are not empty
     if (!username || !password) return;
 
-    setIsLoading(true);
-    await new Promise((resolve) => setTimeout(resolve, 1000)); // Prevent flashing of spinner
+    setResult(null);
 
     if (isRegistering) {
       await register();
     } else {
       await login();
     }
-
-    setIsLoading(false);
   };
 
-  const login = async () => {
-    const { result, error } = await makeApiCall<LoginCookiePayload>("/api/auth/login", {
+  const register = async () => {
+    // check if passwords match
+    if (isRegistering && password !== confirmPassword) {
+      setResult({ error: "Passwords do not match" });
+      return;
+    }
+
+    // check min password length
+    if (isRegistering && password.length < 8) {
+      setResult({ error: "Password must be at least 8 characters long" });
+      return;
+    }
+
+    const response = await makeApiCall<LoginCookiePayload>("/api/auth/register", {
       method: "POST",
       body: JSON.stringify({
         username: username,
         password: await sha256(password),
       } as UserLogin),
     });
+    setResult(response);
 
-    if (error) {
-      setError(error);
+    if (!response?.error) {
+      setIsRegistering(false);
+      login();
+    }
+  };
 
+  const login = async () => {
+    const response = await makeApiCall<LoginCookiePayload>("/api/auth/login", {
+      method: "POST",
+      body: JSON.stringify({
+        username: username,
+        password: await sha256(password),
+      } as UserLogin),
+    });
+    setResult(response);
+
+    if (response?.error) {
       setPassword("");
       setConfirmPassword("");
-      return;
     }
 
-    if (result) {
-      setLoginCookie(result);
+    if (response?.result) {
+      setLoginCookie(response.result);
 
       // redirect to callback url
       const urlParams = new URLSearchParams(window.location.search);
@@ -72,37 +94,6 @@ export default function Login() {
 
       window.location.href = callbackUrl;
     }
-  };
-
-  const register = async () => {
-    // check if passwords match
-    if (isRegistering && password !== confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    // check min password length
-    if (isRegistering && password.length < 8) {
-      setError("Password must be at least 8 characters long");
-      return;
-    }
-
-    const { error } = await makeApiCall<LoginCookiePayload>("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify({
-        username: username,
-        password: await sha256(password),
-      } as UserLogin),
-    });
-
-    if (error) {
-      setError(error);
-      return;
-    }
-
-    // register successful, login
-    setIsRegistering(false);
-    login();
   };
 
   return (
@@ -129,7 +120,10 @@ export default function Login() {
         )}
       </div>
 
-      <Error message={error} className="mt-3" />
+      <div className="flex justify-center mt-4">
+        <Loader isVisible={result === null} />
+        <Error message={result?.error} />
+      </div>
 
       <div className="flex gap-2 mt-4">
         <Button
@@ -138,8 +132,8 @@ export default function Login() {
         >
           {isRegistering ? "Login Instead" : "No Account? Register"}
         </Button>
-        <Button className="ctrl-blue" onClick={onSubmit} disabled={isLoading}>
-          {isLoading ? <PulseLoader size="8px" color="#F0F0F0" speedMultiplier={0.6} /> : "Login"}
+        <Button className="ctrl-blue" onClick={onSubmit} disabled={result === null}>
+          Login
         </Button>
       </div>
     </div>
