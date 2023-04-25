@@ -80,3 +80,35 @@ export async function PUT(request: NextRequest, { params }: Props) {
     status: 200,
   });
 }
+
+/*
+  Params: rom_id, slot
+  Codes: 401, 404
+*/
+export async function DELETE(request: NextRequest, { params }: Props) {
+  // [Auth] Validate token
+  const token = await validateToken(request);
+  if (!token) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
+  }
+
+  // [Request] Get state path
+  const statePath = path.join(stateFilePath, `${token.id}-${params.rom_id}-${params.slot}.state`);
+
+  // [Validation] Check if state file exists
+  const stateExists = await fs.stat(statePath).catch(() => false);
+  if (!stateExists) {
+    return new Response("State not Found", {
+      status: 404,
+    });
+  }
+
+  // [FS] Delete state
+  await fs.unlink(statePath);
+
+  return new Response(null, {
+    status: 200,
+  });
+}

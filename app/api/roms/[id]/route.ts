@@ -44,7 +44,8 @@ export async function GET(request: NextRequest, { params }: Props) {
   return new Response(blob, {
     headers: {
       "Content-Type": "application/octet-stream",
-      "Cache-Control": "max-age=43200",
+      "Cache-Control": "max-age=43200, s-maxage=86400",
+      "CDN-Cache-Control": "max-age=43200",
     },
     status: 200,
   });
