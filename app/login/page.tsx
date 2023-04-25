@@ -61,7 +61,7 @@ export default function Login() {
         username: username,
         password: await sha256(password),
       } as UserLogin),
-    });
+    }, 750);
     setResult(response);
 
     // Login if registration was successful
@@ -78,7 +78,7 @@ export default function Login() {
         username: username,
         password: await sha256(password),
       } as UserLogin),
-    });
+    }, 750);
     setResult(response);
 
     // Clear password fields if login failed
