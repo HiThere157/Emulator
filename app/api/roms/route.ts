@@ -58,7 +58,7 @@ export async function POST(request: NextRequest) {
   const roms: RomFile[] = JSON.parse(romDB);
 
   // [Request] Get rom details
-  const { name, core, image, image_resolution }: RomFileCR = await request.json();
+  const { name, core, image, image_resolution }: Partial<RomFileCR> = await request.json();
 
   // [Validation] Check for missing fields
   if (!name || !core || !image_resolution) {
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     id: new Date().getTime(),
     name,
     core,
-    image,
+    image: image ?? "",
     image_resolution,
     uploaded_by: token.id,
     size: 0,

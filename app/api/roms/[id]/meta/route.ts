@@ -38,7 +38,7 @@ export async function POST(request: NextRequest, { params }: Props) {
   }
 
   // [Request] Get rom details
-  const { name, core, image, image_resolution }: RomFileCR = await request.json();
+  const { name, core, image, image_resolution }: Partial<RomFileCR> = await request.json();
 
   // [Validation] Check for missing fields
   if (!name || !core || !image_resolution) {
@@ -62,7 +62,13 @@ export async function POST(request: NextRequest, { params }: Props) {
   }
 
   // [DB] Update rom (2/2 - Update roms)
-  roms[currentRomIndex] = { ...roms[currentRomIndex], name, core, image, image_resolution };
+  roms[currentRomIndex] = {
+    ...roms[currentRomIndex],
+    name,
+    core,
+    image: image ?? "",
+    image_resolution,
+  };
 
   // [DB] Write roms
   await fs.writeFile(romDBPath, JSON.stringify(roms, null, 2));

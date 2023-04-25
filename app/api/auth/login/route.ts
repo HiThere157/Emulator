@@ -11,7 +11,7 @@ const JWTSecret = "AAAAAAA";
 /*
   Body: UserLogin
   Response: cookie, LoginCookiePayload
-  Codes: 401
+  Codes: 400, 401
 */
 export async function POST(request: NextRequest) {
   // [DB] Read users
@@ -19,7 +19,14 @@ export async function POST(request: NextRequest) {
   const users: User[] = JSON.parse(userDB);
 
   // [Request] Get username and password
-  const { username, password }: UserLogin = await request.json();
+  const { username, password }: Partial<UserLogin> = await request.json();
+
+  // [Validation] Check for missing fields
+  if (!username || !password) {
+    return new Response("Missing fields", {
+      status: 400,
+    });
+  }
 
   // [Validation] Check if user exists
   const user = users.find((user: User) => user.username.toLowerCase() === username.toLowerCase());
