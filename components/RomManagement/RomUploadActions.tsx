@@ -33,6 +33,7 @@ export default function RomUploadActions({
       body: JSON.stringify(romCR),
     });
 
+    // If there was an error, stop here
     if (db_response?.error || db_response?.result?.id === undefined) {
       setResult(db_response);
       return;
@@ -44,6 +45,7 @@ export default function RomUploadActions({
     });
     setResult(blob_response);
 
+    // Add the rom in the list
     if (!blob_response?.error && db_response?.result) {
       onRomUpload(db_response.result);
       onClose();

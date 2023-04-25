@@ -31,6 +31,7 @@ export default function RomEditActions({
     });
     setResult(response);
 
+    // Update the rom in the list
     if (!response?.error && response?.result) {
       onRomUpdate(response.result);
       onClose();
@@ -45,6 +46,7 @@ export default function RomEditActions({
     });
     setResult(response);
 
+    // Remove the rom from the list
     if (!response?.error) {
       onRomDelete(id);
       onClose();

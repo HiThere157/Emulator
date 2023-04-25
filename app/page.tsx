@@ -44,7 +44,6 @@ export default function Library() {
 
   const fetchRoms = async () => {
     setRoms(null);
-
     setRoms(await makeApiCall<RomFile[]>("/api/roms"));
   };
 

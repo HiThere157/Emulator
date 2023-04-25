@@ -27,11 +27,11 @@ export default function Player({ params }: PlayerProps) {
   };
 
   useEffect(() => {
-    // direct navigation:
+    // Direct navigation:
     //  - onLoad does not trigger
     //  - iframe is loaded before react? no need to wait for load
 
-    // navbar navigation:
+    // Navbar navigation:
     //  - initPlayer will fail, because iframe is not loaded yet
     //  - onLoad triggers normally
     try {

@@ -30,7 +30,7 @@ export default function Login() {
   };
 
   const onSubmit = async () => {
-    // check if username and password are not empty
+    // Check if username and password are not empty
     if (!username || !password) return;
 
     setResult(null);
@@ -43,13 +43,13 @@ export default function Login() {
   };
 
   const register = async () => {
-    // check if passwords match
+    // Check if passwords match
     if (isRegistering && password !== confirmPassword) {
       setResult({ error: "Passwords do not match" });
       return;
     }
 
-    // check min password length
+    // Check min password length
     if (isRegistering && password.length < 8) {
       setResult({ error: "Password must be at least 8 characters long" });
       return;
@@ -64,6 +64,7 @@ export default function Login() {
     });
     setResult(response);
 
+    // Login if registration was successful
     if (!response?.error) {
       setIsRegistering(false);
       login();
@@ -80,15 +81,17 @@ export default function Login() {
     });
     setResult(response);
 
+    // Clear password fields if login failed
     if (response?.error) {
       setPassword("");
       setConfirmPassword("");
     }
 
+    // Set login cookie if login was successful
     if (response?.result) {
       setLoginCookie(response.result);
 
-      // redirect to callback url
+      // Redirect to callback url
       const urlParams = new URLSearchParams(window.location.search);
       const callbackUrl = urlParams.get("callbackUrl") ?? "/";
 

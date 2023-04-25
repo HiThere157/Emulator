@@ -34,6 +34,7 @@ export default function RomPopup({
   const [resolution, setResolution] = useState<string>("");
   const [romFile, setRomFile] = useState<File>();
 
+  // Reset the form when the popup is opened
   useEffect(() => {
     setResult({});
 
