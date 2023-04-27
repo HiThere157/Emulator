@@ -44,7 +44,7 @@ export default function RomUploadActions({
 
     // Upload the rom file
     const blobResult = await makeApiCall<undefined>(`/api/roms/${dbResult.result.id}`, {
-      method: "POST",
+      method: "PUT",
       body: romFile,
     });
     setResult(blobResult);

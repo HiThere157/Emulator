@@ -1,6 +1,6 @@
 import { useState } from "react";
 import makeApiCall from "@/helpers/api";
-import { getState, putState } from "@/helpers/indexeddb";
+import { deleteState, getState, putState } from "@/helpers/indexeddb";
 
 import Button from "@/components/Button";
 import Loader from "@/components/Loader";
@@ -22,7 +22,10 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
     setResult(null);
 
     // Get the state from indexeddb
-    const dbResult = await getState(localState.rom_id, localState?.slot);
+    const [dbResult] = await Promise.all([
+      getState(localState.rom_id, localState?.slot),
+      new Promise((resolve) => setTimeout(resolve, 750)),
+    ]);
     if (dbResult?.error) {
       setResult(dbResult);
       return;
@@ -51,7 +54,7 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
     const blobResult = await makeApiCall<Uint8Array>(
       `/api/states/${remoteState.rom_id}/${remoteState.slot}`,
       undefined,
-      0,
+      750,
       true,
     );
     if (blobResult?.error || !blobResult?.result) {
@@ -68,9 +71,42 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
     }
   };
 
+  const deleteLocalState = async () => {
+    if (!localState) return;
+    setResult(null);
+
+    const [dbResult] = await Promise.all([
+      deleteState(localState.rom_id, localState.slot),
+      new Promise((resolve) => setTimeout(resolve, 750)),
+    ]);
+    setResult(dbResult);
+
+    if (!dbResult?.error) {
+      onSubmit();
+    }
+  };
+
+  const deleteRemoteState = async () => {
+    if (!remoteState) return;
+    setResult(null);
+
+    const dbResult = await makeApiCall<undefined>(
+      `/api/states/${remoteState.rom_id}/${remoteState.slot}`,
+      {
+        method: "DELETE",
+      },
+      750,
+    );
+    setResult(dbResult);
+
+    if (!dbResult?.error) {
+      onSubmit();
+    }
+  };
+
   return (
     <div className="flex flex-col gap-5">
-      <State state={remoteState} type="remote" />
+      <State state={remoteState} type="remote" onDelete={deleteRemoteState} />
 
       <div className="flex justify-center gap-5">
         <Button className="ctrl-invisible py-2" onClick={uploadState} disabled={!localState}>
@@ -82,7 +118,7 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
         </Button>
       </div>
 
-      <State state={localState} type="local" />
+      <State state={localState} type="local" onDelete={deleteLocalState} />
 
       <div className="flex flex-col justify-center items-center gap-2 m-4">
         <Loader isVisible={result === null} />
