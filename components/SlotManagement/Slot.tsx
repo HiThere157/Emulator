@@ -19,7 +19,6 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
 
   const uploadState = async () => {
     if (!localState) return;
-
     setResult(null);
 
     // Get the state from indexeddb
@@ -37,7 +36,6 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
         body: dbResult?.result,
       },
     );
-
     setResult(blobResult);
 
     if (!blobResult?.error) {
@@ -47,7 +45,6 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
 
   const downloadState = async () => {
     if (!remoteState) return;
-
     setResult(null);
 
     // Download the state from the server

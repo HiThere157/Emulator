@@ -37,7 +37,6 @@ export default function RomUploadActions({
       },
       750,
     );
-
     if (dbResult?.error || dbResult?.result?.id === undefined) {
       setResult(dbResult);
       return;

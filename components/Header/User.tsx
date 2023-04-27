@@ -57,7 +57,7 @@ type UserBodyProps = {
 };
 function UserBody({ isOpen }: UserBodyProps) {
   const logout = async () => {
-    const response = await makeApiCall<undefined>(
+    const logoutResult = await makeApiCall<undefined>(
       "/api/auth/logout",
       {
         method: "POST",
@@ -65,7 +65,7 @@ function UserBody({ isOpen }: UserBodyProps) {
       500,
     );
 
-    if (!response?.error) {
+    if (!logoutResult?.error) {
       clearLoginCookie();
       location.href = "/login";
     }
