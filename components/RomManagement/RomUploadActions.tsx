@@ -28,7 +28,8 @@ export default function RomUploadActions({
       return;
     }
 
-    const db_response = await makeApiCall<RomFile>(
+    // Create the rom in the database
+    const dbResult = await makeApiCall<RomFile>(
       `/api/roms`,
       {
         method: "POST",
@@ -37,21 +38,21 @@ export default function RomUploadActions({
       750,
     );
 
-    // If there was an error, stop here
-    if (db_response?.error || db_response?.result?.id === undefined) {
-      setResult(db_response);
+    if (dbResult?.error || dbResult?.result?.id === undefined) {
+      setResult(dbResult);
       return;
     }
 
-    const blob_response = await makeApiCall<undefined>(`/api/roms/${db_response.result.id}`, {
+    // Upload the rom file
+    const blobResult = await makeApiCall<undefined>(`/api/roms/${dbResult.result.id}`, {
       method: "POST",
       body: romFile,
     });
-    setResult(blob_response);
+    setResult(blobResult);
 
-    // Add the rom in the list
-    if (!blob_response?.error && db_response?.result) {
-      onRomUpload(db_response.result);
+    // Add the rom to the list
+    if (!blobResult?.error) {
+      onRomUpload(dbResult.result);
       onClose();
     }
   };

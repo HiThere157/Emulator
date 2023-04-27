@@ -12,7 +12,7 @@ import Loader from "@/components/Loader";
 import { BsPersonBoundingBox } from "react-icons/bs";
 
 export default function Login() {
-  const [result, setResult] = useState<ApiResult<LoginCookiePayload>>({});
+  const [result, setResult] = useState<ApiResult<LoginCookiePayload | undefined>>({});
   const [isRegistering, setIsRegistering] = useState<boolean>(false);
 
   const [username, setUsername] = useState<string>("");
@@ -55,7 +55,7 @@ export default function Login() {
       return;
     }
 
-    const response = await makeApiCall<undefined>(
+    const registerResult = await makeApiCall<undefined>(
       "/api/auth/register",
       {
         method: "POST",
@@ -66,17 +66,17 @@ export default function Login() {
       },
       750,
     );
-    setResult(response);
+    setResult(registerResult);
 
     // Login if registration was successful
-    if (!response?.error) {
+    if (!registerResult?.error) {
       setIsRegistering(false);
       login();
     }
   };
 
   const login = async () => {
-    const response = await makeApiCall<LoginCookiePayload>(
+    const loginResult = await makeApiCall<LoginCookiePayload>(
       "/api/auth/login",
       {
         method: "POST",
@@ -87,17 +87,17 @@ export default function Login() {
       },
       750,
     );
-    setResult(response);
+    setResult(loginResult);
 
     // Clear password fields if login failed
-    if (response?.error) {
+    if (loginResult?.error) {
       setPassword("");
       setConfirmPassword("");
     }
 
     // Set login cookie if login was successful
-    if (response?.result) {
-      setLoginCookie(response.result);
+    if (loginResult?.result) {
+      setLoginCookie(loginResult.result);
 
       // Redirect to callback url
       const urlParams = new URLSearchParams(window.location.search);

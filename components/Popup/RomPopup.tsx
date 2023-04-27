@@ -26,7 +26,7 @@ export default function RomPopup({
   onRomUpdate,
   onRomDelete,
 }: RomPopupProps) {
-  const [result, setResult] = useState<ApiResult<RomFile>>({});
+  const [result, setResult] = useState<ApiResult<RomFile | undefined>>({});
 
   const [name, setName] = useState<string>("");
   const [core, setCore] = useState<string>("");

@@ -15,30 +15,32 @@ type SlotProps = {
   onSubmit: () => void;
 };
 export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
-  const [result, setResult] = useState<ApiResult<undefined | Uint8Array>>({});
+  const [result, setResult] = useState<ApiResult<Uint8Array | undefined>>({});
 
   const uploadState = async () => {
     if (!localState) return;
 
     setResult(null);
 
-    const dbReq = await getState(localState.rom_id, localState?.slot);
-    if (dbReq?.error) {
-      setResult(dbReq);
+    // Get the state from indexeddb
+    const dbResult = await getState(localState.rom_id, localState?.slot);
+    if (dbResult?.error) {
+      setResult(dbResult);
       return;
     }
 
-    const blobReq = await makeApiCall<undefined>(
+    // Upload the state to the server
+    const blobResult = await makeApiCall<undefined>(
       `/api/states/${localState.rom_id}/${localState.slot}`,
       {
         method: "PUT",
-        body: dbReq?.result,
+        body: dbResult?.result,
       },
     );
 
-    setResult(blobReq);
+    setResult(blobResult);
 
-    if (!blobReq?.error) {
+    if (!blobResult?.error) {
       onSubmit();
     }
   };
@@ -48,21 +50,23 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
 
     setResult(null);
 
-    const response = await makeApiCall<Uint8Array>(
+    // Download the state from the server
+    const blobResult = await makeApiCall<Uint8Array>(
       `/api/states/${remoteState.rom_id}/${remoteState.slot}`,
       undefined,
       0,
       true,
     );
-    if (response?.error || !response?.result) {
-      setResult(response);
+    if (blobResult?.error || !blobResult?.result) {
+      setResult(blobResult);
       return;
     }
 
-    const dbRequest = await putState(remoteState.rom_id, remoteState.slot, response?.result);
-    setResult(dbRequest);
+    // Save the state to indexeddb
+    const dbResult = await putState(remoteState.rom_id, remoteState.slot, blobResult?.result);
+    setResult(dbResult);
 
-    if (!dbRequest?.error) {
+    if (!dbResult?.error) {
       onSubmit();
     }
   };
