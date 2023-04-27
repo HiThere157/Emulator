@@ -5,6 +5,7 @@ const nextConfig = {
   },
   images: {
     domains: ["upload.wikimedia.org"],
+    minimumCacheTTL: 43200,
   },
   output: "standalone",
 };
