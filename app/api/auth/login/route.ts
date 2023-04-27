@@ -2,11 +2,14 @@ import path from "path";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { promises as fs } from "fs";
+import dotenv from "dotenv";
+dotenv.config();
+
 import { NextRequest } from "next/server";
+import init from "@/helpers/init";
 
 export const revalidate = 0;
 const userDBPath = path.join(process.cwd(), "data/users.json");
-const JWTSecret = "AAAAAAA";
 
 /*
   Body: UserLogin
@@ -14,6 +17,15 @@ const JWTSecret = "AAAAAAA";
   Codes: 400, 401
 */
 export async function POST(request: NextRequest) {
+  await init();
+  
+  const JWTSecret = process.env.JWT_SECRET;
+  if (!JWTSecret) {
+    return new Response("JWT secret not configured", {
+      status: 500,
+    });
+  }
+
   // [DB] Read users
   const userDB = await fs.readFile(userDBPath, "utf-8");
   const users: User[] = JSON.parse(userDB);

@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "build:docker": "docker build -t emulator .",
     "prettier": "prettier -w .",
     "lint": "next lint"
   },
@@ -19,7 +20,7 @@
     "react-dom": "18.2.0",
     "react-icons": "^4.8.0",
     "react-spinners": "^0.13.8",
-    "sharp": "^0.32.0"
+    "sharp": "^0.32.1"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^9.0.1",

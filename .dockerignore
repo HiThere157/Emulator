@@ -1,0 +1,6 @@
+/node_modules
+/data
+
+/public/emulatorJs/.github
+/public/emulatorJs/demos
+/public/emulatorJs/docs

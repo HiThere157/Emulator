@@ -2,6 +2,7 @@ import path from "path";
 import bcrypt from "bcrypt";
 import { promises as fs } from "fs";
 import { NextRequest } from "next/server";
+import init from "@/helpers/init";
 
 export const revalidate = 0;
 const userDBPath = path.join(process.cwd(), "data/users.json");
@@ -11,6 +12,8 @@ const userDBPath = path.join(process.cwd(), "data/users.json");
   Codes: 400
 */
 export async function POST(request: NextRequest) {
+  await init();
+  
   // [DB] Read users
   const userDB = await fs.readFile(userDBPath, "utf-8");
   const users: User[] = JSON.parse(userDB);
