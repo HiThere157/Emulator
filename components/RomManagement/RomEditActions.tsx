@@ -25,10 +25,14 @@ export default function RomEditActions({
   const updateRom = async () => {
     setResult(null);
 
-    const response = await makeApiCall<RomFile>(`/api/roms/${id}/meta`, {
-      method: "POST",
-      body: JSON.stringify(romCR),
-    }, 750);
+    const response = await makeApiCall<RomFile>(
+      `/api/roms/${id}/meta`,
+      {
+        method: "POST",
+        body: JSON.stringify(romCR),
+      },
+      750,
+    );
     setResult(response);
 
     // Update the rom in the list
@@ -41,9 +45,13 @@ export default function RomEditActions({
   const deleteRom = async () => {
     setResult(null);
 
-    const response = await makeApiCall<RomFile>(`/api/roms/${id}/meta`, {
-      method: "DELETE",
-    }, 750);
+    const response = await makeApiCall<RomFile>(
+      `/api/roms/${id}/meta`,
+      {
+        method: "DELETE",
+      },
+      750,
+    );
     setResult(response);
 
     // Remove the rom from the list

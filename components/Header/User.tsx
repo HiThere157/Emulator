@@ -57,9 +57,13 @@ type UserBodyProps = {
 };
 function UserBody({ isOpen }: UserBodyProps) {
   const logout = async () => {
-    const response = await makeApiCall<LoginCookiePayload>("/api/auth/logout", {
-      method: "POST",
-    }, 500);
+    const response = await makeApiCall<LoginCookiePayload>(
+      "/api/auth/logout",
+      {
+        method: "POST",
+      },
+      500,
+    );
 
     if (!response?.error) {
       clearLoginCookie();

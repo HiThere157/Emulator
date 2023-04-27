@@ -28,10 +28,14 @@ export default function RomUploadActions({
       return;
     }
 
-    const db_response = await makeApiCall<RomFile>(`/api/roms`, {
-      method: "POST",
-      body: JSON.stringify(romCR),
-    }, 750);
+    const db_response = await makeApiCall<RomFile>(
+      `/api/roms`,
+      {
+        method: "POST",
+        body: JSON.stringify(romCR),
+      },
+      750,
+    );
 
     // If there was an error, stop here
     if (db_response?.error || db_response?.result?.id === undefined) {

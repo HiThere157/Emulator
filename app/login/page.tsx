@@ -55,13 +55,17 @@ export default function Login() {
       return;
     }
 
-    const response = await makeApiCall<LoginCookiePayload>("/api/auth/register", {
-      method: "POST",
-      body: JSON.stringify({
-        username: username,
-        password: await sha256(password),
-      } as UserLogin),
-    }, 750);
+    const response = await makeApiCall<LoginCookiePayload>(
+      "/api/auth/register",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+          password: await sha256(password),
+        } as UserLogin),
+      },
+      750,
+    );
     setResult(response);
 
     // Login if registration was successful
@@ -72,13 +76,17 @@ export default function Login() {
   };
 
   const login = async () => {
-    const response = await makeApiCall<LoginCookiePayload>("/api/auth/login", {
-      method: "POST",
-      body: JSON.stringify({
-        username: username,
-        password: await sha256(password),
-      } as UserLogin),
-    }, 750);
+    const response = await makeApiCall<LoginCookiePayload>(
+      "/api/auth/login",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          username: username,
+          password: await sha256(password),
+        } as UserLogin),
+      },
+      750,
+    );
     setResult(response);
 
     // Clear password fields if login failed

@@ -31,39 +31,61 @@ async function getStore(dbName: string, storeName: string, mode: IDBTransactionM
   return db.transaction(storeName, mode).objectStore(storeName);
 }
 
-async function getStates(): Promise<StateFile[]> {
-  const store = await getStore("ejs-states", "states", "readonly");
+async function getStates(): Promise<ApiResult<StateFile[]>> {
+  try {
+    const store = await getStore("ejs-states", "states", "readonly");
 
-  const keys = await makeRequest<string[]>(store.getAllKeys());
-  const values = await makeRequest<Uint8Array[]>(store.getAll());
+    const keys = await makeRequest<string[]>(store.getAllKeys());
+    const values = await makeRequest<Uint8Array[]>(store.getAll());
 
-  const promises = keys.map(async (key, index): Promise<StateFile> => {
-    const [rom_id, slot] = key.split("-");
+    const promises = keys.map(async (key, index): Promise<StateFile> => {
+      const [rom_id, slot] = key.split("-");
 
-    return {
-      rom_id: parseInt(rom_id),
-      slot: parseInt(slot),
-      uploaded_by: -1,
-      size: values[index].length,
-    };
-  });
+      return {
+        rom_id: parseInt(rom_id),
+        slot: parseInt(slot),
+        uploaded_by: -1,
+        size: values[index].length,
+      };
+    });
 
-  return Promise.all(promises);
+    return { result: await Promise.all(promises) };
+  } catch (error: any) {
+    return { error: error };
+  }
 }
 
-async function getState(rom_id: number, slot: number): Promise<Uint8Array> {
-  const store = await getStore("ejs-states", "states", "readonly");
-  return await makeRequest<Uint8Array>(store.get(`${rom_id}-${slot}`));
+async function getState(rom_id: number, slot: number): Promise<ApiResult<Uint8Array>> {
+  try {
+    const store = await getStore("ejs-states", "states", "readonly");
+    const blob = await makeRequest<Uint8Array>(store.get(`${rom_id}-${slot}`));
+
+    return { result: blob };
+  } catch (error: any) {
+    return { error: error };
+  }
 }
 
-async function putState(rom_id: number, slot: number, blob: Blob) {
-  const store = await getStore("ejs-states", "states", "readwrite");
-  await makeRequest(store.put(blob, `${rom_id}-${slot}`));
+async function putState(rom_id: number, slot: number, blob: Blob): Promise<ApiResult<undefined>> {
+  try {
+    const store = await getStore("ejs-states", "states", "readwrite");
+    await makeRequest(store.put(blob, `${rom_id}-${slot}`));
+
+    return {};
+  } catch (error: any) {
+    return { error: error };
+  }
 }
 
-async function deleteState(rom_id: number, slot: number) {
-  const store = await getStore("ejs-states", "states", "readwrite");
-  await makeRequest(store.delete(`${rom_id}-${slot}`));
+async function deleteState(rom_id: number, slot: number): Promise<ApiResult<undefined>> {
+  try {
+    const store = await getStore("ejs-states", "states", "readwrite");
+    await makeRequest(store.delete(`${rom_id}-${slot}`));
+
+    return {};
+  } catch (error: any) {
+    return { error: error };
+  }
 }
 
 export { getStates, getState, putState, deleteState };

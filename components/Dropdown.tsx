@@ -12,6 +12,7 @@ type DropdownProps = {
   icons?: React.ReactNode[];
   lookup?: { [key: string]: string };
   label?: string;
+  justify?: "start" | "end";
   disabled?: boolean;
   onChange: (value: string) => void;
 };
@@ -21,6 +22,7 @@ export default function Dropdown({
   lookup,
   value,
   label,
+  justify,
   disabled,
   onChange,
 }: DropdownProps) {
@@ -55,6 +57,7 @@ export default function Dropdown({
         icons={icons}
         lookup={lookup}
         value={value}
+        justify={justify ?? "end"}
         onChange={(value: string) => {
           onChange(value);
           setIsOpen(false);
@@ -68,16 +71,26 @@ type DrowdownBodyProps = {
   isOpen: boolean;
   values: string[];
   value: string;
+  justify: "start" | "end";
   icons?: React.ReactNode[];
   lookup?: { [key: string]: string };
   onChange: (value: string) => void;
 };
-function DrowdownBody({ isOpen, values, icons, lookup, value, onChange }: DrowdownBodyProps) {
+function DrowdownBody({
+  isOpen,
+  values,
+  value,
+  justify,
+  icons,
+  lookup,
+  onChange,
+}: DrowdownBodyProps) {
   return (
     <div
       className={
-        "absolute top-8 right-0 overflow-hidden transition-size duration-200 " +
-        (isOpen ? "max-h-screen" : "max-h-0")
+        "absolute top-8 overflow-hidden transition-size duration-200 " +
+        (isOpen ? "max-h-screen " : "max-h-0 ") +
+        (justify === "start" ? "left-0 " : "right-0 ")
       }
     >
       <div className="flex flex-col rounded bg-el1 p-2">
