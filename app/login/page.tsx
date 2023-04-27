@@ -103,6 +103,9 @@ export default function Login() {
       const urlParams = new URLSearchParams(window.location.search);
       const callbackUrl = urlParams.get("callbackUrl") ?? "/";
 
+      // Sanitize callback url
+      if (!callbackUrl.startsWith("/") || callbackUrl.includes("..")) return;
+
       window.location.href = callbackUrl;
     }
   };

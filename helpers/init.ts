@@ -17,23 +17,23 @@ async function exists(path: string) {
 }
 
 export default async function init() {
-  if(!await exists(dataPath)) {
+  if (!(await exists(dataPath))) {
     await fs.mkdir(dataPath);
   }
 
-  if(!await exists(userDBPath)) {
+  if (!(await exists(userDBPath))) {
     await fs.writeFile(userDBPath, JSON.stringify([]));
   }
 
-  if(!await exists(romDBPath)) {
+  if (!(await exists(romDBPath))) {
     await fs.writeFile(romDBPath, JSON.stringify([]));
   }
 
-  if(!await exists(romFilePath)) {
+  if (!(await exists(romFilePath))) {
     await fs.mkdir(romFilePath);
   }
 
-  if(!await exists(stateFilePath)) {
+  if (!(await exists(stateFilePath))) {
     await fs.mkdir(stateFilePath);
   }
 }

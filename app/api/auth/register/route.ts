@@ -13,7 +13,7 @@ const userDBPath = path.join(process.cwd(), "data/users.json");
 */
 export async function POST(request: NextRequest) {
   await init();
-  
+
   // [DB] Read users
   const userDB = await fs.readFile(userDBPath, "utf-8");
   const users: User[] = JSON.parse(userDB);

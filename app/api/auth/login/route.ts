@@ -18,7 +18,7 @@ const userDBPath = path.join(process.cwd(), "data/users.json");
 */
 export async function POST(request: NextRequest) {
   await init();
-  
+
   const JWTSecret = process.env.JWT_SECRET;
   if (!JWTSecret) {
     return new Response("JWT secret not configured", {
