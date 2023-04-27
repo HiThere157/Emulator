@@ -45,7 +45,7 @@ export default function RomEditActions({
   const deleteRom = async () => {
     setResult(null);
 
-    const response = await makeApiCall<RomFile>(
+    const response = await makeApiCall<undefined>(
       `/api/roms/${id}/meta`,
       {
         method: "DELETE",

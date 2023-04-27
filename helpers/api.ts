@@ -2,6 +2,7 @@ export default async function makeApiCall<T>(
   url: string,
   init?: RequestInit,
   minDelay: number = 0,
+  raw: boolean = false,
 ): Promise<ApiResult<T>> {
   // Make the request and wait for the response
   // Also wait for the minimum delay to pass - this is to prevent the UI from
@@ -13,6 +14,12 @@ export default async function makeApiCall<T>(
 
   // If the response is ok, return the result
   if (response.ok) {
+    if (raw) {
+      return {
+        result: (await response.arrayBuffer()) as T,
+      };
+    }
+
     // Try to parse the result as JSON
     const result = await response.text();
     try {

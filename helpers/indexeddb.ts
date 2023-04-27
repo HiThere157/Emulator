@@ -45,7 +45,7 @@ async function getStates(): Promise<ApiResult<StateFile[]>> {
         rom_id: parseInt(rom_id),
         slot: parseInt(slot),
         uploaded_by: -1,
-        size: values[index].length,
+        size: values[index].byteLength,
       };
     });
 
@@ -66,7 +66,11 @@ async function getState(rom_id: number, slot: number): Promise<ApiResult<Uint8Ar
   }
 }
 
-async function putState(rom_id: number, slot: number, blob: Blob): Promise<ApiResult<undefined>> {
+async function putState(
+  rom_id: number,
+  slot: number,
+  blob: Uint8Array,
+): Promise<ApiResult<undefined>> {
   try {
     const store = await getStore("ejs-states", "states", "readwrite");
     await makeRequest(store.put(blob, `${rom_id}-${slot}`));

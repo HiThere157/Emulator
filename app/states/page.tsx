@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";
 import Error from "@/components/Error";
 import Loader from "@/components/Loader";
+import Slot from "@/components/SlotManagement/Slot";
 
 import { FiRefreshCw } from "react-icons/fi";
 
@@ -22,9 +23,19 @@ export default function Library() {
     setLocalState(null);
     setRemoteState(null);
 
-    setRoms(await makeApiCall<RomFile[]>("/api/roms", undefined));
-    setRemoteState(await makeApiCall<StateFile[]>("/api/states", undefined, 750));
-    setLocalState(await getStates());
+    const romsReq = makeApiCall<RomFile[]>("/api/roms", undefined);
+    const remoteStateReq = makeApiCall<StateFile[]>("/api/states", undefined, 750);
+    const localStateReq = getStates();
+
+    const [romsResult, remoteStateResult, localStateResult] = await Promise.all([
+      romsReq,
+      remoteStateReq,
+      localStateReq,
+    ]);
+
+    setRoms(romsResult);
+    setRemoteState(remoteStateResult);
+    setLocalState(localStateResult);
   };
 
   useEffect(() => {
@@ -50,12 +61,27 @@ export default function Library() {
         </Button>
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-2">
+      <div className="flex flex-col justify-center items-center gap-2 m-4">
         <Loader isVisible={roms === null || remoteState === null || localState === null} />
         <Error
           className="text-2xl"
           message={roms?.error ?? remoteState?.error ?? localState?.error}
         />
+      </div>
+
+      <div className="flex justify-center gap-5 p-2">
+        {[1, 2, 3, 4, 5].map((slot) => (
+          <Slot
+            key={slot}
+            remoteState={remoteState?.result?.find(
+              (state) => state.slot === slot && state.rom_id.toString() === selectedRomId,
+            )}
+            localState={localState?.result?.find(
+              (state) => state.slot === slot && state.rom_id.toString() === selectedRomId,
+            )}
+            onSubmit={fetchData}
+          />
+        ))}
       </div>
     </div>
   );

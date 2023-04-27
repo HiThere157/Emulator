@@ -55,7 +55,7 @@ export default function Login() {
       return;
     }
 
-    const response = await makeApiCall<LoginCookiePayload>(
+    const response = await makeApiCall<undefined>(
       "/api/auth/register",
       {
         method: "POST",

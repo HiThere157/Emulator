@@ -16,7 +16,7 @@ export default function Category({ name, count, children }: CategoryProps) {
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   return (
-    <div className="p-2">
+    <div>
       <Button
         className="ctrl-invisible flex items-center w-full"
         onClick={() => setIsOpen(!isOpen)}

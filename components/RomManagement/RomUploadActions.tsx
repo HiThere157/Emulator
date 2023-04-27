@@ -43,7 +43,7 @@ export default function RomUploadActions({
       return;
     }
 
-    const blob_response = await makeApiCall<RomFile>(`/api/roms/${db_response.result.id}`, {
+    const blob_response = await makeApiCall<undefined>(`/api/roms/${db_response.result.id}`, {
       method: "POST",
       body: romFile,
     });

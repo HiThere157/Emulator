@@ -113,34 +113,40 @@ export default function Library() {
         />
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-2">
+      <div className="flex flex-col justify-center items-center gap-2 m-4">
         <Loader isVisible={roms === null} />
         <Error className="text-2xl" message={roms?.error} />
       </div>
 
-      {roms?.result &&
-        roms.result
-          .filter(searchFilter)
-          .sort(sortFunctionLookup[sortType])
-          .reduce(uniqueReducer, [] as string[])
-          .map((core) => {
-            return (
-              <Category
-                key={core}
-                name={core}
-                count={roms.result?.filter((rom) => rom.core === core).length ?? 0}
-              >
-                <div className={"flex flex-wrap gap-2"}>
-                  {roms.result
-                    ?.filter((rom) => rom.core === core)
-                    .filter(searchFilter)
-                    .map((rom) => (
-                      <GameCard key={rom.id} rom={rom} onDetailsClick={() => setSelectedRom(rom)} />
-                    ))}
-                </div>
-              </Category>
-            );
-          })}
+      <div className="flex flex-col gap-2 p-2">
+        {roms?.result &&
+          roms.result
+            .filter(searchFilter)
+            .sort(sortFunctionLookup[sortType])
+            .reduce(uniqueReducer, [] as string[])
+            .map((core) => {
+              return (
+                <Category
+                  key={core}
+                  name={core}
+                  count={roms.result?.filter((rom) => rom.core === core).length ?? 0}
+                >
+                  <div className={"flex flex-wrap gap-2"}>
+                    {roms.result
+                      ?.filter((rom) => rom.core === core)
+                      .filter(searchFilter)
+                      .map((rom) => (
+                        <GameCard
+                          key={rom.id}
+                          rom={rom}
+                          onDetailsClick={() => setSelectedRom(rom)}
+                        />
+                      ))}
+                  </div>
+                </Category>
+              );
+            })}
+      </div>
     </div>
   );
 }
