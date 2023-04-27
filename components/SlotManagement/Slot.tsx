@@ -15,7 +15,7 @@ type SlotProps = {
   onSubmit: () => void;
 };
 export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
-  const [result, setResult] = useState<ApiResult<Uint8Array | undefined>>({});
+  const [result, setResult] = useState<ApiResult<ArrayBuffer | undefined>>({});
 
   const uploadState = async () => {
     if (!localState) return;
@@ -51,7 +51,7 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
     setResult(null);
 
     // Download the state from the server
-    const blobResult = await makeApiCall<Uint8Array>(
+    const blobResult = await makeApiCall<ArrayBuffer>(
       `/api/states/${remoteState.rom_id}/${remoteState.slot}`,
       undefined,
       750,
@@ -63,7 +63,11 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
     }
 
     // Save the state to indexeddb
-    const dbResult = await putState(remoteState.rom_id, remoteState.slot, blobResult?.result);
+    const dbResult = await putState(
+      remoteState.rom_id,
+      remoteState.slot,
+      new Uint8Array(blobResult?.result),
+    );
     setResult(dbResult);
 
     if (!dbResult?.error) {
