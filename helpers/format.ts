@@ -1,28 +1,5 @@
-function getRomFileName(friendlyName: string) {
-  return friendlyName.replace(/[^0-9a-zA-Z ]/g, "").replace(/ /g, "_");
-}
-
-function getRomFriendlyName(fileName: string) {
-  return fileName.replace(/_/g, " ");
-}
-
-function getStateFileName(meta: StateFileMeta) {
-  const [date, rawTime] = meta.date.toISOString().split("T");
-  const parsedTime = rawTime.replace(/:/g, "-").split(".")[0];
-  return `${date}_${parsedTime}_${meta.identifier}`;
-}
-
-function getStateFileMeta(fileName: string): StateFileMeta {
-  const [date, time, identifier] = fileName.split("_");
-
-  return {
-    date: new Date(`${date}T${time.replace(/-/g, ":")}Z`),
-    identifier,
-  };
-}
-
-function formatFileSize(bytes: number) {
-  const units = ["bytes", "KB", "MB", "GB", "TB"];
+function formatBytes(bytes: number) {
+  const units = ["Bytes", "KB", "MB", "GB", "TB"];
   let size = bytes;
   let i = 0;
 
@@ -31,7 +8,14 @@ function formatFileSize(bytes: number) {
     i++;
   }
 
-  return `${size.toLocaleString(undefined, { maximumFractionDigits: 2 })} ${units[i]}`;
+  return `${size.toLocaleString(undefined, { maximumFractionDigits: 2, useGrouping: false })} ${
+    units[i]
+  }`;
 }
 
-export { getRomFileName, getRomFriendlyName, getStateFileName, getStateFileMeta, formatFileSize };
+function cleanPath(path: string) {
+  // Remove anything but letters, numbers, - and .
+  return path.replace(/[^a-zA-Z0-9-.]/g, "");
+}
+
+export { formatBytes, cleanPath };

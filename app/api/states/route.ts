@@ -1,34 +1,46 @@
 import path from "path";
 import { promises as fs } from "fs";
-
 import { NextRequest } from "next/server";
 
-import { info } from "@/helpers/logging";
-import { createDirectory, verifyToken } from "@/helpers/api";
+import { validateToken } from "@/helpers/auth";
 
 export const revalidate = 0;
+const stateFilePath = path.join(process.cwd(), "data/states");
 
+/*
+  Response: StateFile[]
+  Codes: 401
+*/
 export async function GET(request: NextRequest) {
-  // check auth (403)
-  if (!verifyToken(request)) {
-    return new Response(null, { status: 403 });
+  // [Auth] Validate token
+  const token = await validateToken(request);
+  if (!token) {
+    return new Response("Unauthorized", {
+      status: 401,
+    });
   }
 
-  const stateDBPath = path.join(process.cwd(), "data/states");
-  await createDirectory(stateDBPath);
+  // [FS] Read states
+  const stateFiles = await fs.readdir(stateFilePath);
+  const allStates: StateFile[] = await Promise.all(
+    stateFiles.map(async (stateFile) => {
+      const [uploaded_by, rom_id, slot] = stateFile.split("-");
+      const stats = await fs.stat(path.join(stateFilePath, stateFile));
 
-  const games = await fs.readdir(stateDBPath);
-  const states: StateFile[] = [];
+      return {
+        rom_id: parseInt(rom_id),
+        slot: parseInt(slot),
+        uploaded_by: parseInt(uploaded_by),
+        size: stats.size,
+      };
+    }),
+  );
+  const states = allStates.filter((state) => state.uploaded_by === token.id);
 
-  for (const game of games) {
-    const stateFiles = await fs.readdir(`${stateDBPath}/${game}`);
-
-    for (const stateFile of stateFiles) {
-      const stateStats = await fs.stat(`${stateDBPath}/${game}/${stateFile}`);
-      states.push({ game, fileName: stateFile.split(".")[0], size: stateStats.size });
-    }
-  }
-
-  info("successful GET request for /states");
-  return new Response(JSON.stringify(states));
+  return new Response(JSON.stringify(states), {
+    headers: {
+      "Content-Type": "application/json",
+    },
+    status: 200,
+  });
 }

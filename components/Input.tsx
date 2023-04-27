@@ -1,37 +1,41 @@
-import { HTMLInputTypeAttribute } from "react";
+import { ChangeEvent } from "react";
 
 type InputProps = {
   value: string;
-  className?: string;
+  label?: string;
   placeholder?: string;
-  type?: HTMLInputTypeAttribute;
-  onChange: (value: string) => any;
-  onEnter?: () => any;
+  type?: "text" | "password";
+  disabled?: boolean;
+  onChange: (value: string) => void;
+  onEnter?: () => void;
 };
 export default function Input({
   value,
-  className,
+  label,
   placeholder,
   type,
+  disabled,
   onChange,
   onEnter,
 }: InputProps) {
-  const onKeyDown = (event: React.KeyboardEvent) => {
-    if (event.key === "Enter") {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
       onEnter?.();
     }
   };
 
   return (
-    <input
-      className={
-        "rounded-md px-2 bg-el1 hover:bg-el1Accent active:bg-el1Active " + (className ?? "")
-      }
-      value={value}
-      onChange={(event) => onChange(event.target.value)}
-      onKeyDown={onKeyDown}
-      placeholder={placeholder}
-      type={type}
-    />
+    <div className="flex items-center gap-2.5">
+      {label && <span className="font-bold">{label}</span>}
+      <input
+        className="ctrl-flat can-disable p-0.5 px-2 rounded"
+        value={value}
+        onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
+        type={type}
+        disabled={disabled}
+      />
+    </div>
   );
 }

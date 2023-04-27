@@ -1,43 +1,83 @@
+import path from "path";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
+import { promises as fs } from "fs";
 import dotenv from "dotenv";
 dotenv.config();
 
 import { NextRequest } from "next/server";
-
-import { error, info, warn } from "@/helpers/logging";
-import { getBody } from "@/helpers/api";
+import init from "@/helpers/init";
 
 export const revalidate = 0;
+const userDBPath = path.join(process.cwd(), "data/users.json");
 
+/*
+  Body: UserLogin
+  Response: cookie, LoginCookiePayload
+  Codes: 400, 401
+*/
 export async function POST(request: NextRequest) {
-  // dont sign if the secret is not configured (500)
-  const secret = process.env.JWT_SECRET;
-  const adminPW = process.env.ADMIN_PW;
-  if (!secret || !adminPW) {
-    error("JWT_SECRET or ADMIN_PW not configured");
-    return new Response(null, { status: 500 });
-  }
+  await init();
 
-  // verify body and body props (400)
-  const body: { passwordHash: string } | undefined = await getBody(request);
-  if (!body || !body.passwordHash) {
-    warn("invalid POST request for /auth/login");
-    return new Response(null, { status: 400 });
-  }
-
-  const adminHash = crypto.createHash("sha256").update(adminPW).digest("hex");
-  if (body.passwordHash === adminHash) {
-    const payload = { username: "Admin" };
-    const token = jwt.sign(payload, secret, { expiresIn: "12h" });
-
-    info("successful POST request for /auth/login");
-    return new Response(JSON.stringify(payload), {
-      headers: [
-        ["Set-Cookie", `token=${token}; Max-Age=43200; Secure; HttpOnly; SameSite=Strict; Path=/`],
-      ],
+  const JWTSecret = process.env.JWT_SECRET;
+  if (!JWTSecret) {
+    return new Response("JWT secret not configured", {
+      status: 500,
     });
   }
 
-  return new Response(null, { status: 403 });
+  // [DB] Read users
+  const userDB = await fs.readFile(userDBPath, "utf-8");
+  const users: User[] = JSON.parse(userDB);
+
+  // [Request] Get username and password
+  const { username, password }: Partial<UserLogin> = await request.json();
+
+  // [Validation] Check for missing fields
+  if (!username || !password) {
+    return new Response("Missing fields", {
+      status: 400,
+    });
+  }
+
+  // [Validation] Check if user exists
+  const user = users.find((user: User) => user.username.toLowerCase() === username.toLowerCase());
+  if (!user) {
+    return new Response("Invalid credentials", {
+      status: 401,
+    });
+  }
+
+  // [Validation] Check if passwords match
+  const isMatch = await bcrypt.compare(password, user.hash);
+  if (!isMatch) {
+    return new Response("Invalid credentials", {
+      status: 401,
+    });
+  }
+
+  // [Validation] Check if user is enabled
+  if (!user.enabled) {
+    return new Response("User is not enabled", {
+      status: 401,
+    });
+  }
+
+  // [JWT] Create token
+  const payload: LoginCookiePayload = {
+    id: user.id,
+    username: user.username,
+    role: user.role,
+  };
+  const token = jwt.sign(payload, JWTSecret, {
+    expiresIn: "12h",
+  });
+
+  return new Response(JSON.stringify(payload), {
+    headers: {
+      "Content-Type": "application/json",
+      "Set-Cookie": `login_token=${token}; Max-Age=43200; Path=/; HttpOnly; SameSite=Strict`,
+    },
+    status: 200,
+  });
 }
