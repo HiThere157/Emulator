@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import { NextRequest } from "next/server";
 
 import { validateToken } from "@/helpers/auth";
+import { cleanPath } from "@/helpers/format";
 
 export const revalidate = 0;
 const stateFilePath = path.join(process.cwd(), "data/states");
@@ -29,7 +30,10 @@ export async function GET(request: NextRequest, { params }: Props) {
   }
 
   // [Request] Get state path
-  const statePath = path.join(stateFilePath, `${token.id}-${params.rom_id}-${params.slot}.state`);
+  const statePath = path.join(
+    stateFilePath,
+    cleanPath(`${token.id}-${params.rom_id}-${params.slot}.state`),
+  );
 
   // [Validation] Check if state file exists
   const stateExists = await fs.stat(statePath).catch(() => false);
@@ -72,7 +76,10 @@ export async function PUT(request: NextRequest, { params }: Props) {
   }
 
   // [FS] Update state
-  const statePath = path.join(stateFilePath, `${token.id}-${params.rom_id}-${params.slot}.state`);
+  const statePath = path.join(
+    stateFilePath,
+    cleanPath(`${token.id}-${params.rom_id}-${params.slot}.state`),
+  );
   const state = new Uint8Array(await request.arrayBuffer());
   await fs.writeFile(statePath, state);
 
@@ -95,7 +102,10 @@ export async function DELETE(request: NextRequest, { params }: Props) {
   }
 
   // [Request] Get state path
-  const statePath = path.join(stateFilePath, `${token.id}-${params.rom_id}-${params.slot}.state`);
+  const statePath = path.join(
+    stateFilePath,
+    cleanPath(`${token.id}-${params.rom_id}-${params.slot}.state`),
+  );
 
   // [Validation] Check if state file exists
   const stateExists = await fs.stat(statePath).catch(() => false);

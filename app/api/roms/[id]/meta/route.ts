@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import { NextRequest } from "next/server";
 
 import { validateToken } from "@/helpers/auth";
+import { cleanPath } from "@/helpers/format";
 
 export const revalidate = 0;
 const romDBPath = path.join(process.cwd(), "data/roms.json");
@@ -122,7 +123,7 @@ export async function DELETE(request: NextRequest, { params }: Props) {
 
   // [FS] Delete rom file
   try {
-    await fs.unlink(path.join(romFilePath, `${params.id}.rom`));
+    await fs.unlink(path.join(romFilePath, cleanPath(`${params.id}.rom`)));
   } catch {}
 
   return new Response(null, {

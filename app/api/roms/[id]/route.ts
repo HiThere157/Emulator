@@ -3,6 +3,7 @@ import { promises as fs } from "fs";
 import { NextRequest } from "next/server";
 
 import { validateToken } from "@/helpers/auth";
+import { cleanPath } from "@/helpers/format";
 
 export const revalidate = 0;
 const romDBPath = path.join(process.cwd(), "data/roms.json");
@@ -28,7 +29,7 @@ export async function GET(request: NextRequest, { params }: Props) {
   }
 
   // [Request] Get rom path
-  const romPath = path.join(romFilePath, `${params.id}.rom`);
+  const romPath = path.join(romFilePath, cleanPath(`${params.id}.rom`));
 
   // [Validation] Check if rom file exists
   const romExists = await fs.stat(romPath).catch(() => false);
@@ -91,7 +92,7 @@ export async function PUT(request: NextRequest, { params }: Props) {
   }
 
   // [FS] Update rom
-  const romPath = path.join(romFilePath, `${params.id}.rom`);
+  const romPath = path.join(romFilePath, cleanPath(`${params.id}.rom`));
   const rom = new Uint8Array(await request.arrayBuffer());
   await fs.writeFile(romPath, rom);
 

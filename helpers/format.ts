@@ -13,4 +13,9 @@ function formatBytes(bytes: number) {
   }`;
 }
 
-export { formatBytes };
+function cleanPath(path: string) {
+  // Remove anything but letters, numbers, - and .
+  return path.replace(/[^a-zA-Z0-9-.]/g, "");
+}
+
+export { formatBytes, cleanPath };
