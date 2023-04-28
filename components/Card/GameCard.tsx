@@ -16,7 +16,7 @@ export default function GameCard({ rom, onDetailsClick }: GameCardProps) {
     <div className="relative h-fit">
       <Link
         href={`/player/${rom.core}/${rom.id}`}
-        className="block ctrl-invisible p-2 rounded group"
+        className="block ctrl-invisible p-2 rounded group max-w-min"
       >
         <div className="relative" style={{ width, height }}>
           <GameImage src={rom.image} alt={rom.name} />
@@ -25,9 +25,7 @@ export default function GameCard({ rom, onDetailsClick }: GameCardProps) {
           <BsCaretRightFill className="absolute top-1/2 left-1/2 translate-x-[-50%] translate-y-[-50%] text-8xl invisible group-hover:visible" />
         </div>
 
-        <span className="block truncate m-1" style={{ width: "calc(100% - 2em)" }}>
-          {rom.name}
-        </span>
+        <span className="block m-1">{rom.name}</span>
       </Link>
 
       <Button className="ctrl-invisible absolute bottom-3 right-2 px-1" onClick={onDetailsClick}>

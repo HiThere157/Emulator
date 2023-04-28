@@ -110,7 +110,12 @@ export default function RomPopup({
 
             <SettingCategory name="Image">
               <span className="text-greyColor">Image Url:</span>
-              <Input value={image} onChange={setImage} disabled={result === null} />
+              <Input
+                value={image}
+                onChange={setImage}
+                className="w-full"
+                disabled={result === null}
+              />
 
               <span className="text-greyColor">Resolution:</span>
               <Dropdown
@@ -123,7 +128,12 @@ export default function RomPopup({
 
             <SettingCategory name="General Settings">
               <span className="text-greyColor">Name:</span>
-              <Input value={name} onChange={setName} disabled={result === null} />
+              <Input
+                value={name}
+                onChange={setName}
+                className="w-full"
+                disabled={result === null}
+              />
 
               <span className="text-greyColor">Platform:</span>
               <Dropdown

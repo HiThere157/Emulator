@@ -5,6 +5,7 @@ type InputProps = {
   label?: string;
   placeholder?: string;
   type?: "text" | "password";
+  className?: string;
   disabled?: boolean;
   onChange: (value: string) => void;
   onEnter?: () => void;
@@ -14,6 +15,7 @@ export default function Input({
   label,
   placeholder,
   type,
+  className,
   disabled,
   onChange,
   onEnter,
@@ -28,7 +30,7 @@ export default function Input({
     <div className="flex items-center gap-2.5">
       {label && <span className="font-bold">{label}</span>}
       <input
-        className="ctrl-flat can-disable p-0.5 px-2 rounded"
+        className={"ctrl-flat can-disable p-0.5 px-2 rounded " + className}
         value={value}
         onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
         onKeyDown={handleKeyDown}

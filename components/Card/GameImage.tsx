@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import placeholderSvg from "@/public/qblock.svg";
+import placeholderSvg from "@/assets/qblock.svg";
 
 type GameImageProps = {
   src: string;
