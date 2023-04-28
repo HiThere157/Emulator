@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import { cores } from "@/config/static";
 

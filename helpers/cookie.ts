@@ -1,5 +1,3 @@
-"use client";
-
 function getLoginCookie(): LoginCookiePayload | null {
   if (typeof window === "undefined") return null;
 

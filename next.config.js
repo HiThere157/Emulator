@@ -15,8 +15,8 @@ const nextConfig = {
           {
             key: "Content-Encoding",
             value: "br",
-          }
-        ]
+          },
+        ],
       },
       {
         source: "/api/states/:rom_id/:slot",
@@ -24,9 +24,9 @@ const nextConfig = {
           {
             key: "Content-Encoding",
             value: "br",
-          }
-        ]
-      }
+          },
+        ],
+      },
     ];
   },
   output: "standalone",
