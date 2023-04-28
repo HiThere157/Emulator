@@ -1,4 +1,5 @@
 import path from "path";
+import zlib from "zlib";
 import { promises as fs } from "fs";
 import { NextRequest } from "next/server";
 
@@ -46,7 +47,17 @@ export async function GET(request: NextRequest, { params }: Props) {
   // [FS] Read state blob
   const blob = await fs.readFile(statePath);
 
-  return new Response(blob, {
+  // [Compression] Compress rom blob with gzip
+  // Content-Encoding is set in next.config.js
+  const compressedBlob = zlib.brotliCompressSync(blob, {
+    params: {
+      [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_GENERIC,
+      [zlib.constants.BROTLI_PARAM_QUALITY]: 1,
+      [zlib.constants.BROTLI_PARAM_SIZE_HINT]: blob.length,
+    },
+  });
+
+  return new Response(compressedBlob, {
     headers: {
       "Content-Type": "application/octet-stream",
     },
