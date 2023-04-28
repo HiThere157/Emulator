@@ -9,7 +9,7 @@ export default function Error({ message, className }: ErrorProps) {
     <>
       {message && (
         <div className={"flex items-center gap-2 text-redColor " + className}>
-          <BsExclamationOctagon className="text-2xl" />
+          <BsExclamationOctagon className="text-2xl flex-shrink-0" />
           <span>{message}</span>
         </div>
       )}

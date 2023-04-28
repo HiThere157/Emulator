@@ -113,7 +113,7 @@ export default function Library() {
         />
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-2 m-4">
+      <div className="flex flex-col justify-center items-center gap-2">
         <Loader isVisible={roms === null} />
         <Error className="text-2xl" message={roms?.error} />
       </div>

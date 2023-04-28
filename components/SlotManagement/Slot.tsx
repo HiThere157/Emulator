@@ -109,15 +109,23 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col items-center gap-5">
       <State state={remoteState} type="remote" onDelete={deleteRemoteState} />
 
       <div className="flex justify-center gap-5">
-        <Button className="ctrl-invisible py-2" onClick={uploadState} disabled={!localState}>
+        <Button
+          className="ctrl-invisible py-2"
+          onClick={uploadState}
+          disabled={!localState || result === null}
+        >
           <BsArrowUp className="text-3xl" />
         </Button>
 
-        <Button className="ctrl-invisible py-2" onClick={downloadState} disabled={!remoteState}>
+        <Button
+          className="ctrl-invisible py-2"
+          onClick={downloadState}
+          disabled={!remoteState || result === null}
+        >
           <BsArrowDown className="text-3xl" />
         </Button>
       </div>
@@ -126,7 +134,7 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
 
       <div className="flex flex-col justify-center items-center gap-2 m-4">
         <Loader isVisible={result === null} />
-        <Error className="text-2xl" message={result?.error} />
+        <Error className="text-2xl max-w-min" message={result?.error} />
       </div>
     </div>
   );

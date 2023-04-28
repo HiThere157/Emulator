@@ -61,7 +61,7 @@ export default function Library() {
         </Button>
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-2 m-4">
+      <div className="flex flex-col justify-center items-center gap-2">
         <Loader isVisible={roms === null || remoteState === null || localState === null} />
         <Error
           className="text-2xl"
@@ -69,7 +69,7 @@ export default function Library() {
         />
       </div>
 
-      <div className="flex justify-center gap-5 p-2">
+      <div className="flex justify-center gap-5 p-2 mt-2">
         {[1, 2, 3, 4, 5].map((slot) => (
           <Slot
             key={slot}
