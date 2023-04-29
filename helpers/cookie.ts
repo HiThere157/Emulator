@@ -18,13 +18,13 @@ function setLoginCookie(payload: ReducedUser) {
 
   document.cookie = `login_info=${JSON.stringify(
     payload,
-  )}; Max-Age=43200; Secure; SameSite=Strict; Path=/`;
+  )}; Max-Age=43200; Secure; SameSite=Lax; Path=/`;
 }
 
 function clearLoginCookie() {
   if (typeof window === "undefined") return;
 
-  document.cookie = "login_info=; Max-Age=0; Secure; SameSite=Strict; Path=/";
+  document.cookie = "login_info=; Max-Age=0; Secure; SameSite=Lax; Path=/";
 }
 
 export { getLoginCookie, setLoginCookie, clearLoginCookie };

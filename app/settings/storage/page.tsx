@@ -150,7 +150,7 @@ export default function StorageOptionsPage() {
           values={Object.keys(storageCharts)}
           value={storageChart}
           lookup={storageCharts}
-          label="Storage Usage Chart"
+          label="Storage Usage"
           onChange={setStorageChart}
         />
         <Button className="ctrl-flat px-1" onClick={fetchData}>

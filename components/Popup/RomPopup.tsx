@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { cores } from "@/config/static";
 import { formatBytes } from "@/helpers/format";
+import { getLoginCookie } from "@/helpers/cookie";
 
 import Popup from "@/components/Popup/Popup";
 import Input from "@/components/Input";
@@ -35,6 +36,8 @@ export default function RomPopup({
   const [image, setImage] = useState<string>("");
   const [resolution, setResolution] = useState<string>("");
   const [romFile, setRomFile] = useState<File>();
+
+  const isAdmin = getLoginCookie()?.role === "Administrator";
 
   // Reset the form when the popup is opened
   useEffect(() => {
@@ -72,11 +75,12 @@ export default function RomPopup({
 
           <div className="flex flex-col-reverse justify-end gap-1">
             {/* flex-col-reverse: make the dropdowns not overlap each other */}
+
             {rom?.id === -1 ? (
               <RomUploadActions
                 romCR={{ name, core, image, image_resolution: resolution } as RomFileCR}
                 romFile={romFile}
-                isLoading={result === null}
+                isLoading={result === null || !isAdmin}
                 setResult={setResult}
                 onClose={onClose}
                 onRomUpload={onRomUpload}
@@ -85,7 +89,7 @@ export default function RomPopup({
               <RomEditActions
                 romCR={{ name, core, image, image_resolution: resolution } as RomFileCR}
                 id={rom?.id ?? -1}
-                isLoading={result === null}
+                isLoading={result === null || !isAdmin}
                 setResult={setResult}
                 onClose={onClose}
                 onRomUpdate={onRomUpdate}
@@ -105,7 +109,7 @@ export default function RomPopup({
                 <FileUpload
                   fileName={romFile?.name}
                   onUpload={setRomFile}
-                  disabled={result === null}
+                  disabled={result === null || !isAdmin}
                 />
               </div>
             )}
@@ -116,7 +120,7 @@ export default function RomPopup({
                 value={image}
                 onChange={setImage}
                 className="w-full"
-                disabled={result === null}
+                disabled={result === null || !isAdmin}
               />
 
               <span className="text-greyColor">Resolution:</span>
@@ -124,17 +128,17 @@ export default function RomPopup({
                 values={resolutions}
                 value={resolution}
                 onChange={setResolution}
-                disabled={result === null}
+                disabled={result === null || !isAdmin}
               />
             </SettingCategory>
 
-            <SettingCategory name="General Settings">
+            <SettingCategory name="General">
               <span className="text-greyColor">Name:</span>
               <Input
                 value={name}
                 onChange={setName}
                 className="w-full"
-                disabled={result === null}
+                disabled={result === null || !isAdmin}
               />
 
               <span className="text-greyColor">Platform:</span>
@@ -143,7 +147,7 @@ export default function RomPopup({
                 value={core}
                 lookup={cores}
                 onChange={setCore}
-                disabled={result === null}
+                disabled={result === null || !isAdmin}
               />
             </SettingCategory>
           </div>

@@ -8,7 +8,7 @@ import makeApiCall from "@/helpers/api";
 import Link from "@/components/Link";
 import Button from "@/components/Button";
 
-import { BsPersonCircle, BsAsterisk, BsBoxArrowRight } from "react-icons/bs";
+import { BsPersonCircle, BsFillPersonLinesFill, BsBoxArrowRight } from "react-icons/bs";
 import { FiChevronDown } from "react-icons/fi";
 
 export default function User() {
@@ -79,13 +79,9 @@ function UserBody({ isOpen }: UserBodyProps) {
       }
     >
       <div className="flex flex-col gap-1 rounded bg-el1 p-2">
-        <Link
-          href="/auth/changePassword"
-          className="gap-2 py-0.5 px-2 ctrl-flat"
-          activeClassName="ctrl-blue"
-        >
-          <BsAsterisk className="w-5" />
-          <span>Change Password</span>
+        <Link href="/auth/edit" className="gap-2 py-0.5 px-2 ctrl-flat" activeClassName="ctrl-blue">
+          <BsFillPersonLinesFill className="text-xl w-5" />
+          <span>Account Settings</span>
         </Link>
 
         <Button className="ctrl-flat flex items-center gap-2 text-redColor" onClick={logout}>
