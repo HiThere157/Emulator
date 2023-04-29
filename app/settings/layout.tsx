@@ -7,10 +7,10 @@ export default function OptionsLayout({ children }: { children: React.ReactNode 
   const activeClassName = "ctrl-blue";
 
   return (
-    <div className="flex justify-center px-60 h-full">
+    <div className="flex justify-center px-80 h-full">
       <div className="flex flex-grow p-4">
         <nav className="flex flex-col gap-2 my-5">
-          <Link href="/settings/storage" className={className} activeClassName={activeClassName}>
+          <Link href="/settings" className={className} activeClassName={activeClassName}>
             <BsDatabaseFillGear className="text-xl w-5" />
             <span>Storage</span>
           </Link>
