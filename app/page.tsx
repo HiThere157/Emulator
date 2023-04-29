@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { sortTypes } from "@/config/static";
 import makeApiCall from "@/helpers/api";
 
 import Button from "@/components/Button";
@@ -22,25 +21,33 @@ import {
 } from "react-icons/bs";
 import { FiRefreshCw } from "react-icons/fi";
 
+const uniqueReducer = (uniqueCores: string[], core: RomFile) => {
+  if (!uniqueCores.includes(core.core)) uniqueCores.push(core.core);
+  return uniqueCores;
+};
+
+const sortTypes: { [key: string]: string } = {
+  platform: "Platform",
+  "name-asc": "Name (A → Z)",
+  "name-desc": "Name (Z → A)",
+  recent: "Recently Added",
+};
+
+const sortFunctions: { [key: string]: (a: RomFile, b: RomFile) => number } = {
+  platform: (a: RomFile, b: RomFile) => b.core.localeCompare(a.core),
+  "name-asc": (a: RomFile, b: RomFile) => a.name.localeCompare(b.name),
+  "name-desc": (a: RomFile, b: RomFile) => b.name.localeCompare(a.name),
+  recent: (a: RomFile, b: RomFile) => b.id - a.id,
+};
+
 export default function LibraryPage() {
   const [roms, setRoms] = useState<ApiResult<RomFile[]>>(null);
   const [selectedRom, setSelectedRom] = useState<RomFile | null>(null);
 
   const [search, setSearch] = useState<string>("");
-  const searchFilter = (rom: RomFile) => rom.name.toLowerCase().includes(search.toLowerCase());
-
   const [sortType, setSortType] = useState<string>("name-asc");
-  const sortFunctionLookup: { [key: string]: (a: RomFile, b: RomFile) => number } = {
-    platform: (a: RomFile, b: RomFile) => b.core.localeCompare(a.core),
-    "name-asc": (a: RomFile, b: RomFile) => a.name.localeCompare(b.name),
-    "name-desc": (a: RomFile, b: RomFile) => b.name.localeCompare(a.name),
-    recent: (a: RomFile, b: RomFile) => b.id - a.id,
-  };
 
-  const uniqueReducer = (uniqueCores: string[], core: RomFile) => {
-    if (!uniqueCores.includes(core.core)) uniqueCores.push(core.core);
-    return uniqueCores;
-  };
+  const searchFilter = (rom: RomFile) => rom.name.toLowerCase().includes(search.toLowerCase());
 
   const fetchRoms = async () => {
     setRoms(null);
@@ -122,7 +129,7 @@ export default function LibraryPage() {
         {roms?.result &&
           roms.result
             .filter(searchFilter)
-            .sort(sortFunctionLookup[sortType])
+            .sort(sortFunctions[sortType])
             .reduce(uniqueReducer, [] as string[])
             .map((core) => {
               return (
@@ -135,6 +142,7 @@ export default function LibraryPage() {
                     {roms.result
                       ?.filter((rom) => rom.core === core)
                       .filter(searchFilter)
+                      .sort(sortFunctions[sortType])
                       .map((rom) => (
                         <GameCard
                           key={rom.id}

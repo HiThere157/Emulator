@@ -44,7 +44,7 @@ async function getStates(): Promise<ApiResult<StateFile[]>> {
       return {
         rom_id: parseInt(rom_id),
         slot: parseInt(slot),
-        uploaded_by: -1,
+        user_id: -1,
         size: values[index].byteLength,
       };
     });

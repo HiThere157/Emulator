@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { cores, resolutions } from "@/config/static";
+import { cores } from "@/config/static";
 import { formatBytes } from "@/helpers/format";
 
 import Popup from "@/components/Popup/Popup";
@@ -11,6 +11,8 @@ import GameImage from "@/components/Card/GameImage";
 import RomEditActions from "@/components/RomManagement/RomEditActions";
 import RomUploadActions from "@/components/RomManagement/RomUploadActions";
 import FileUpload from "@/components/RomManagement/FileUpload";
+
+const resolutions: string[] = ["200x275", "300x200", "260x230"];
 
 type RomPopupProps = {
   rom: RomFile | null;
