@@ -30,10 +30,6 @@ input {
 }
 
 @layer components {
-  .can-disable {
-    @apply disabled:opacity-50 disabled:pointer-events-none;
-  }
-
   .ctrl-invisible {
     @apply hover:bg-el1Accent active:bg-el1Active;
   }

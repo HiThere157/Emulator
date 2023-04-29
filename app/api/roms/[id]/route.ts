@@ -109,6 +109,8 @@ export async function PUT(request: NextRequest, { params }: Props) {
 
   // [DB] Update rom database
   roms[currentRomIndex].size = rom.length;
+
+  // [DB] Write rom database
   await fs.writeFile(romDBPath, JSON.stringify(roms, null, 2));
 
   return new Response(null, {

@@ -52,7 +52,7 @@ export async function POST(request: NextRequest, { params }: Props) {
   const romDB = await fs.readFile(romDBPath, "utf-8");
   const roms: RomFile[] = JSON.parse(romDB);
 
-  // [DB] Update rom (1/2 - Create new rom)
+  // [DB] Find rom
   const currentRomIndex = roms.findIndex((rom) => rom.id.toString() === params.id);
 
   // [Validation] Check if rom exists
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest, { params }: Props) {
     });
   }
 
-  // [DB] Update rom (2/2 - Update roms)
+  // [DB] Update rom
   roms[currentRomIndex] = {
     ...roms[currentRomIndex],
     name,
@@ -107,7 +107,7 @@ export async function DELETE(request: NextRequest, { params }: Props) {
   const romDB = await fs.readFile(romDBPath, "utf-8");
   const roms: RomFile[] = JSON.parse(romDB);
 
-  // [DB] Delete rom (1/2 - Find rom)
+  // [DB] Find rom
   const currentRomIndex = roms.findIndex((rom) => rom.id.toString() === params.id);
 
   // [Validation] Check if rom exists
@@ -117,8 +117,10 @@ export async function DELETE(request: NextRequest, { params }: Props) {
     });
   }
 
-  // [DB] Delete rom (2/2 - Delete rom)
+  // [DB] Remove rom
   roms.splice(currentRomIndex, 1);
+
+  // [DB] Write rom database
   await fs.writeFile(romDBPath, JSON.stringify(roms, null, 2));
 
   // [FS] Delete rom file

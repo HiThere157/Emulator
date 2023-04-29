@@ -30,7 +30,10 @@ export default function Input({
     <div className="flex items-center gap-2.5">
       {label && <span className="font-bold">{label}</span>}
       <input
-        className={"ctrl-flat can-disable p-0.5 px-2 rounded " + className}
+        className={
+          "ctrl-flat p-0.5 px-2 rounded disabled:opacity-50 disabled:pointer-events-none " +
+          className
+        }
         value={value}
         onChange={(event: ChangeEvent<HTMLInputElement>) => onChange(event.target.value)}
         onKeyDown={handleKeyDown}

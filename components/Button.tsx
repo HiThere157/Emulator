@@ -9,7 +9,9 @@ type ButtonProps = {
 export default function Button({ children, disabled, className, onClick }: ButtonProps) {
   return (
     <button
-      className={"can-disable block py-0.5 px-2 rounded " + className}
+      className={
+        "block py-0.5 px-2 rounded disabled:opacity-50 disabled:pointer-events-none " + className
+      }
       onClick={onClick}
       disabled={disabled}
     >

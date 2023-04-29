@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import { roleClasses } from "@/config/static";
 import { getLoginCookie, clearLoginCookie } from "@/helpers/cookie";
 import makeApiCall from "@/helpers/api";
 
@@ -11,7 +12,7 @@ import Button from "@/components/Button";
 import { BsPersonCircle, BsFillPersonLinesFill, BsBoxArrowRight } from "react-icons/bs";
 import { FiChevronDown } from "react-icons/fi";
 
-export default function User() {
+export default function Profile() {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [user, setUser] = useState<ReducedUser | null>(null);
@@ -21,19 +22,13 @@ export default function User() {
     setUser(getLoginCookie());
   }, []);
 
-  const classLookup = {
-    Administrator: "text-redColor",
-    Player: "text-blueColor",
-    Guest: "text-greyColor",
-  };
-
   return (
     <div ref={ref} className="relative z-[15]">
       <Button
         className="ctrl-invisible flex items-center gap-2 text-start"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <BsPersonCircle className={"text-3xl " + classLookup[user?.role ?? "Guest"]} />
+        <BsPersonCircle className={"text-3xl " + roleClasses[user?.role ?? "Guest"]} />
 
         <div className="flex flex-col leading-tight">
           <span>{user?.username ?? "Anonymous"}</span>

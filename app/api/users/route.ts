@@ -27,6 +27,7 @@ export async function GET(request: NextRequest) {
     id: user.id,
     username: user.username,
     role: user.role,
+    enabled: user.enabled,
   }));
 
   return new Response(JSON.stringify(reducedUsers), {

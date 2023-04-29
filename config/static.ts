@@ -4,4 +4,10 @@ const cores: { [key: string]: string } = {
   nds: "Nintendo DS",
 };
 
-export { cores };
+const roleClasses = {
+  Administrator: "text-redColor",
+  Player: "text-blueColor",
+  Guest: "text-greyColor",
+};
+
+export { cores, roleClasses };

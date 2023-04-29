@@ -44,7 +44,7 @@ export default function FileUpload({ fileName, disabled, onUpload }: FileUploadP
       onDragLeave={handleDragLeave}
     >
       <input
-        className="can-disable hidden"
+        className="hidden"
         type="file"
         multiple={true}
         onChange={handleChange}

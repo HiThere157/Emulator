@@ -3,7 +3,7 @@ import "./global.css";
 import Image from "next/image";
 
 import Link from "@/components/Link";
-import User from "@/components/Header/User";
+import Profile from "@/components/Header/Profile";
 
 import iconPng from "@/assets/icon.png";
 
@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           <div className="flex-grow" />
 
-          <User />
+          <Profile />
         </header>
         <main className="flex-grow">{children}</main>
       </body>

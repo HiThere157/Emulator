@@ -68,6 +68,7 @@ export async function POST(request: NextRequest) {
     id: user.id,
     username: user.username,
     role: user.role,
+    enabled: user.enabled,
   };
   const token = jwt.sign(payload, JWTSecret, {
     expiresIn: "12h",
