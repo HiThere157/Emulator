@@ -11,7 +11,7 @@ type UserLogin = {
   password: string;
 };
 
-type LoginCookiePayload = {
+type ReducedUser = {
   id: number;
   username: string;
   role: "Administrator" | "Player";

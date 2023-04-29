@@ -12,7 +12,7 @@ import Loader from "@/components/Loader";
 import { BsPersonBoundingBox } from "react-icons/bs";
 
 export default function Login() {
-  const [result, setResult] = useState<ApiResult<LoginCookiePayload | undefined>>({});
+  const [result, setResult] = useState<ApiResult<ReducedUser | undefined>>({});
   const [isRegistering, setIsRegistering] = useState<boolean>(false);
 
   const [username, setUsername] = useState<string>("");
@@ -76,7 +76,7 @@ export default function Login() {
   };
 
   const login = async () => {
-    const loginResult = await makeApiCall<LoginCookiePayload>(
+    const loginResult = await makeApiCall<ReducedUser>(
       "/api/auth/login",
       {
         method: "POST",

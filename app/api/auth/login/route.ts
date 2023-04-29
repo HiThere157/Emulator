@@ -13,7 +13,7 @@ const userDBPath = path.join(process.cwd(), "data/users.json");
 
 /*
   Body: UserLogin
-  Response: cookie, LoginCookiePayload
+  Response: cookie, ReducedUser
   Codes: 400, 401
 */
 export async function POST(request: NextRequest) {
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
   }
 
   // [JWT] Create token
-  const payload: LoginCookiePayload = {
+  const payload: ReducedUser = {
     id: user.id,
     username: user.username,
     role: user.role,

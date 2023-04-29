@@ -4,7 +4,7 @@ dotenv.config();
 
 import { NextRequest } from "next/server";
 
-async function validateToken(request: NextRequest): Promise<LoginCookiePayload | null> {
+async function validateToken(request: NextRequest): Promise<ReducedUser | null> {
   const JWTSecret = process.env.JWT_SECRET;
   if (!JWTSecret) return null;
 
@@ -12,7 +12,7 @@ async function validateToken(request: NextRequest): Promise<LoginCookiePayload |
   if (!tokenCookie) return null;
 
   try {
-    return jwt.verify(tokenCookie.value, JWTSecret) as LoginCookiePayload;
+    return jwt.verify(tokenCookie.value, JWTSecret) as ReducedUser;
   } catch {
     return null;
   }

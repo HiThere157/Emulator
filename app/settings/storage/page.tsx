@@ -20,6 +20,11 @@ type AggregatedStorage = {
   labels: string[];
   data: number[];
 };
+type RawDataSet = {
+  roms: RomFile[];
+  states: StateFile[];
+  users: ReducedUser[];
+};
 
 const generateDataset = (aggregated: AggregatedStorage): ChartData<"doughnut"> => {
   return {
@@ -45,9 +50,9 @@ const storageCharts: { [key: string]: string } = {
 };
 
 const storageAggregators: {
-  [key: string]: (roms: RomFile[], states: StateFile[]) => AggregatedStorage;
+  [key: string]: (raw: RawDataSet) => AggregatedStorage;
 } = {
-  combined: (roms: RomFile[], states: StateFile[]) => {
+  combined: ({ roms, states }) => {
     return {
       labels: ["ROMs", "States"],
       data: [
@@ -56,7 +61,7 @@ const storageAggregators: {
       ],
     };
   },
-  "roms-game": (roms: RomFile[], states: StateFile[]) => {
+  "roms-game": ({ roms }) => {
     const sortedRoms = roms.sort((a, b) => a.size - b.size);
 
     return {
@@ -64,7 +69,7 @@ const storageAggregators: {
       data: sortedRoms.map((rom) => rom.size),
     };
   },
-  "roms-platform": (roms: RomFile[], states: StateFile[]) => {
+  "roms-platform": ({ roms }) => {
     const uniqueCores = roms.reduce((uniqueCores: string[], core: RomFile) => {
       if (!uniqueCores.includes(core.core)) uniqueCores.push(core.core);
       return uniqueCores;
@@ -77,22 +82,24 @@ const storageAggregators: {
       }),
     };
   },
-  "states-user": (roms: RomFile[], states: StateFile[]) => {
-    const uniqueUsers = states.reduce((uniqueUsers: number[], state: StateFile) => {
-      if (!uniqueUsers.includes(state.user_id)) uniqueUsers.push(state.user_id);
-      return uniqueUsers;
+  "states-user": ({ states, users }) => {
+    const uniqueUserIds = states.reduce((uniqueUserIds: number[], state: StateFile) => {
+      if (!uniqueUserIds.includes(state.user_id)) uniqueUserIds.push(state.user_id);
+      return uniqueUserIds;
     }, []);
 
     return {
-      labels: uniqueUsers.map((user) => user.toString()),
-      data: uniqueUsers.map((user) => {
+      labels: uniqueUserIds.map(
+        (userId) => users.find((user) => user.id === userId)?.username ?? "Unknown",
+      ),
+      data: uniqueUserIds.map((userId) => {
         return states
-          .filter((state) => state.user_id === user)
+          .filter((state) => state.user_id === userId)
           .reduce((acc, state) => acc + state.size, 0);
       }),
     };
   },
-  "states-game": (roms: RomFile[], states: StateFile[]) => {
+  "states-game": ({ roms, states }) => {
     const uniqueRomIds = states.reduce((uniqueRomIds: number[], state: StateFile) => {
       if (!uniqueRomIds.includes(state.rom_id)) uniqueRomIds.push(state.rom_id);
       return uniqueRomIds;
@@ -112,19 +119,22 @@ const storageAggregators: {
 export default function StorageOptionsPage() {
   const [roms, setRoms] = useState<ApiResult<RomFile[]>>(null);
   const [states, setStates] = useState<ApiResult<StateFile[]>>(null);
+  const [users, setUsers] = useState<ApiResult<ReducedUser[]>>(null);
 
   const [storageChart, setStorageChart] = useState<string>("combined");
 
   const fetchData = async () => {
     setStates(null);
 
-    const romsReq = makeApiCall<RomFile[]>("/api/roms", undefined);
-    const stateReq = makeApiCall<StateFile[]>("/api/states", undefined, 750);
+    const romsReq = makeApiCall<RomFile[]>("/api/roms");
+    const stateReq = makeApiCall<StateFile[]>("/api/states");
+    const usersReq = makeApiCall<ReducedUser[]>("/api/users", undefined, 750);
 
-    const [romsResult, stateResult] = await Promise.all([romsReq, stateReq]);
+    const [romsResult, stateResult, usersResult] = await Promise.all([romsReq, stateReq, usersReq]);
 
     setRoms(romsResult);
     setStates(stateResult);
+    setUsers(usersResult);
   };
 
   useEffect(() => {
@@ -147,8 +157,8 @@ export default function StorageOptionsPage() {
       </div>
 
       <div className="flex flex-col justify-center items-center gap-2">
-        <Loader isVisible={roms === null || states === null} />
-        <Error className="text-2xl" message={roms?.error ?? states?.error} />
+        <Loader isVisible={roms === null || states === null || users === null} />
+        <Error className="text-2xl" message={roms?.error ?? states?.error ?? users?.error} />
       </div>
 
       <div className="flex justify-center">
@@ -173,7 +183,11 @@ export default function StorageOptionsPage() {
               },
             }}
             data={generateDataset(
-              storageAggregators[storageChart](roms?.result ?? [], states?.result ?? []),
+              storageAggregators[storageChart]({
+                roms: roms?.result ?? [],
+                states: states?.result ?? [],
+                users: users?.result ?? [],
+              }),
             )}
           />
         </div>

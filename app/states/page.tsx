@@ -23,7 +23,7 @@ export default function StatesPage() {
     setLocalState(null);
     setRemoteState(null);
 
-    const romsReq = makeApiCall<RomFile[]>("/api/roms", undefined);
+    const romsReq = makeApiCall<RomFile[]>("/api/roms");
     const remoteStateReq = makeApiCall<StateFile[]>("/api/states", undefined, 750);
     const localStateReq = getStates();
 

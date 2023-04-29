@@ -1,4 +1,4 @@
-function getLoginCookie(): LoginCookiePayload | null {
+function getLoginCookie(): ReducedUser | null {
   if (typeof window === "undefined") return null;
 
   const userCookieString = document.cookie
@@ -10,10 +10,10 @@ function getLoginCookie(): LoginCookiePayload | null {
     return null;
   }
 
-  return JSON.parse(userCookieString) as LoginCookiePayload;
+  return JSON.parse(userCookieString) as ReducedUser;
 }
 
-function setLoginCookie(payload: LoginCookiePayload) {
+function setLoginCookie(payload: ReducedUser) {
   if (typeof window === "undefined") return;
 
   document.cookie = `login_info=${JSON.stringify(
