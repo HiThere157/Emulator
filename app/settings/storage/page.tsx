@@ -124,7 +124,9 @@ export default function StorageOptionsPage() {
   const [storageChart, setStorageChart] = useState<string>("combined");
 
   const fetchData = async () => {
+    setRoms(null);
     setStates(null);
+    setUsers(null);
 
     const romsReq = makeApiCall<RomFile[]>("/api/roms");
     const stateReq = makeApiCall<StateFile[]>("/api/states");
