@@ -13,8 +13,7 @@ const stateFilePath = path.join(process.cwd(), "data/states");
 */
 export async function GET(request: NextRequest) {
   // [Auth] Validate token
-  const token = await validateToken(request);
-  if (!token) {
+  if (!(await validateToken(request))) {
     return new Response("Unauthorized", {
       status: 401,
     });
