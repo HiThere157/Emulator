@@ -17,7 +17,7 @@ const sortTypes: { [key: string]: string } = {
   role: "Role",
   "name-asc": "Name (A → Z)",
   "name-desc": "Name (Z → A)",
-  recent: "Recently Added",
+  recent: "New Accounts",
 };
 
 const sortFunctions: { [key: string]: (a: ReducedUser, b: ReducedUser) => number } = {
