@@ -93,7 +93,7 @@ function DrowdownBody({
         (justify === "start" ? "left-0 " : "right-0 ")
       }
     >
-      <div className="flex flex-col rounded bg-el1 p-2">
+      <div className="flex flex-col gap-1 rounded bg-el1 p-2">
         {values.map((item, index) => {
           return (
             <Button

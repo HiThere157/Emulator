@@ -22,7 +22,7 @@ import {
 } from "react-icons/bs";
 import { FiRefreshCw } from "react-icons/fi";
 
-export default function Library() {
+export default function LibraryPage() {
   const [roms, setRoms] = useState<ApiResult<RomFile[]>>(null);
   const [selectedRom, setSelectedRom] = useState<RomFile | null>(null);
 

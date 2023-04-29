@@ -39,10 +39,7 @@ export default function HeaderStats() {
             {
               label: "# of Votes",
               data: [12, 19],
-              backgroundColor: [
-                "#208CF0",
-                "#B92828",
-              ],
+              backgroundColor: ["#208CF0", "#B92828"],
               borderWidth: 0,
             },
           ],

@@ -1,12 +1,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-type OptionLinkProps = {
+type ProfileLinkProps = {
   href: string;
-  icon: React.ReactNode;
   children: React.ReactNode;
 };
-export default function OptionLink({ href, icon, children }: OptionLinkProps) {
+export default function ProfileLink({ href, children }: ProfileLinkProps) {
   const pathname = usePathname();
 
   return (
@@ -17,8 +16,7 @@ export default function OptionLink({ href, icon, children }: OptionLinkProps) {
       }
       href={href}
     >
-      {icon}
-      <span>{children}</span>
+      {children}
     </Link>
   );
 }

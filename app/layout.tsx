@@ -28,6 +28,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
           <NavLink href="/">Library</NavLink>
           <NavLink href="/states">States</NavLink>
+          <NavLink href="/settings" matchSubPaths={true}>
+            Settings
+          </NavLink>
 
           <div className="flex-grow" />
 

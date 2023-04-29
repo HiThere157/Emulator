@@ -12,7 +12,7 @@ import Slot from "@/components/SlotManagement/Slot";
 
 import { FiRefreshCw } from "react-icons/fi";
 
-export default function Library() {
+export default function StatesPage() {
   const [roms, setRoms] = useState<ApiResult<RomFile[]>>(null);
   const [remoteState, setRemoteState] = useState<ApiResult<StateFile[]>>(null);
   const [localState, setLocalState] = useState<ApiResult<StateFile[]>>(null);

@@ -14,7 +14,7 @@ type PlayerProps = {
     id: string;
   };
 };
-export default function Player({ params }: PlayerProps) {
+export default function PlayerPage({ params }: PlayerProps) {
   const playerRef = useRef<HTMLIFrameElement>(null);
 
   const initPlayer = () => {

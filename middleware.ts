@@ -5,8 +5,7 @@ export async function middleware(request: NextRequest) {
 
   // Allow access to login/logout pages and Next.js files
   if (
-    pathname === "/login" ||
-    pathname === "/logout" ||
+    pathname === "/auth/login" ||
     pathname.startsWith("/api/auth/") ||
     pathname.startsWith("/_next/")
   ) {
@@ -19,7 +18,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Redirect to login page if the user is not logged in
-  const url = new URL("/login", request.url);
+  const url = new URL("/auth/login", request.url);
   url.searchParams.set("callbackUrl", pathname);
   return NextResponse.redirect(url);
 }

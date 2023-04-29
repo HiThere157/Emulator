@@ -5,10 +5,10 @@ import useOutsideClick from "@/hooks/useOutsideClick";
 import { getLoginCookie, clearLoginCookie } from "@/helpers/cookie";
 import makeApiCall from "@/helpers/api";
 
-import OptionLink from "@/components/Header/OptionLink";
+import ProfileLink from "@/components/Header/ProfileLink";
 import Button from "@/components/Button";
 
-import { BsPersonCircle, BsGearFill, BsPersonFillGear, BsBoxArrowRight } from "react-icons/bs";
+import { BsPersonCircle, BsAsterisk, BsBoxArrowRight } from "react-icons/bs";
 import { FiChevronDown } from "react-icons/fi";
 
 export default function User() {
@@ -67,7 +67,7 @@ function UserBody({ isOpen }: UserBodyProps) {
 
     if (!logoutResult?.error) {
       clearLoginCookie();
-      location.href = "/login";
+      location.href = "/auth/login";
     }
   };
 
@@ -78,15 +78,11 @@ function UserBody({ isOpen }: UserBodyProps) {
         (isOpen ? "max-h-screen" : "max-h-0")
       }
     >
-      <div className="flex flex-col rounded bg-el1 p-2">
-        <OptionLink href="/admin/settings" icon={<BsGearFill className="text-lg w-5" />}>
-          Settings
-        </OptionLink>
-        <OptionLink href="/admin/users" icon={<BsPersonFillGear className="text-xl w-5" />}>
-          User Management
-        </OptionLink>
-
-        <hr className="my-2 text-el1Active" />
+      <div className="flex flex-col gap-1 rounded bg-el1 p-2">
+        <ProfileLink href="/auth/changePassword">
+          <BsAsterisk className=" w-5" />
+          <span>Change Password</span>
+        </ProfileLink>
 
         <Button className="ctrl-flat flex items-center gap-2 text-redColor" onClick={logout}>
           <BsBoxArrowRight className="text-xl w-5" />
