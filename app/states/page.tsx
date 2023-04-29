@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import makeApiCall from "@/helpers/api";
 import { getStates } from "@/helpers/indexeddb";
+import { getLoginCookie } from "@/helpers/cookie";
 
 import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";
@@ -18,6 +19,7 @@ export default function StatesPage() {
   const [localState, setLocalState] = useState<ApiResult<StateFile[]>>(null);
 
   const [selectedRomId, setSelectedRomId] = useState<string>("");
+  const userId = getLoginCookie()?.id;
 
   const fetchData = async () => {
     setLocalState(null);
@@ -74,10 +76,13 @@ export default function StatesPage() {
           <Slot
             key={slot}
             remoteState={remoteState?.result?.find(
-              (state) => state.slot === slot && state.rom_id.toString() === selectedRomId,
+              (state) =>
+                state.user_id === userId &&
+                state.rom_id.toString() === selectedRomId &&
+                state.slot === slot,
             )}
             localState={localState?.result?.find(
-              (state) => state.slot === slot && state.rom_id.toString() === selectedRomId,
+              (state) => state.rom_id.toString() === selectedRomId && state.slot === slot,
             )}
             onSubmit={fetchData}
           />

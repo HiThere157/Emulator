@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
 
   // [FS] Read states
   const stateFiles = await fs.readdir(stateFilePath);
-  const allStates: StateFile[] = await Promise.all(
+  const states: StateFile[] = await Promise.all(
     stateFiles.map(async (stateFile) => {
       const [user_id, rom_id, slot] = stateFile.split("-");
       const stats = await fs.stat(path.join(stateFilePath, stateFile));
@@ -35,7 +35,6 @@ export async function GET(request: NextRequest) {
       };
     }),
   );
-  const states = allStates.filter((state) => state.user_id === token.id);
 
   return new Response(JSON.stringify(states), {
     headers: {
