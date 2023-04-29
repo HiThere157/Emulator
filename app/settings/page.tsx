@@ -178,7 +178,10 @@ export default function StorageOptionsPage() {
                   callbacks: {
                     label: (context) => {
                       const value = context.raw as number;
-                      return ` Size: ${formatBytes(value)}`;
+                      const allValues = context.chart.data.datasets[0].data as number[];
+                      return ` Size: ${formatBytes(value)} / ${formatBytes(
+                        allValues.reduce((acc, val) => acc + val, 0),
+                      )}`;
                     },
                   },
                 },
