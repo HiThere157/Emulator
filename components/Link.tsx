@@ -5,10 +5,18 @@ import { usePathname } from "next/navigation";
 
 type NavLinkProps = {
   href: string;
+  className?: string;
+  activeClassName?: string;
   matchSubPaths?: boolean;
   children: React.ReactNode;
 };
-export default function NavLink({ href, matchSubPaths, children }: NavLinkProps) {
+export default function CustomLink({
+  href,
+  className,
+  activeClassName,
+  matchSubPaths,
+  children,
+}: NavLinkProps) {
   const pathname = usePathname();
 
   const isMatch = matchSubPaths ? pathname.startsWith(href) : pathname == href;
@@ -16,12 +24,14 @@ export default function NavLink({ href, matchSubPaths, children }: NavLinkProps)
   return (
     <Link
       className={
-        "ctrl-invisible flex items-center h-full rounded px-2 text-lg font-bold " +
-        (isMatch ? "text-whiteColor" : "text-greyColor")
+        "flex items-center rounded whitespace-nowrap " +
+        (isMatch ? activeClassName : "") +
+        " " +
+        className
       }
       href={href}
     >
-      <span>{children}</span>
+      {children}
     </Link>
   );
 }

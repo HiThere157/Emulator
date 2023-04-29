@@ -1,24 +1,23 @@
-import SettingsLinkProps from "@/components/Settings/SettingsLink";
+import Link from "@/components/Link";
 
 import { BsDatabaseFillGear, BsPersonFillGear } from "react-icons/bs";
 
 export default function OptionsLayout({ children }: { children: React.ReactNode }) {
+  const className = "gap-2 py-1 px-2 ctrl-invisible";
+  const activeClassName = "ctrl-blue";
+
   return (
     <div className="flex justify-center px-60 h-full">
       <div className="flex flex-grow p-4">
         <nav className="flex flex-col gap-2 my-5">
-          <SettingsLinkProps
-            href="/settings/storage"
-            icon={<BsDatabaseFillGear className="text-2xl w-6" />}
-          >
-            Storage
-          </SettingsLinkProps>
-          <SettingsLinkProps
-            href="/settings/users"
-            icon={<BsPersonFillGear className="text-2xl w-6" />}
-          >
-            User Management
-          </SettingsLinkProps>
+          <Link href="/settings/storage" className={className} activeClassName={activeClassName}>
+            <BsDatabaseFillGear className="text-xl w-5" />
+            <span>Storage</span>
+          </Link>
+          <Link href="/settings/users" className={className} activeClassName={activeClassName}>
+            <BsPersonFillGear className="text-xl w-5" />
+            <span>User Management</span>
+          </Link>
         </nav>
 
         <div className="mx-4 my-2 rounded border-r-2 border-el1" />

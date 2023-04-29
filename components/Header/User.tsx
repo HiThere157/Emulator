@@ -5,7 +5,7 @@ import useOutsideClick from "@/hooks/useOutsideClick";
 import { getLoginCookie, clearLoginCookie } from "@/helpers/cookie";
 import makeApiCall from "@/helpers/api";
 
-import ProfileLink from "@/components/Header/ProfileLink";
+import Link from "@/components/Link";
 import Button from "@/components/Button";
 
 import { BsPersonCircle, BsAsterisk, BsBoxArrowRight } from "react-icons/bs";
@@ -79,10 +79,14 @@ function UserBody({ isOpen }: UserBodyProps) {
       }
     >
       <div className="flex flex-col gap-1 rounded bg-el1 p-2">
-        <ProfileLink href="/auth/changePassword">
-          <BsAsterisk className=" w-5" />
+        <Link
+          href="/auth/changePassword"
+          className="gap-2 py-0.5 px-2 ctrl-flat"
+          activeClassName="ctrl-blue"
+        >
+          <BsAsterisk className="w-5" />
           <span>Change Password</span>
-        </ProfileLink>
+        </Link>
 
         <Button className="ctrl-flat flex items-center gap-2 text-redColor" onClick={logout}>
           <BsBoxArrowRight className="text-xl w-5" />

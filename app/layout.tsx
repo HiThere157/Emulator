@@ -2,7 +2,7 @@ import "./global.css";
 
 import Image from "next/image";
 
-import NavLink from "@/components/Header/NavLink";
+import Link from "@/components/Link";
 import User from "@/components/Header/User";
 
 import iconPng from "@/assets/icon.png";
@@ -13,6 +13,9 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const className = "ctrl-invisible h-full px-2 text-lg font-bold text-greyColor";
+  const activeClassName = "text-whiteColor";
+
   return (
     <html lang="en">
       <body className="flex flex-col h-screen text-whiteColor bg-darkBg">
@@ -26,11 +29,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             height="50"
           />
 
-          <NavLink href="/">Library</NavLink>
-          <NavLink href="/states">States</NavLink>
-          <NavLink href="/settings" matchSubPaths={true}>
+          <Link href="/" className={className} activeClassName={activeClassName}>
+            Library
+          </Link>
+          <Link href="/states" className={className} activeClassName={activeClassName}>
+            States
+          </Link>
+          <Link
+            href="/settings"
+            matchSubPaths={true}
+            className={className}
+            activeClassName={activeClassName}
+          >
             Settings
-          </NavLink>
+          </Link>
 
           <div className="flex-grow" />
 
