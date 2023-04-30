@@ -13,7 +13,7 @@ const userDBPath = path.join(process.cwd(), "data/users.json");
 
 /*
   Body: UserLogin
-  Response: cookie, ReducedUser
+  Response: cookie, User
   Codes: 400, 401
 */
 export async function POST(request: NextRequest) {
@@ -28,7 +28,7 @@ export async function POST(request: NextRequest) {
 
   // [DB] Read users
   const userDB = await fs.readFile(userDBPath, "utf-8");
-  const users: User[] = JSON.parse(userDB);
+  const users: DBUser[] = JSON.parse(userDB);
 
   // [Request] Get username and password
   const { username, password }: Partial<UserLogin> = await request.json();
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
   }
 
   // [Validation] Check if user exists
-  const user = users.find((user: User) => user.username.toLowerCase() === username.toLowerCase());
+  const user = users.find((user: DBUser) => user.username.toLowerCase() === username.toLowerCase());
   if (!user) {
     return new Response("Invalid credentials", {
       status: 401,
@@ -64,7 +64,7 @@ export async function POST(request: NextRequest) {
   }
 
   // [JWT] Create token
-  const payload: ReducedUser = {
+  const payload: User = {
     id: user.id,
     username: user.username,
     role: user.role,

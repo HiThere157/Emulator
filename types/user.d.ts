@@ -6,11 +6,11 @@ type UserCR = {
 
 type User = UserCR & {
   id: number;
-  hash: string;
 };
 
-type ReducedUser = UserCR & {
+type DBUser = UserCR & {
   id: number;
+  hash: string;
 };
 
 type UserLogin = {

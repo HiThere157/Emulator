@@ -15,7 +15,7 @@ import { FiChevronDown } from "react-icons/fi";
 export default function Profile() {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [user, setUser] = useState<ReducedUser | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useOutsideClick(ref, () => setIsOpen(false));
   useEffect(() => {

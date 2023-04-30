@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
 
   // [DB] Read users
   const userDB = await fs.readFile(userDBPath, "utf-8");
-  const users: User[] = JSON.parse(userDB);
+  const users: DBUser[] = JSON.parse(userDB);
 
   // [Request] Get username and password
   const { username, password }: Partial<UserLogin> = await request.json();
@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
   // [Validation] Check if user exists
   const existingUser = users.find(
-    (user: User) => user.username.toLowerCase() === username.toLowerCase(),
+    (user: DBUser) => user.username.toLowerCase() === username.toLowerCase(),
   );
   if (existingUser) {
     return new Response("User already exists", {
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
   }
 
   // [DB] Create user
-  const user: User = {
+  const user: DBUser = {
     id: new Date().getTime(),
     username,
     hash: await bcrypt.hash(password, 10),

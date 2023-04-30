@@ -21,26 +21,26 @@ const sortTypes: { [key: string]: string } = {
   recent: "New Accounts",
 };
 
-const sortFunctions: { [key: string]: (a: ReducedUser, b: ReducedUser) => number } = {
-  role: (a: ReducedUser, b: ReducedUser) => a.role.localeCompare(b.role),
-  "name-asc": (a: ReducedUser, b: ReducedUser) => a.username.localeCompare(b.username),
-  "name-desc": (a: ReducedUser, b: ReducedUser) => b.username.localeCompare(a.username),
-  recent: (a: ReducedUser, b: ReducedUser) => b.id - a.id,
+const sortFunctions: { [key: string]: (a: User, b: User) => number } = {
+  role: (a: User, b: User) => a.role.localeCompare(b.role),
+  "name-asc": (a: User, b: User) => a.username.localeCompare(b.username),
+  "name-desc": (a: User, b: User) => b.username.localeCompare(a.username),
+  recent: (a: User, b: User) => b.id - a.id,
 };
 
 export default function UsersOptionPage() {
-  const [users, setUsers] = useState<ApiResult<ReducedUser[]>>(null);
+  const [users, setUsers] = useState<ApiResult<User[]>>(null);
   const [sortType, setSortType] = useState<string>("role");
 
   const [search, setSearch] = useState<string>("");
-  const searchFilter = (user: ReducedUser) =>
+  const searchFilter = (user: User) =>
     user.username.toLowerCase().includes(search.toLowerCase());
 
   const isAdmin = getLoginCookie()?.role === "Administrator";
 
   const fetchData = async () => {
     setUsers(null);
-    setUsers(await makeApiCall<ReducedUser[]>("/api/users", undefined, 750));
+    setUsers(await makeApiCall<User[]>("/api/users", undefined, 750));
   };
 
   useEffect(() => {

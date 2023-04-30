@@ -11,12 +11,12 @@ import Error from "@/components/Error";
 import { BsFillTrashFill, BsPersonCircle, BsSave } from "react-icons/bs";
 
 type UserProps = {
-  user: ReducedUser;
+  user: User;
   disabled?: boolean;
   onSubmit: () => any;
 };
 export default function User({ user, disabled, onSubmit }: UserProps) {
-  const [result, setResult] = useState<ApiResult<ReducedUser | undefined>>({});
+  const [result, setResult] = useState<ApiResult<User | undefined>>({});
 
   const [role, setRole] = useState<string>(user.role);
   const [enabled, setEnabled] = useState<boolean>(user.enabled);
@@ -25,7 +25,7 @@ export default function User({ user, disabled, onSubmit }: UserProps) {
     setResult(null);
 
     // Update the user in the database
-    const dbResult = await makeApiCall<ReducedUser>(
+    const dbResult = await makeApiCall<User>(
       `/api/users/${user.id}`,
       {
         method: "POST",

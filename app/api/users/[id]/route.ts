@@ -17,7 +17,7 @@ type Props = {
   Params: id
   Role: Administrator
   Body: UserCR
-  Response: ReducedUser
+  Response: User
   Codes: 400, 401, 403, 404
 */
 export async function POST(request: NextRequest, { params }: Props) {
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest, { params }: Props) {
 
   // [DB] Read users
   const userDB = await fs.readFile(userDBPath, "utf-8");
-  const users: User[] = JSON.parse(userDB);
+  const users: DBUser[] = JSON.parse(userDB);
 
   // [DB] Find user
   const currentUserIndex = users.findIndex((user) => user.id.toString() === params.id);
@@ -110,7 +110,7 @@ export async function DELETE(request: NextRequest, { params }: Props) {
 
   // [DB] Read users
   const userDB = await fs.readFile(userDBPath, "utf-8");
-  const users: User[] = JSON.parse(userDB);
+  const users: DBUser[] = JSON.parse(userDB);
 
   // [DB] Find user
   const currentUserIndex = users.findIndex((user) => user.id.toString() === params.id);

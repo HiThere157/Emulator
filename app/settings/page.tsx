@@ -23,7 +23,7 @@ type AggregatedStorage = {
 type RawDataSet = {
   roms: RomFile[];
   states: StateFile[];
-  users: ReducedUser[];
+  users: User[];
 };
 
 const generateDataset = (aggregated: AggregatedStorage): ChartData<"doughnut"> => {
@@ -119,7 +119,7 @@ const storageAggregators: {
 export default function StorageOptionsPage() {
   const [roms, setRoms] = useState<ApiResult<RomFile[]>>(null);
   const [states, setStates] = useState<ApiResult<StateFile[]>>(null);
-  const [users, setUsers] = useState<ApiResult<ReducedUser[]>>(null);
+  const [users, setUsers] = useState<ApiResult<User[]>>(null);
 
   const [storageChart, setStorageChart] = useState<string>("combined");
 
@@ -130,7 +130,7 @@ export default function StorageOptionsPage() {
 
     const romsReq = makeApiCall<RomFile[]>("/api/roms");
     const stateReq = makeApiCall<StateFile[]>("/api/states");
-    const usersReq = makeApiCall<ReducedUser[]>("/api/users", undefined, 750);
+    const usersReq = makeApiCall<User[]>("/api/users", undefined, 750);
 
     const [romsResult, stateResult, usersResult] = await Promise.all([romsReq, stateReq, usersReq]);
 

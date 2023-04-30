@@ -8,7 +8,7 @@ export const revalidate = 0;
 const userDBPath = path.join(process.cwd(), "data/users.json");
 
 /*
-  Response: ReducedUser[]
+  Response: User[]
   Codes: 401
 */
 export async function GET(request: NextRequest) {
@@ -21,9 +21,9 @@ export async function GET(request: NextRequest) {
 
   // [DB] Read users
   const userDB = await fs.readFile(userDBPath, "utf-8");
-  const users: User[] = JSON.parse(userDB);
+  const users: DBUser[] = JSON.parse(userDB);
 
-  const reducedUsers: ReducedUser[] = users.map((user) => ({
+  const reducedUsers: User[] = users.map((user) => ({
     id: user.id,
     username: user.username,
     role: user.role,
