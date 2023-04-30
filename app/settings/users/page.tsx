@@ -6,6 +6,7 @@ import makeApiCall from "@/helpers/api";
 
 import Dropdown from "@/components/Dropdown";
 import Button from "@/components/Button";
+import Input from "@/components/Input";
 import Loader from "@/components/Loader";
 import Error from "@/components/Error";
 import User from "@/components/Settings/User";
@@ -31,6 +32,10 @@ export default function UsersOptionPage() {
   const [users, setUsers] = useState<ApiResult<ReducedUser[]>>(null);
   const [sortType, setSortType] = useState<string>("role");
 
+  const [search, setSearch] = useState<string>("");
+  const searchFilter = (user: ReducedUser) =>
+    user.username.toLowerCase().includes(search.toLowerCase());
+
   const isAdmin = getLoginCookie()?.role === "Administrator";
 
   const fetchData = async () => {
@@ -44,12 +49,13 @@ export default function UsersOptionPage() {
 
   return (
     <div>
-      <div className="flex gap-2 m-2">
+      <div className="flex justify-center flex-wrap gap-2 m-2">
         <Button className="ctrl-flat px-1 h-7" onClick={fetchData}>
           <FiRefreshCw className="text-lg" />
         </Button>
+        <Input value={search} onChange={setSearch} placeholder="Search" />
 
-        <div className="flex-grow" />
+        <div className="hidden sm:block flex-grow" />
 
         <Dropdown
           values={Object.keys(sortTypes)}
@@ -74,6 +80,7 @@ export default function UsersOptionPage() {
       <div className="flex flex-col-reverse gap-2 p-2">
         {users?.result &&
           users.result
+            .filter(searchFilter)
             .sort(sortFunctions[sortType])
             .reverse()
             .map((user) => {
