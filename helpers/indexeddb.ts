@@ -27,13 +27,18 @@ function makeRequest<T>(request: IDBRequest) {
 }
 
 async function getStore(dbName: string, storeName: string, mode: IDBTransactionMode) {
-  const db = await getDB(dbName);
-  return db.transaction(storeName, mode).objectStore(storeName);
+  try {
+    const db = await getDB(dbName);
+    return db.transaction(storeName, mode).objectStore(storeName);
+  } catch (error: any) {
+    return null;
+  }
 }
 
 async function getStates(): Promise<ApiResult<StateFile[]>> {
   try {
     const store = await getStore("ejs-states", "states", "readonly");
+    if (!store) return { result: [] };
 
     const keys = await makeRequest<string[]>(store.getAllKeys());
     const values = await makeRequest<Uint8Array[]>(store.getAll());
@@ -51,18 +56,20 @@ async function getStates(): Promise<ApiResult<StateFile[]>> {
 
     return { result: await Promise.all(promises) };
   } catch (error: any) {
-    return { error: error };
+    return { error: error.toString() };
   }
 }
 
 async function getState(rom_id: number, slot: number): Promise<ApiResult<Uint8Array>> {
   try {
     const store = await getStore("ejs-states", "states", "readonly");
+    if (!store) return { error: "Store not found. Run the player first to create it." };
+
     const blob = await makeRequest<Uint8Array>(store.get(`${rom_id}-${slot}`));
 
     return { result: blob };
   } catch (error: any) {
-    return { error: error };
+    return { error: error.toString() };
   }
 }
 
@@ -73,22 +80,26 @@ async function putState(
 ): Promise<ApiResult<undefined>> {
   try {
     const store = await getStore("ejs-states", "states", "readwrite");
+    if (!store) return { error: "Store not found. Run the player first to create it." };
+
     await makeRequest(store.put(blob, `${rom_id}-${slot}`));
 
     return {};
   } catch (error: any) {
-    return { error: error };
+    return { error: error.toString() };
   }
 }
 
 async function deleteState(rom_id: number, slot: number): Promise<ApiResult<undefined>> {
   try {
     const store = await getStore("ejs-states", "states", "readwrite");
+    if (!store) return { error: "Store not found. Run the player first to create it." };
+
     await makeRequest(store.delete(`${rom_id}-${slot}`));
 
     return {};
   } catch (error: any) {
-    return { error: error };
+    return { error: error.toString() };
   }
 }
 
