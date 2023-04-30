@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cores } from "@/config/static";
 
 import Button from "@/components/Button";
@@ -13,6 +13,17 @@ type CategoryProps = {
 export default function Category({ name, count, children }: CategoryProps) {
   const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(true);
+  const [height, setHeight] = useState<number>(0);
+
+  useEffect(() => {
+    const handleResize = () => setHeight(ref.current?.scrollHeight ?? 0);
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [ref.current?.scrollHeight]);
 
   return (
     <div>
@@ -35,7 +46,7 @@ export default function Category({ name, count, children }: CategoryProps) {
       <div
         ref={ref}
         className={"overflow-hidden transition-size duration-200"}
-        style={{ height: isOpen ? ref.current?.scrollHeight : 0 }}
+        style={{ maxHeight: isOpen ? height : 0 }}
       >
         {children}
       </div>

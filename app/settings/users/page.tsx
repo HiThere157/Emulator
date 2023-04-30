@@ -33,8 +33,7 @@ export default function UsersOptionPage() {
   const [sortType, setSortType] = useState<string>("role");
 
   const [search, setSearch] = useState<string>("");
-  const searchFilter = (user: User) =>
-    user.username.toLowerCase().includes(search.toLowerCase());
+  const searchFilter = (user: User) => user.username.toLowerCase().includes(search.toLowerCase());
 
   const isAdmin = getLoginCookie()?.role === "Administrator";
 
