@@ -36,7 +36,7 @@ export default function PlayerPage({ params }: PlayerProps) {
     //  - onLoad triggers normally
     try {
       initPlayer();
-    } catch { }
+    } catch {}
   }, []);
 
   return (

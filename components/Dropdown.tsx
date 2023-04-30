@@ -85,13 +85,16 @@ function DrowdownBody({
   lookup,
   onChange,
 }: DrowdownBodyProps) {
+  const ref = useRef<HTMLDivElement>(null);
+
   return (
     <div
+      ref={ref}
       className={
         "absolute top-8 overflow-hidden transition-size duration-200 " +
-        (isOpen ? "max-h-screen " : "max-h-0 ") +
-        (justify === "start" ? "left-0 " : "right-0 ")
+        (justify === "start" ? "left-0" : "right-0")
       }
+      style={{ height: isOpen ? ref.current?.scrollHeight : 0 }}
     >
       <div className="flex flex-col gap-1 rounded bg-el1 p-2">
         {values.map((item, index) => {

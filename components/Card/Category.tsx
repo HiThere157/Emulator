@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { cores } from "@/config/static";
 
 import Button from "@/components/Button";
@@ -11,6 +11,7 @@ type CategoryProps = {
   children?: React.ReactNode;
 };
 export default function Category({ name, count, children }: CategoryProps) {
+  const ref = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState<boolean>(true);
 
   return (
@@ -32,9 +33,9 @@ export default function Category({ name, count, children }: CategoryProps) {
       </Button>
 
       <div
-        className={
-          "overflow-hidden transition-size duration-200 " + (isOpen ? "max-h-screen" : "max-h-0")
-        }
+        ref={ref}
+        className={"overflow-hidden transition-size duration-200"}
+        style={{ height: isOpen ? ref.current?.scrollHeight : 0 }}
       >
         {children}
       </div>

@@ -61,11 +61,11 @@ export default function User({ user, disabled, onSubmit }: UserProps) {
   };
 
   return (
-    <div className="flex items-center justify-end rounded py-2 px-3 bg-lightBg">
+    <div className="flex flex-wrap items-center justify-center gap-2 rounded py-2 px-3 bg-lightBg">
       <div className="flex items-center gap-3">
         <BsPersonCircle className={"text-3xl " + roleClasses[user?.role ?? "Guest"]} />
         <span>{user.username}</span>
-        <span className="text-greyColor">(ID: {user.id})</span>
+        <span className="text-greyColor">(#{user.id})</span>
       </div>
 
       <div className="flex flex-col flex-grow justify-center items-center gap-2">
@@ -73,7 +73,7 @@ export default function User({ user, disabled, onSubmit }: UserProps) {
         <Error className="text-xl" message={result?.error} />
       </div>
 
-      <div className="w-52">
+      <div className="w-48">
         <Dropdown
           values={["Administrator", "Player"]}
           value={role}
@@ -83,7 +83,7 @@ export default function User({ user, disabled, onSubmit }: UserProps) {
         />
       </div>
 
-      <div className="w-28">
+      <div className="mr-2">
         <Checkbox checked={enabled} label="Enabled" onChange={setEnabled} disabled={disabled} />
       </div>
 

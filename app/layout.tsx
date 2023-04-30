@@ -18,7 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en">
-      <body className="flex flex-col h-screen text-whiteColor bg-darkBg">
+      <body className="flex flex-col h-screen min-w-[23rem] text-whiteColor bg-darkBg">
         <header className="sticky top-0 flex items-center px-2 py-1 bg-lightBg border-b-2 border-el1 z-[100]">
           <Image
             src={iconPng}

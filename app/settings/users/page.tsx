@@ -44,7 +44,7 @@ export default function UsersOptionPage() {
 
   return (
     <div>
-      <div className="flex justify-between gap-2 m-2">
+      <div className="flex gap-2 m-2">
         <Button className="ctrl-flat px-1 h-7" onClick={fetchData}>
           <FiRefreshCw className="text-lg" />
         </Button>

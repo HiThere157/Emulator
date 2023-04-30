@@ -63,7 +63,7 @@ export default function RomPopup({
       }}
     >
       <div className="p-4 rounded border-2 bg-lightBg border-el1">
-        <div className="flex">
+        <div className="flex-col sm:flex-row flex">
           <div className="flex flex-col items-center justify-center">
             <div className="relative" style={getSize(resolution)}>
               <GameImage src={image} alt="Image Preview" />
@@ -71,7 +71,7 @@ export default function RomPopup({
             <span className="text-greyColor mt-1">Size: {formatBytes(rom?.size ?? 0)}</span>
           </div>
 
-          <div className="mx-4 my-2 rounded border-r-2 border-el1" />
+          <div className="mx-4 my-2 rounded border-r-2 border-b-2 border-el1" />
 
           <div className="flex flex-col-reverse justify-end gap-1">
             {/* flex-col-reverse: make the dropdowns not overlap each other */}

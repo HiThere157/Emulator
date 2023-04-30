@@ -80,7 +80,7 @@ export default function LibraryPage() {
         }}
       />
 
-      <div className="flex justify-between gap-2 m-2">
+      <div className="flex justify-center flex-wrap gap-2 m-2">
         <Button
           className="ctrl-blue flex items-center gap-2"
           onClick={() => {
@@ -103,7 +103,7 @@ export default function LibraryPage() {
         </Button>
         <Input value={search} onChange={setSearch} placeholder="Search" />
 
-        <div className="flex-grow" />
+        <div className="hidden sm:block flex-grow" />
 
         <Dropdown
           values={Object.keys(sortTypes)}
@@ -125,7 +125,7 @@ export default function LibraryPage() {
         <Error className="text-2xl" message={roms?.error} />
       </div>
 
-      <div className="flex flex-col gap-2 p-2">
+      <div className="flex flex-col gap-2 p-2 mt-2">
         {roms?.result &&
           roms.result
             .filter(searchFilter)
@@ -138,7 +138,7 @@ export default function LibraryPage() {
                   name={core}
                   count={roms.result?.filter((rom) => rom.core === core).length ?? 0}
                 >
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex-col items-center sm:flex-row sm:items-start flex flex-wrap gap-2">
                     {roms.result
                       ?.filter((rom) => rom.core === core)
                       .filter(searchFilter)

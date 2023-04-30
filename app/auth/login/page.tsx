@@ -116,7 +116,7 @@ export default function Login() {
   };
 
   return (
-    <div className="absolute top-1/4 left-1/2 translate-x-[-50%] translate-y-[-50%] flex flex-col items-center rounded">
+    <div className="flex flex-col items-center py-[10vh] rounded">
       <BsPersonBoundingBox className="text-8xl text-blueColor mb-7" />
 
       <div className="grid grid-cols-[auto_auto] gap-2">
