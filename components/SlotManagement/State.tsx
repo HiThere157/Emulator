@@ -1,6 +1,6 @@
 import { formatBytes } from "@/helpers/format";
 
-import Button from "../Button";
+import Button from "@/components/Button";
 
 import {
   BsCloudCheckFill,

@@ -138,7 +138,7 @@ export default function LibraryPage() {
                   name={core}
                   count={roms.result?.filter((rom) => rom.core === core).length ?? 0}
                 >
-                  <div className={"flex flex-wrap gap-2"}>
+                  <div className="flex flex-wrap gap-2">
                     {roms.result
                       ?.filter((rom) => rom.core === core)
                       .filter(searchFilter)

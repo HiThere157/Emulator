@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import makeApiCall from "@/helpers/api";
 import { setLoginCookie } from "@/helpers/cookie";
 
@@ -30,6 +30,11 @@ export default function Login() {
   };
 
   const onSubmit = async () => {
+    if (window.location.protocol !== "https:" && window.location.hostname !== "localhost") {
+      setResult({ error: "HTTPS connection required" });
+      return;
+    }
+
     // Check if username and password are not empty
     if (!username || !password) return;
 
