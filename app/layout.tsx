@@ -10,6 +10,12 @@ import iconPng from "@/assets/icon.png";
 export const metadata = {
   title: "Emulator",
   description: "Online Retro Video Game Emulator",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    title: "Emulator",
+    statusBarStyle: "black-translucent",
+    startupImage: "/maskable_icon_192.png",
+  }
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
