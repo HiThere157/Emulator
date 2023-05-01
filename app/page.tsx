@@ -98,8 +98,8 @@ export default function LibraryPage() {
           <BsArrowBarUp className="text-xl" />
           <span className="font-bold">Upload Rom</span>
         </Button>
-        <Button className="ctrl-flat px-1" onClick={fetchData}>
-          <FiRefreshCw className="text-lg" />
+        <Button className="ctrl-flat px-1 group" onClick={fetchData}>
+          <FiRefreshCw className="text-lg group-hover:rotate-180 duration-150" />
         </Button>
         <Input value={search} onChange={setSearch} placeholder="Search" />
 

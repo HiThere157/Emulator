@@ -49,8 +49,8 @@ export default function UsersOptionPage() {
   return (
     <div>
       <div className="flex justify-center flex-wrap gap-2 m-2">
-        <Button className="ctrl-flat px-1 h-7" onClick={fetchData}>
-          <FiRefreshCw className="text-lg" />
+        <Button className="ctrl-flat px-1 group" onClick={fetchData}>
+          <FiRefreshCw className="text-lg group-hover:rotate-180 duration-150" />
         </Button>
         <Input value={search} onChange={setSearch} placeholder="Search" />
 

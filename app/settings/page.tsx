@@ -153,8 +153,8 @@ export default function StorageOptionsPage() {
           label="Storage Usage"
           onChange={setStorageChart}
         />
-        <Button className="ctrl-flat px-1" onClick={fetchData}>
-          <FiRefreshCw className="text-lg" />
+        <Button className="ctrl-flat px-1 group" onClick={fetchData}>
+          <FiRefreshCw className="text-lg group-hover:rotate-180 duration-150" />
         </Button>
       </div>
 
