@@ -75,7 +75,7 @@ export default function StatesPage() {
         />
       </div>
 
-      <div className="flex flex-wrap justify-center gap-5 p-2 mt-2">
+      <div className="flex flex-wrap justify-center gap-5 p-2">
         {[1, 2, 3, 4, 5].map((slot) => (
           <Slot
             key={slot}
