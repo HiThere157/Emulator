@@ -1,5 +1,6 @@
 "use client";
 
+import packageInfo from "@/package.json";
 import { useEffect, useRef, useState } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { roleClasses } from "@/config/static";
@@ -9,7 +10,8 @@ import makeApiCall from "@/helpers/api";
 import Link from "@/components/Link";
 import Button from "@/components/Button";
 
-import { BsPersonCircle, BsFillPersonLinesFill, BsBoxArrowRight } from "react-icons/bs";
+import { BsPersonCircle, BsFillPersonLinesFill, BsBoxArrowRight, BsDot } from "react-icons/bs";
+import { SiNextdotjs, SiGithub } from "react-icons/si";
 import { FiChevronDown } from "react-icons/fi";
 
 export default function Profile() {
@@ -85,6 +87,34 @@ function UserBody({ isOpen }: UserBodyProps) {
           <BsBoxArrowRight className="text-xl w-5" />
           <span>Logout</span>
         </Button>
+
+        <hr className="my-1 text-el1Active" />
+
+        <div className="flex items-center justify-center gap-1 text-greyColor">
+          <a
+            href="https://github.com/HiThere157/Emulator"
+            className="flex items-center gap-1.5"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <SiGithub className="text-lg" />
+            <span className="text-sm underline underline-offset-2">v{packageInfo.version}</span>
+          </a>
+
+          <BsDot />
+
+          <a
+            href="https://github.com/vercel/next.js"
+            className="flex items-center gap-1.5"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <SiNextdotjs className="text-lg" />
+            <span className="text-sm underline underline-offset-2">
+              v{packageInfo.dependencies.next.substring(1)}
+            </span>
+          </a>
+        </div>
       </div>
     </div>
   );

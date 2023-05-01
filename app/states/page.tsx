@@ -48,7 +48,11 @@ export default function StatesPage() {
     <div>
       <div className="flex gap-2 m-2">
         <Dropdown
-          values={roms?.result?.map((rom) => rom.id.toString()) ?? []}
+          values={
+            roms?.result
+              ?.sort((a, b) => a.name.localeCompare(b.name))
+              .map((rom) => rom.id.toString()) ?? []
+          }
           value={selectedRomId}
           lookup={Object.fromEntries(
             roms?.result?.map((rom) => [rom.id.toString(), rom.name]) ?? [],
