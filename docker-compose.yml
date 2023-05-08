@@ -4,7 +4,5 @@ services:
     image: hithere157/emulator:latest
     ports:
       - "3000:3000"
-    environment:
-      - JWT_SECRET=${JWT_SECRET}
     volumes:
       - ./data:/app/data
