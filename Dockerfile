@@ -30,7 +30,7 @@ RUN mkdir /app/data && chown nextjs:nodejs /app/data
 USER nextjs
 
 EXPOSE 3000
-VOLUME [ "/data" ]
+VOLUME [ "/app/data" ]
 
 ENV PORT 3000
 

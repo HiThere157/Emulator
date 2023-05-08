@@ -1,0 +1,15 @@
+version: "3.9"
+services:
+  web:
+    image: hithere157/emulator:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - JWT_SECRET=${JWT_SECRET}
+    volumes:
+      - ./data:/app/data
+
+  tunnel:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel run --token ${TUNNEL_TOKEN}
