@@ -114,7 +114,7 @@ export default function AuthOptionPage() {
         />
 
         <div className="flex justify-between">
-          <Button className="ctrl-red" onClick={revokeSessions} disabled={!isAdmin}>
+          <Button className="ctrl-red font-bold" onClick={revokeSessions} disabled={!isAdmin}>
             Revoke all Sessions
           </Button>
           <Button

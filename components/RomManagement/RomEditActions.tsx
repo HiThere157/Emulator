@@ -72,8 +72,8 @@ export default function RomEditActions({
 
       <div className="flex-grow" />
 
-      <Button className="ctrl-flat" onClick={onClose} disabled={isLoading}>
-        <span className="font-bold mr-1">Cancel</span>
+      <Button className="ctrl-flat font-bold" onClick={onClose} disabled={isLoading}>
+        Cancel
       </Button>
       <Button
         className="ctrl-blue flex items-center gap-1"
