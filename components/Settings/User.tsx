@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { roleClasses } from "@/config/static";
-import { getLoginCookie } from "@/helpers/cookie";
 import makeApiCall from "@/helpers/api";
 
 import Dropdown from "@/components/Dropdown";
@@ -18,14 +17,9 @@ type UserProps = {
 };
 export default function User({ user, disabled, onSubmit }: UserProps) {
   const [result, setResult] = useState<ApiResult<User | undefined>>({});
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   const [role, setRole] = useState<string>(user.role);
   const [enabled, setEnabled] = useState<boolean>(user.enabled);
-
-  useEffect(() => {
-    setCurrentUser(getLoginCookie());
-  }, []);
 
   const updateUser = async () => {
     setResult(null);
@@ -94,7 +88,7 @@ export default function User({ user, disabled, onSubmit }: UserProps) {
           checked={enabled}
           label="Enabled"
           onChange={setEnabled}
-          disabled={disabled || currentUser?.id === user.id || result === null}
+          disabled={disabled || result === null}
         />
       </div>
 
@@ -109,7 +103,7 @@ export default function User({ user, disabled, onSubmit }: UserProps) {
         <Button
           className="ctrl-red py-1.5"
           onClick={deleteUser}
-          disabled={disabled || user.role === "Administrator" || result === null}
+          disabled={disabled || result === null}
         >
           <BsFillTrashFill className="text-xl" />
         </Button>

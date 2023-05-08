@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { clearLoginCookie } from "@/helpers/cookie";
+import { clearLoginCookie, getLoginCookie } from "@/helpers/cookie";
 import makeApiCall from "@/helpers/api";
 
 import Button from "@/components/Button";
@@ -19,6 +19,8 @@ export default function AuthOptionPage() {
   const [canLogin, setCanLogin] = useState<boolean>(true);
   const [canRegister, setCanRegister] = useState<boolean>(true);
   const [maxUsers, setMaxUsers] = useState<number>(50);
+
+  const isAdmin = getLoginCookie()?.role === "Administrator";
 
   const fetchData = async () => {
     setConfig(null);
@@ -95,30 +97,30 @@ export default function AuthOptionPage() {
           checked={canLogin}
           label="Users can Login"
           onChange={setCanLogin}
-          disabled={config === null}
+          disabled={!isAdmin || config === null}
         />
         <Checkbox
           checked={canRegister}
           label="New Users can Register"
           onChange={setCanRegister}
-          disabled={config === null}
+          disabled={!isAdmin || config === null}
         />
         <Input
           value={maxUsers.toString()}
           type="number"
           onChange={(value) => setMaxUsers(parseInt(value))}
           label="Maximum Users"
-          disabled={config === null}
+          disabled={!isAdmin || config === null}
         />
 
         <div className="flex justify-between">
-          <Button className="ctrl-red" onClick={revokeSessions}>
+          <Button className="ctrl-red" onClick={revokeSessions} disabled={!isAdmin}>
             Revoke all Sessions
           </Button>
           <Button
             className="ctrl-blue flex items-center gap-1"
             onClick={updateConfig}
-            disabled={config === null}
+            disabled={!isAdmin || config === null}
           >
             <BsSave className="text-lg mx-0.5" />
             <span className="font-bold mr-1">Save</span>

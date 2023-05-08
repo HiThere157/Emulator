@@ -35,7 +35,7 @@ export default function UsersOptionPage() {
   const [search, setSearch] = useState<string>("");
   const searchFilter = (user: User) => user.username.toLowerCase().includes(search.toLowerCase());
 
-  const isAdmin = getLoginCookie()?.role === "Administrator";
+  const currentUser = getLoginCookie();
 
   const fetchData = async () => {
     setUsers(null);
@@ -83,7 +83,14 @@ export default function UsersOptionPage() {
             .sort(sortFunctions[sortType])
             .reverse()
             .map((user) => {
-              return <User key={user.id} user={user} disabled={!isAdmin} onSubmit={fetchData} />;
+              return (
+                <User
+                  key={user.id}
+                  user={user}
+                  disabled={currentUser?.role !== "Administrator" || user.id === currentUser?.id}
+                  onSubmit={fetchData}
+                />
+              );
             })}
       </div>
     </div>
