@@ -1,7 +1,9 @@
 import path from "path";
 import bcrypt from "bcrypt";
 import { promises as fs } from "fs";
+
 import { NextRequest } from "next/server";
+import { getAuthConfig } from "@/helpers/auth";
 import init from "@/helpers/init";
 
 export const revalidate = 0;
@@ -9,7 +11,7 @@ const userDBPath = path.join(process.cwd(), "data/users.json");
 
 /*
   Body: UserLogin
-  Codes: 400
+  Codes: 400, 403
 */
 export async function POST(request: NextRequest) {
   await init();
@@ -38,10 +40,18 @@ export async function POST(request: NextRequest) {
     });
   }
 
-  // [Validation] Check for maximum users
-  if (users.length >= 50) {
+  // [Config] Check for maximum users
+  const authConfig = await getAuthConfig();
+  if (users.length >= authConfig.maxUsers) {
     return new Response("Maximum users reached", {
-      status: 400,
+      status: 403,
+    });
+  }
+
+  // [Config] Check if registration is enabled in config
+  if (!authConfig.canRegister) {
+    return new Response("Registration is disabled", {
+      status: 403,
     });
   }
 

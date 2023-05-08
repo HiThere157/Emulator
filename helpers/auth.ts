@@ -1,21 +1,28 @@
+import path from "path";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
-dotenv.config();
+import { promises as fs } from "fs";
 
 import { NextRequest } from "next/server";
 
+const authConfigPath = path.join(process.cwd(), "data/auth.json");
+
 async function validateToken(request: NextRequest): Promise<User | null> {
-  const JWTSecret = process.env.JWT_SECRET;
-  if (!JWTSecret) return null;
+  const authConfig = await getAuthConfig();
+  if (!authConfig.secret) return null;
 
   const tokenCookie = request.cookies.get("login_token");
   if (!tokenCookie) return null;
 
   try {
-    return jwt.verify(tokenCookie.value, JWTSecret) as User;
+    return jwt.verify(tokenCookie.value, authConfig.secret) as User;
   } catch {
     return null;
   }
 }
 
-export { validateToken };
+async function getAuthConfig(): Promise<AuthConfig> {
+  const authConfig = await fs.readFile(authConfigPath, "utf-8");
+  return JSON.parse(authConfig);
+}
+
+export { validateToken, getAuthConfig };

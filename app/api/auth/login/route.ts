@@ -2,10 +2,9 @@ import path from "path";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { promises as fs } from "fs";
-import dotenv from "dotenv";
-dotenv.config();
 
 import { NextRequest } from "next/server";
+import { getAuthConfig } from "@/helpers/auth";
 import init from "@/helpers/init";
 
 export const revalidate = 0;
@@ -14,17 +13,10 @@ const userDBPath = path.join(process.cwd(), "data/users.json");
 /*
   Body: UserLogin
   Response: cookie, User
-  Codes: 400, 401
+  Codes: 400, 401, 403
 */
 export async function POST(request: NextRequest) {
   await init();
-
-  const JWTSecret = process.env.JWT_SECRET;
-  if (!JWTSecret) {
-    return new Response("JWT secret not configured", {
-      status: 500,
-    });
-  }
 
   // [DB] Read users
   const userDB = await fs.readFile(userDBPath, "utf-8");
@@ -63,6 +55,14 @@ export async function POST(request: NextRequest) {
     });
   }
 
+  // [Config] Check if login is enabled in config
+  const authConfig = await getAuthConfig();
+  if (!authConfig.canLogin && user.role !== "Administrator") {
+    return new Response("Login is disabled", {
+      status: 403,
+    });
+  }
+
   // [JWT] Create token
   const payload: User = {
     id: user.id,
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
     role: user.role,
     enabled: user.enabled,
   };
-  const token = jwt.sign(payload, JWTSecret, {
+  const token = jwt.sign(payload, authConfig.secret, {
     expiresIn: "12h",
   });
 

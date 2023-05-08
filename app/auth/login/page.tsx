@@ -152,7 +152,7 @@ export default function Login() {
           {isRegistering ? "Login Instead" : "No Account? Register"}
         </Button>
         <Button className="ctrl-blue" onClick={onSubmit} disabled={result === null}>
-          Login
+          {isRegistering ? "Register" : "Login"}
         </Button>
       </div>
     </div>
