@@ -62,7 +62,11 @@ export default function StatesPage() {
           onChange={setSelectedRomId}
         />
 
-        <Button className="ctrl-flat px-1 group" onClick={fetchData}>
+        <Button
+          className="ctrl-flat px-1 group"
+          onClick={fetchData}
+          disabled={roms === null || remoteState === null || localState === null}
+        >
           <FiRefreshCw className="text-lg group-hover:rotate-180 duration-150" />
         </Button>
       </div>

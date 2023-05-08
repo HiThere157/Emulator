@@ -1,6 +1,6 @@
 import Link from "@/components/Link";
 
-import { BsDatabaseFillGear, BsPersonFillGear } from "react-icons/bs";
+import { BsDatabaseFillGear, BsPersonFillGear, BsShieldLockFill } from "react-icons/bs";
 
 export default function OptionsLayout({ children }: { children: React.ReactNode }) {
   const className = "gap-2 py-1 px-2 ctrl-invisible";
@@ -16,6 +16,10 @@ export default function OptionsLayout({ children }: { children: React.ReactNode 
         <Link href="/settings/users" className={className} activeClassName={activeClassName}>
           <BsPersonFillGear className="text-xl w-5" />
           <span>User Management</span>
+        </Link>
+        <Link href="/settings/auth" className={className} activeClassName={activeClassName}>
+          <BsShieldLockFill className="text-xl w-5" />
+          <span>Authentication</span>
         </Link>
       </nav>
 

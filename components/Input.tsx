@@ -4,7 +4,7 @@ type InputProps = {
   value: string;
   label?: string;
   placeholder?: string;
-  type?: "text" | "password";
+  type?: "text" | "password" | "number";
   className?: string;
   disabled?: boolean;
   onChange: (value: string) => void;

@@ -65,18 +65,18 @@ export default function RomEditActions({
 
   return (
     <div className="flex gap-2 mt-2">
-      <Button className="ctrl-red flex items-center gap-2" onClick={deleteRom} disabled={isLoading}>
+      <Button className="ctrl-red flex items-center gap-1" onClick={deleteRom} disabled={isLoading}>
         <BsFillTrashFill className="text-xl" />
         <span className="font-bold mr-1">Delete</span>
       </Button>
 
       <div className="flex-grow" />
 
-      <Button className="ctrl-flat flex items-center gap-2" onClick={onClose} disabled={isLoading}>
+      <Button className="ctrl-flat" onClick={onClose} disabled={isLoading}>
         <span className="font-bold mr-1">Cancel</span>
       </Button>
       <Button
-        className="ctrl-blue flex items-center gap-2"
+        className="ctrl-blue flex items-center gap-1"
         onClick={updateRom}
         disabled={isLoading}
       >
