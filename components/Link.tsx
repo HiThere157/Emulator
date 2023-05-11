@@ -18,7 +18,6 @@ export default function CustomLink({
   children,
 }: NavLinkProps) {
   const pathname = usePathname();
-
   const isMatch = matchSubPaths ? pathname.startsWith(href) : pathname == href;
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import makeApiCall from "@/helpers/api";
 import { setLoginCookie } from "@/helpers/cookie";
 
@@ -103,15 +103,7 @@ export default function Login() {
     // Set login cookie if login was successful
     if (loginResult?.result) {
       setLoginCookie(loginResult.result);
-
-      // Redirect to callback url
-      const urlParams = new URLSearchParams(window.location.search);
-      const callbackUrl = urlParams.get("callbackUrl") ?? "/";
-
-      // Sanitize callback url
-      if (!callbackUrl.startsWith("/") || callbackUrl.includes("..")) return;
-
-      window.location.href = callbackUrl;
+      window.location.href = "/";
     }
   };
 

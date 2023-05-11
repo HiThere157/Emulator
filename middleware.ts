@@ -19,6 +19,5 @@ export async function middleware(request: NextRequest) {
 
   // Redirect to login page if the user is not logged in
   const url = new URL("/auth/login", request.url);
-  url.searchParams.set("callbackUrl", pathname);
   return NextResponse.redirect(url);
 }
