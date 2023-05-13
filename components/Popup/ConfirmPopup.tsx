@@ -6,10 +6,17 @@ import { BsFillTrashFill } from "react-icons/bs";
 type ConfirmPopupProps = {
   isOpen: boolean;
   text: string;
+  btnText?: string;
   onConfirm: () => void;
   onClose: () => void;
 };
-export default function ConfirmPopup({ isOpen, text, onConfirm, onClose }: ConfirmPopupProps) {
+export default function ConfirmPopup({
+  isOpen,
+  text,
+  btnText,
+  onConfirm,
+  onClose,
+}: ConfirmPopupProps) {
   return (
     <Popup isOpen={isOpen} onBackgroundClick={onClose} className="py-[10vh] justify-center">
       <div className="p-4 rounded border-2 bg-lightBg border-el1">
@@ -25,7 +32,7 @@ export default function ConfirmPopup({ isOpen, text, onConfirm, onClose }: Confi
 
           <Button className="ctrl-red flex items-center gap-1.5" onClick={onConfirm}>
             <BsFillTrashFill className="text-xl" />
-            <span className="font-bold">Delete</span>
+            <span className="font-bold">{btnText ?? "Delete"}</span>
           </Button>
         </div>
       </div>

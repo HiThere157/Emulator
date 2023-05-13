@@ -86,6 +86,7 @@ export default function AuthOptionPage() {
       <ConfirmPopup
         isOpen={isConfirmOpen}
         text="This will revoke all active sessions."
+        btnText="Revoke"
         onClose={() => setIsConfirmOpen(false)}
         onConfirm={() => {
           setIsConfirmOpen(false);
@@ -134,12 +135,12 @@ export default function AuthOptionPage() {
             Revoke all Sessions
           </Button>
           <Button
-            className="ctrl-blue flex items-center gap-1"
+            className="ctrl-blue flex items-center gap-1.5"
             onClick={updateConfig}
             disabled={!isAdmin || config === null}
           >
-            <BsSave className="text-lg mx-0.5" />
-            <span className="font-bold mr-1">Save</span>
+            <BsSave className="text-lg" />
+            <span className="font-bold">Save</span>
           </Button>
         </div>
       </div>
