@@ -1,5 +1,5 @@
 import { useState } from "react";
-import makeApiCall from "@/helpers/api";
+import makeApiCall from "@/helpers/c_api";
 
 import ConfirmPopup from "@/components/Popup/ConfirmPopup";
 import Button from "@/components/Button";

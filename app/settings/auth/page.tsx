@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { clearLoginCookie, getLoginCookie } from "@/helpers/cookie";
-import makeApiCall from "@/helpers/api";
+import { clearLoginCookie, getLoginCookie } from "@/helpers/c_cookie";
+import makeApiCall from "@/helpers/c_api";
 
 import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";

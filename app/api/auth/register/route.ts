@@ -3,8 +3,8 @@ import bcrypt from "bcrypt";
 import { promises as fs } from "fs";
 
 import { NextRequest } from "next/server";
-import { getAuthConfig } from "@/helpers/auth";
-import init from "@/helpers/init";
+import { getAuthConfig } from "@/helpers/s_auth";
+import init from "@/helpers/s_init";
 
 export const revalidate = 0;
 const userDBPath = path.join(process.cwd(), "data/users.json");

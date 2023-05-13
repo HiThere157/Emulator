@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import makeApiCall from "@/helpers/api";
+import makeApiCall from "@/helpers/c_api";
 
 import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";

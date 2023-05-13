@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { cores } from "@/config/static";
 import { formatBytes } from "@/helpers/format";
-import { getLoginCookie } from "@/helpers/cookie";
+import { getLoginCookie } from "@/helpers/c_cookie";
 
 import Popup from "@/components/Popup/Popup";
 import Input from "@/components/Input";

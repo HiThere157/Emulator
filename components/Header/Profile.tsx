@@ -4,8 +4,8 @@ import packageInfo from "@/package.json";
 import { useEffect, useRef, useState } from "react";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import { roleClasses } from "@/config/static";
-import { getLoginCookie, clearLoginCookie } from "@/helpers/cookie";
-import makeApiCall from "@/helpers/api";
+import { getLoginCookie, clearLoginCookie } from "@/helpers/c_cookie";
+import makeApiCall from "@/helpers/c_api";
 
 import Link from "@/components/Link";
 import Button from "@/components/Button";

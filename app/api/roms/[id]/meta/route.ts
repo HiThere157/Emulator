@@ -2,7 +2,7 @@ import path from "path";
 import { promises as fs } from "fs";
 import { NextRequest } from "next/server";
 
-import { validateToken } from "@/helpers/auth";
+import { validateToken } from "@/helpers/s_auth";
 import { cleanPath } from "@/helpers/format";
 
 export const revalidate = 0;

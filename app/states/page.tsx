@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import makeApiCall from "@/helpers/api";
-import { getStates } from "@/helpers/indexeddb";
-import { getLoginCookie } from "@/helpers/cookie";
+import makeApiCall from "@/helpers/c_api";
+import { getStates } from "@/helpers/c_indexeddb";
+import { getLoginCookie } from "@/helpers/c_cookie";
 
 import Button from "@/components/Button";
 import Dropdown from "@/components/Dropdown";

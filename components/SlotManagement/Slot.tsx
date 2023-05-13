@@ -1,6 +1,6 @@
 import { useState } from "react";
-import makeApiCall from "@/helpers/api";
-import { deleteState, getState, putState } from "@/helpers/indexeddb";
+import makeApiCall from "@/helpers/c_api";
+import { deleteState, getState, putState } from "@/helpers/c_indexeddb";
 
 import Button from "@/components/Button";
 import Loader from "@/components/Loader";

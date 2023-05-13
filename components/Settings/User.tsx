@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { roleClasses } from "@/config/static";
-import makeApiCall from "@/helpers/api";
+import makeApiCall from "@/helpers/c_api";
 
 import Dropdown from "@/components/Dropdown";
 import Checkbox from "@/components/Checkbox";

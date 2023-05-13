@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import makeApiCall from "@/helpers/api";
-import { setLoginCookie } from "@/helpers/cookie";
+import makeApiCall from "@/helpers/c_api";
+import { setLoginCookie } from "@/helpers/c_cookie";
 
 import Input from "@/components/Input";
 import Button from "@/components/Button";

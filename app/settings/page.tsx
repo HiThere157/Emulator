@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { cores } from "@/config/static";
 import { formatBytes } from "@/helpers/format";
-import makeApiCall from "@/helpers/api";
+import makeApiCall from "@/helpers/c_api";
 
 import Dropdown from "@/components/Dropdown";
 import Button from "@/components/Button";

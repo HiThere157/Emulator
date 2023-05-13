@@ -2,7 +2,7 @@ import path from "path";
 import { promises as fs } from "fs";
 
 import { NextRequest } from "next/server";
-import { getAuthConfig, validateToken } from "@/helpers/auth";
+import { getAuthConfig, validateToken } from "@/helpers/s_auth";
 
 export const revalidate = 0;
 const authConfigPath = path.join(process.cwd(), "data/auth.json");
