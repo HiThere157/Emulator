@@ -8,6 +8,7 @@ import Button from "@/components/Button";
 import Loader from "@/components/Loader";
 import Error from "@/components/Error";
 import ConfirmPopup from "@/components/Popup/ConfirmPopup";
+import Title from "@/components/Title";
 
 import { BsFillTrashFill, BsPersonCircle, BsSave } from "react-icons/bs";
 
@@ -105,20 +106,25 @@ export default function User({ user, disabled, onSubmit }: UserProps) {
       </div>
 
       <div className="flex gap-2">
-        <Button
-          className="ctrl-blue py-1.5"
-          onClick={updateUser}
-          disabled={disabled || result === null}
-        >
-          <BsSave className="text-lg" />
-        </Button>
-        <Button
-          className="ctrl-red py-1.5"
-          onClick={() => setIsConfirmOpen(true)}
-          disabled={disabled || result === null}
-        >
-          <BsFillTrashFill className="text-xl" />
-        </Button>
+        <Title text="Save Changes" position="bottom">
+          <Button
+            className="ctrl-blue py-1.5"
+            onClick={updateUser}
+            disabled={disabled || result === null}
+          >
+            <BsSave className="text-lg" />
+          </Button>
+        </Title>
+
+        <Title text="Delete User" position="bottom">
+          <Button
+            className="ctrl-red py-1.5"
+            onClick={() => setIsConfirmOpen(true)}
+            disabled={disabled || result === null}
+          >
+            <BsFillTrashFill className="text-xl" />
+          </Button>
+        </Title>
       </div>
     </div>
   );

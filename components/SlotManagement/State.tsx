@@ -3,6 +3,7 @@ import { formatBytes } from "@/helpers/format";
 
 import Button from "@/components/Button";
 import ConfirmPopup from "@/components/Popup/ConfirmPopup";
+import Title from "@/components/Title";
 
 import {
   BsCloudCheckFill,
@@ -57,12 +58,11 @@ export default function State({ state, type, onDelete }: StateProps) {
       )}
 
       {state && (
-        <Button
-          className="ctrl-invisible absolute top-0 right-0 py-2 m-1"
-          onClick={() => setIsConfirmOpen(true)}
-        >
-          <BsFillTrashFill className="text-lg text-redColor" />
-        </Button>
+        <Title text="Delete State" position="right" className="!absolute top-0 right-0 m-1">
+          <Button className="ctrl-invisible py-2" onClick={() => setIsConfirmOpen(true)}>
+            <BsFillTrashFill className="text-lg text-redColor" />
+          </Button>
+        </Title>
       )}
     </div>
   );
