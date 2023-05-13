@@ -6,7 +6,7 @@ export async function middleware(request: NextRequest) {
   // Allow access to login/logout pages and Next.js files
   if (
     pathname === "/auth/login" ||
-    pathname.startsWith("/api/auth/") ||
+    pathname.startsWith("/api/") ||
     pathname.startsWith("/_next/")
   ) {
     return NextResponse.next();

@@ -1,9 +1,9 @@
 import path from "path";
-import zlib from "zlib";
 import { promises as fs } from "fs";
 import { NextRequest } from "next/server";
 
 import { validateToken } from "@/helpers/s_auth";
+import { compress } from "@/helpers/s_api";
 import { cleanPath } from "@/helpers/format";
 
 export const revalidate = 0;
@@ -47,18 +47,11 @@ export async function GET(request: NextRequest, { params }: Props) {
   // [FS] Read state blob
   const blob = await fs.readFile(statePath);
 
-  // [Compression] Compress rom blob with gzip
   // Content-Encoding is set in next.config.js
-  const compressedBlob = zlib.brotliCompressSync(blob, {
-    params: {
-      [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_GENERIC,
-      [zlib.constants.BROTLI_PARAM_QUALITY]: 1,
-      [zlib.constants.BROTLI_PARAM_SIZE_HINT]: blob.length,
-    },
-  });
-
+  const compressedBlob = compress(blob);
   return new Response(compressedBlob, {
     headers: {
+      "Content-Length": compressedBlob.length.toString(),
       "Content-Type": "application/octet-stream",
     },
     status: 200,

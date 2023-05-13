@@ -1,9 +1,9 @@
 import path from "path";
-import zlib from "zlib";
 import { promises as fs } from "fs";
 import { NextRequest } from "next/server";
 
 import { validateToken } from "@/helpers/s_auth";
+import { compress } from "@/helpers/s_api";
 import { cleanPath } from "@/helpers/format";
 
 export const revalidate = 0;
@@ -19,7 +19,7 @@ type Props = {
 /*
   Params: id
   Response: blob
-  Codes: 401, 404
+  Codes: 206, 401, 404
 */
 export async function GET(request: NextRequest, { params }: Props) {
   // [Auth] Validate token
@@ -43,18 +43,37 @@ export async function GET(request: NextRequest, { params }: Props) {
   // [FS] Read rom blob
   const blob = await fs.readFile(romPath);
 
-  // [Compression] Compress rom blob with gzip
-  // Content-Encoding is set in next.config.js
-  const compressedBlob = zlib.brotliCompressSync(blob, {
-    params: {
-      [zlib.constants.BROTLI_PARAM_MODE]: zlib.constants.BROTLI_MODE_GENERIC,
-      [zlib.constants.BROTLI_PARAM_QUALITY]: 1,
-      [zlib.constants.BROTLI_PARAM_SIZE_HINT]: blob.length,
-    },
-  });
+  // [Request] Get Range header
+  const range = request.headers.get("Range");
+  if (range) {
+    const [start, end] = range
+      .replace(/bytes=/, "")
+      .split("-")
+      .map((x) => parseInt(x, 10));
+    const chunksize = (end ? end : blob.length) - start;
+    const chunk = blob.subarray(start, start + chunksize);
 
+    // Content-Encoding is set in next.config.js
+    const compressedChunk = compress(chunk);
+    return new Response(compressedChunk, {
+      headers: {
+        "Accept-Ranges": "bytes",
+        "Content-Length": compressedChunk.length.toString(),
+        "Content-Range": `bytes ${start}-${start + chunksize}/${blob.length}`,
+        "Content-Type": "application/octet-stream",
+        "Cache-Control": "max-age=43200, s-maxage=86400",
+        "CDN-Cache-Control": "max-age=43200",
+      },
+      status: 206,
+    });
+  }
+
+  // Content-Encoding is set in next.config.js
+  const compressedBlob = compress(blob);
   return new Response(compressedBlob, {
     headers: {
+      "Accept-Ranges": "bytes",
+      "Content-Length": compressedBlob.length.toString(),
       "Content-Type": "application/octet-stream",
       "Cache-Control": "max-age=43200, s-maxage=86400",
       "CDN-Cache-Control": "max-age=43200",
