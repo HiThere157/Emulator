@@ -30,6 +30,7 @@ export default function RedirectPopup({ href, onClose }: RedirectPopupProps) {
             className="ctrl-blue flex items-center gap-1.5 py-0.5 px-2 rounded"
             target="_blank"
             rel="noopener noreferrer"
+            onClick={onClose}
           >
             <BsBoxArrowUpRight className="text-lg" />
             <span className="font-bold">Open new Tab</span>
