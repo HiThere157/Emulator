@@ -45,7 +45,7 @@ export default function PlayerPage({ params }: PlayerProps) {
     playerWindow.EJS_gameUrl = `/api/roms/${params.id}`;
     playerWindow.EJS_core = params.core;
     playerWindow.init();
-  }, []);
+  }, [params]);
 
   useEffect(() => {
     // Direct navigation:
