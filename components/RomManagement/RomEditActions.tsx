@@ -65,9 +65,13 @@ export default function RomEditActions({
 
   return (
     <div className="flex gap-2 mt-2">
-      <Button className="ctrl-red flex items-center gap-1" onClick={deleteRom} disabled={isLoading}>
+      <Button
+        className="ctrl-red flex items-center gap-1.5"
+        onClick={deleteRom}
+        disabled={isLoading}
+      >
         <BsFillTrashFill className="text-xl" />
-        <span className="font-bold mr-1">Delete</span>
+        <span className="font-bold">Delete</span>
       </Button>
 
       <div className="flex-grow" />
@@ -76,12 +80,12 @@ export default function RomEditActions({
         Cancel
       </Button>
       <Button
-        className="ctrl-blue flex items-center gap-1"
+        className="ctrl-blue flex items-center gap-1.5"
         onClick={updateRom}
         disabled={isLoading}
       >
-        <BsSave className="text-lg mx-0.5" />
-        <span className="font-bold mr-1">Save</span>
+        <BsSave className="text-lg" />
+        <span className="font-bold">Save</span>
       </Button>
     </div>
   );

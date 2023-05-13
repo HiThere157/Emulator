@@ -54,6 +54,7 @@ export default function StatesPage() {
               .map((rom) => rom.id.toString()) ?? []
           }
           value={selectedRomId}
+          placeholder="Select a Game"
           lookup={Object.fromEntries(
             roms?.result?.map((rom) => [rom.id.toString(), rom.name]) ?? [],
           )}

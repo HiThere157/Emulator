@@ -9,6 +9,7 @@ import { BsCheckLg } from "react-icons/bs";
 type DropdownProps = {
   values: string[];
   value: string;
+  placeholder?: string;
   icons?: React.ReactNode[];
   lookup?: { [key: string]: string };
   label?: string;
@@ -18,9 +19,10 @@ type DropdownProps = {
 };
 export default function Dropdown({
   values,
+  value,
+  placeholder,
   icons,
   lookup,
-  value,
   label,
   justify,
   disabled,
@@ -41,7 +43,7 @@ export default function Dropdown({
           disabled={disabled}
         >
           <div className="flex items-center gap-1">
-            <span>{lookup?.[value] ?? value}</span>
+            <span>{value == "" ? placeholder : lookup?.[value] ?? value}</span>
             <FiChevronDown
               className={
                 "text-xl transition-transform duration-150 " + (isOpen ? "rotate-180" : "rotate-0")

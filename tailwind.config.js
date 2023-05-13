@@ -34,8 +34,8 @@ module.exports = {
 
       // Red
       el4: "#B92828",
-      el4Accent: "#BD1E1E",
-      el4Active: "#B51919",
+      el4Accent: "#B31919",
+      el4Active: "#A10E0E",
     },
   },
   plugins: [],

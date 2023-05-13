@@ -113,10 +113,16 @@ export default function Login() {
 
       <div className="grid grid-cols-[auto_auto] gap-2">
         <span>Username:</span>
-        <Input value={username} onChange={setUsername} />
+        <Input value={username} onChange={setUsername} disabled={result === null} />
 
         <span>Password:</span>
-        <Input value={password} onChange={setPassword} onEnter={onSubmit} type="password" />
+        <Input
+          value={password}
+          onChange={setPassword}
+          onEnter={onSubmit}
+          type="password"
+          disabled={result === null}
+        />
 
         {isRegistering && (
           <>
@@ -126,6 +132,7 @@ export default function Login() {
               onChange={setConfirmPassword}
               onEnter={onSubmit}
               type="password"
+              disabled={result === null}
             />
           </>
         )}
@@ -140,6 +147,7 @@ export default function Login() {
         <Button
           className="ctrl-invisible underline underline-offset-2"
           onClick={() => setIsRegistering(!isRegistering)}
+          disabled={result === null}
         >
           {isRegistering ? "Login Instead" : "No Account? Register"}
         </Button>

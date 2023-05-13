@@ -61,6 +61,7 @@ export default function RomPopup({
       onBackgroundClick={() => {
         if (result !== null) onClose();
       }}
+      className="items-center justify-center"
     >
       <div className="p-4 rounded border-2 bg-lightBg border-el1">
         <div className="flex-col sm:flex-row flex">

@@ -62,12 +62,12 @@ export default function RomUploadActions({
         Cancel
       </Button>
       <Button
-        className="ctrl-blue flex items-center gap-1"
+        className="ctrl-blue flex items-center gap-1.5"
         onClick={uploadRom}
         disabled={isLoading}
       >
-        <BsSave className="text-lg mx-0.5" />
-        <span className="font-bold mr-1">Save</span>
+        <BsSave className="text-lg" />
+        <span className="font-bold">Save</span>
       </Button>
     </div>
   );
