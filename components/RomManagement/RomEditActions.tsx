@@ -1,5 +1,7 @@
+import { useState } from "react";
 import makeApiCall from "@/helpers/api";
 
+import ConfirmPopup from "@/components/Popup/ConfirmPopup";
 import Button from "@/components/Button";
 
 import { BsFillTrashFill, BsSave } from "react-icons/bs";
@@ -22,6 +24,8 @@ export default function RomEditActions({
   onRomUpdate,
   onRomDelete,
 }: RomEditActionsProps) {
+  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
+
   const updateRom = async () => {
     setResult(null);
 
@@ -65,9 +69,19 @@ export default function RomEditActions({
 
   return (
     <div className="flex gap-2 mt-2">
+      <ConfirmPopup
+        isOpen={isConfirmOpen}
+        text="This will permanently delete the ROM from the database. Associated state files will become unaccessible."
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={() => {
+          setIsConfirmOpen(false);
+          deleteRom();
+        }}
+      />
+
       <Button
         className="ctrl-red flex items-center gap-1.5"
-        onClick={deleteRom}
+        onClick={() => setIsConfirmOpen(true)}
         disabled={isLoading}
       >
         <BsFillTrashFill className="text-xl" />

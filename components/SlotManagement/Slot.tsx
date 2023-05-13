@@ -6,6 +6,7 @@ import Button from "@/components/Button";
 import Loader from "@/components/Loader";
 import Error from "@/components/Error";
 import State from "@/components/SlotManagement/State";
+import Title from "@/components/Title";
 
 import { BsArrowDown, BsArrowUp } from "react-icons/bs";
 
@@ -113,21 +114,25 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
       <State state={remoteState} type="remote" onDelete={deleteRemoteState} />
 
       <div className="flex justify-center gap-5">
-        <Button
-          className="ctrl-invisible py-2"
-          onClick={uploadState}
-          disabled={!localState || result === null}
-        >
-          <BsArrowUp className="text-3xl" />
-        </Button>
+        <Title text="Upload to Server" position="bottom">
+          <Button
+            className="ctrl-invisible py-2"
+            onClick={uploadState}
+            disabled={!localState || result === null}
+          >
+            <BsArrowUp className="text-3xl" />
+          </Button>
+        </Title>
 
-        <Button
-          className="ctrl-invisible py-2"
-          onClick={downloadState}
-          disabled={!remoteState || result === null}
-        >
-          <BsArrowDown className="text-3xl" />
-        </Button>
+        <Title text="Download to Client" position="bottom">
+          <Button
+            className="ctrl-invisible py-2"
+            onClick={downloadState}
+            disabled={!remoteState || result === null}
+          >
+            <BsArrowDown className="text-3xl" />
+          </Button>
+        </Title>
       </div>
 
       <State state={localState} type="local" onDelete={deleteLocalState} />

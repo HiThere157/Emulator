@@ -9,12 +9,14 @@ import Checkbox from "@/components/Checkbox";
 import Input from "@/components/Input";
 import Loader from "@/components/Loader";
 import Error from "@/components/Error";
+import ConfirmPopup from "@/components/Popup/ConfirmPopup";
 
 import { FiRefreshCw } from "react-icons/fi";
 import { BsSave } from "react-icons/bs";
 
 export default function AuthOptionPage() {
   const [config, setConfig] = useState<ApiResult<AuthConfigCR | undefined>>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = useState<boolean>(false);
 
   const [canLogin, setCanLogin] = useState<boolean>(true);
   const [canRegister, setCanRegister] = useState<boolean>(true);
@@ -81,6 +83,16 @@ export default function AuthOptionPage() {
 
   return (
     <div>
+      <ConfirmPopup
+        isOpen={isConfirmOpen}
+        text="This will revoke all active sessions."
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={() => {
+          setIsConfirmOpen(false);
+          revokeSessions();
+        }}
+      />
+
       <div className="m-2">
         <Button className="ctrl-flat h-7 px-1 group" onClick={fetchData} disabled={config === null}>
           <FiRefreshCw className="text-lg group-hover:rotate-180 duration-150" />
@@ -114,7 +126,11 @@ export default function AuthOptionPage() {
         />
 
         <div className="flex justify-between">
-          <Button className="ctrl-red font-bold" onClick={revokeSessions} disabled={!isAdmin}>
+          <Button
+            className="ctrl-red font-bold"
+            onClick={() => setIsConfirmOpen(true)}
+            disabled={!isAdmin}
+          >
             Revoke all Sessions
           </Button>
           <Button
