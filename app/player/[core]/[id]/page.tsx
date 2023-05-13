@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import RedirectPopup from "@/components/Popup/RedirectPopup";
 
@@ -20,7 +20,7 @@ export default function PlayerPage({ params }: PlayerProps) {
   const playerRef = useRef<HTMLIFrameElement>(null);
   const [redirectHref, setRedirectHref] = useState<string | null>(null);
 
-  const handleClick = (event: MouseEvent) => {
+  const handleClick = useCallback((event: MouseEvent) => {
     const target = event.target as HTMLElement;
     if (target.tagName !== "A") return;
 
@@ -30,7 +30,7 @@ export default function PlayerPage({ params }: PlayerProps) {
     const href = target.getAttribute("href");
     setRedirectHref(href);
     event.preventDefault();
-  };
+  }, []);
 
   useEffect(() => {
     document.addEventListener("click", handleClick, { capture: true });
@@ -38,14 +38,14 @@ export default function PlayerPage({ params }: PlayerProps) {
     return () => document.removeEventListener("click", handleClick, { capture: true });
   }, [handleClick]);
 
-  const initPlayer = () => {
+  const initPlayer = useCallback(() => {
     const playerWindow = playerRef.current?.contentWindow as PlayerWindow;
     if (!playerWindow) return;
 
     playerWindow.EJS_gameUrl = `/api/roms/${params.id}`;
     playerWindow.EJS_core = params.core;
     playerWindow.init();
-  };
+  }, []);
 
   useEffect(() => {
     // Direct navigation:
@@ -57,7 +57,7 @@ export default function PlayerPage({ params }: PlayerProps) {
     //  - onLoad triggers normally
     try {
       initPlayer();
-    } catch {}
+    } catch { }
   }, [initPlayer]);
 
   return (
