@@ -50,16 +50,15 @@ export async function GET(request: NextRequest, { params }: Props) {
       .replace(/bytes=/, "")
       .split("-")
       .map((x) => parseInt(x, 10));
-    const chunksize = (end ? end : blob.length) - start;
-    const chunk = blob.subarray(start, start + chunksize);
+
+    const realEnd = Math.min(end, blob.length);
+    const chunk = blob.subarray(start, realEnd);
 
     // Content-Encoding is set in next.config.js
-    const compressedChunk = compress(chunk);
-    return new Response(compressedChunk, {
+    return new Response(compress(chunk), {
       headers: {
         "Accept-Ranges": "bytes",
-        "Content-Length": compressedChunk.length.toString(),
-        "Content-Range": `bytes ${start}-${start + chunksize}/${blob.length}`,
+        "Content-Range": `bytes ${start}-${realEnd}/${blob.length}`,
         "Content-Type": "application/octet-stream",
         "Cache-Control": "max-age=43200, s-maxage=86400",
         "CDN-Cache-Control": "max-age=43200",
@@ -69,11 +68,9 @@ export async function GET(request: NextRequest, { params }: Props) {
   }
 
   // Content-Encoding is set in next.config.js
-  const compressedBlob = compress(blob);
-  return new Response(compressedBlob, {
+  return new Response(compress(blob), {
     headers: {
       "Accept-Ranges": "bytes",
-      "Content-Length": compressedBlob.length.toString(),
       "Content-Type": "application/octet-stream",
       "Cache-Control": "max-age=43200, s-maxage=86400",
       "CDN-Cache-Control": "max-age=43200",

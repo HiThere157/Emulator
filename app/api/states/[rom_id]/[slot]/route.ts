@@ -48,10 +48,8 @@ export async function GET(request: NextRequest, { params }: Props) {
   const blob = await fs.readFile(statePath);
 
   // Content-Encoding is set in next.config.js
-  const compressedBlob = compress(blob);
-  return new Response(compressedBlob, {
+  return new Response(compress(blob), {
     headers: {
-      "Content-Length": compressedBlob.length.toString(),
       "Content-Type": "application/octet-stream",
     },
     status: 200,
