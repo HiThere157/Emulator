@@ -10,15 +10,6 @@ const nextConfig = {
   headers: async () => {
     return [
       {
-        source: "/api/roms/:id",
-        headers: [
-          {
-            key: "Content-Encoding",
-            value: "br",
-          },
-        ],
-      },
-      {
         source: "/api/states/:rom_id/:slot",
         headers: [
           {

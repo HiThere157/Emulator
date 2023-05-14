@@ -54,8 +54,7 @@ export async function GET(request: NextRequest, { params }: Props) {
     const realEnd = Math.min(end, blob.length);
     const chunk = blob.subarray(start, realEnd);
 
-    // Content-Encoding is set in next.config.js
-    return new Response(compress(chunk), {
+    return new Response(chunk, {
       headers: {
         "Accept-Ranges": "bytes",
         "Content-Range": `bytes ${start}-${realEnd}/${blob.length}`,
@@ -67,8 +66,7 @@ export async function GET(request: NextRequest, { params }: Props) {
     });
   }
 
-  // Content-Encoding is set in next.config.js
-  return new Response(compress(blob), {
+  return new Response(blob, {
     headers: {
       "Accept-Ranges": "bytes",
       "Content-Type": "application/octet-stream",
