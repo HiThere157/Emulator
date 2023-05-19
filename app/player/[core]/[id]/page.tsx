@@ -63,7 +63,7 @@ export default function PlayerPage({ params }: PlayerProps) {
   return (
     <div className="h-full">
       <RedirectPopup href={redirectHref} onClose={() => setRedirectHref(null)} />
-      <iframe ref={playerRef} onLoad={initPlayer} src="/player.html" className="w-full h-full" />
+      <iframe ref={playerRef} onLoad={initPlayer} src="/player.html" className="h-full w-full" />
     </div>
   );
 }

@@ -15,10 +15,10 @@ export default function Title({ children, text, position, className = "" }: Titl
       {position === "right" && (
         <div
           className={
-            "top-1/2 right-0 translate-y-[-50%] translate-x-[100%] pl-2 " + containerClasses
+            "right-0 top-1/2 translate-x-[100%] translate-y-[-50%] pl-2 " + containerClasses
           }
         >
-          <div className={"top-1/2 left-1 translate-y-[-50%] " + accentClasses} />
+          <div className={"left-1 top-1/2 translate-y-[-50%] " + accentClasses} />
           <div className={textClasses}>{text}</div>
         </div>
       )}
@@ -26,10 +26,10 @@ export default function Title({ children, text, position, className = "" }: Titl
       {position === "bottom" && (
         <div
           className={
-            "bottom-0 right-1/2 translate-y-[100%] translate-x-[50%] pt-2 " + containerClasses
+            "bottom-0 right-1/2 translate-x-[50%] translate-y-[100%] pt-2 " + containerClasses
           }
         >
-          <div className={"top-1 left-1/2 translate-x-[-50%] " + accentClasses} />
+          <div className={"left-1/2 top-1 translate-x-[-50%] " + accentClasses} />
           <div className={textClasses}>{text}</div>
         </div>
       )}

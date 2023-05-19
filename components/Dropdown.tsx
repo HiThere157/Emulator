@@ -34,7 +34,7 @@ export default function Dropdown({
   useOutsideClick(ref, () => setIsOpen(false));
 
   return (
-    <div ref={ref} className="relative w-fit z-[10]">
+    <div ref={ref} className="relative z-[10] w-fit">
       <div className="flex items-center gap-2.5">
         {label && <span className="font-bold">{label}</span>}
         <Button
@@ -104,14 +104,14 @@ function DrowdownBody({
             <Button
               key={item}
               className={
-                "flex justify-between items-center gap-2 [&>svg]:text-xl " +
+                "flex items-center justify-between gap-2 [&>svg]:text-xl " +
                 (item === value ? "ctrl-blue" : "ctrl-flat")
               }
               onClick={() => onChange(item)}
             >
               {icons && icons[index] && icons[index]}
 
-              <span className="flex-grow text-start whitespace-nowrap">
+              <span className="flex-grow whitespace-nowrap text-start">
                 {lookup?.[item] ?? item}
               </span>
               <BsCheckLg className={"text-xl " + (item === value ? "visible" : "invisible")} />

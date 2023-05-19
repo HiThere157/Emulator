@@ -18,12 +18,12 @@ export default function ConfirmPopup({
   onClose,
 }: ConfirmPopupProps) {
   return (
-    <Popup isOpen={isOpen} onBackgroundClick={onClose} className="py-[10vh] justify-center">
-      <div className="p-4 rounded border-2 bg-lightBg border-el1">
+    <Popup isOpen={isOpen} onBackgroundClick={onClose} className="justify-center py-[10vh]">
+      <div className="rounded border-2 border-el1 bg-lightBg p-4">
         <h1 className="text-xl font-bold">Are you sure?</h1>
         <p>{text}</p>
 
-        <div data-redirect className="flex items-center gap-2 mt-3">
+        <div data-redirect className="mt-3 flex items-center gap-2">
           <Button className="ctrl-flat font-bold" onClick={onClose}>
             Cancel
           </Button>

@@ -46,7 +46,7 @@ export default function StatesPage() {
 
   return (
     <div>
-      <div className="flex gap-2 m-2">
+      <div className="m-2 flex gap-2">
         <Dropdown
           values={
             roms?.result
@@ -64,15 +64,15 @@ export default function StatesPage() {
         />
 
         <Button
-          className="ctrl-flat px-1 group"
+          className="ctrl-flat group px-1"
           onClick={fetchData}
           disabled={roms === null || remoteState === null || localState === null}
         >
-          <FiRefreshCw className="text-lg group-hover:rotate-180 duration-150" />
+          <FiRefreshCw className="text-lg duration-150 group-hover:rotate-180" />
         </Button>
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-2">
+      <div className="flex flex-col items-center justify-center gap-2">
         <Loader isVisible={roms === null || remoteState === null || localState === null} />
         <Error
           className="text-2xl"

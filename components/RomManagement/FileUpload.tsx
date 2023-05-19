@@ -36,7 +36,7 @@ export default function FileUpload({ fileName, disabled, onUpload }: FileUploadP
   return (
     <label
       className={
-        "flex items-center justify-center gap-2 p-2 m-1 rounded border-2 border-dashed cursor-pointer " +
+        "m-1 flex cursor-pointer items-center justify-center gap-2 rounded border-2 border-dashed p-2 " +
         (isDragging ? "border-blueColor" : "border-el1")
       }
       onDragOver={handleDragOver}
@@ -53,7 +53,7 @@ export default function FileUpload({ fileName, disabled, onUpload }: FileUploadP
 
       {fileName ? (
         <>
-          <BsFillFileEarmarkCheckFill className="text-blueColor text-4xl" />
+          <BsFillFileEarmarkCheckFill className="text-4xl text-blueColor" />
           <span className="text-greyColor">{fileName}</span>
         </>
       ) : (

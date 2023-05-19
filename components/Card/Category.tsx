@@ -28,13 +28,13 @@ export default function Category({ name, count, children }: CategoryProps) {
   return (
     <div>
       <Button
-        className="ctrl-invisible flex items-center w-full"
+        className="ctrl-invisible flex w-full items-center"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <h2 className="text-2xl font-bold mr-1">{cores[name] ?? name}</h2>
+        <h2 className="mr-1 text-2xl font-bold">{cores[name] ?? name}</h2>
         <span className="text-greyColor">({count})</span>
 
-        <hr className="flex-grow mx-3 border-t-2 rounded text-el1" />
+        <hr className="mx-3 flex-grow rounded border-t-2 text-el1" />
 
         <FiChevronDown
           className={

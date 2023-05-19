@@ -57,7 +57,7 @@ export default function RomUploadActions({
   };
 
   return (
-    <div className="flex justify-end gap-2 mt-2">
+    <div className="mt-2 flex justify-end gap-2">
       <Button className="ctrl-flat font-bold" onClick={onClose} disabled={isLoading}>
         Cancel
       </Button>

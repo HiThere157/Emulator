@@ -18,13 +18,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang="en">
-      <body className="flex flex-col h-screen min-w-[23rem] text-whiteColor bg-darkBg">
-        <header className="sticky top-0 flex items-center px-2 py-1 bg-lightBg border-b-2 border-el1 z-[100]">
+      <body className="flex h-screen min-w-[23rem] flex-col bg-darkBg text-whiteColor">
+        <header className="sticky top-0 z-[100] flex items-center border-b-2 border-el1 bg-lightBg px-2 py-1">
           <Image
             src={iconPng}
             priority={true}
             alt=""
-            className="w-[50px] h-[50px] mt-[-25px] ml-1 mr-3"
+            className="ml-1 mr-3 mt-[-25px] h-[50px] w-[50px]"
             width="50"
             height="50"
           />

@@ -24,8 +24,8 @@ export default function State({ state, type, onDelete }: StateProps) {
   return (
     <div
       className={
-        "relative flex flex-col justify-center items-center w-44 aspect-square border-4 rounded " +
-        (state ? "border-blueColor" : "border-el1 border-dashed")
+        "relative flex aspect-square w-44 flex-col items-center justify-center rounded border-4 " +
+        (state ? "border-blueColor" : "border-dashed border-el1")
       }
     >
       <ConfirmPopup
@@ -39,16 +39,16 @@ export default function State({ state, type, onDelete }: StateProps) {
       />
 
       {state && type === "local" && (
-        <BsFillFileEarmarkCheckFill className={"text-6xl mb-2 text-blueColor"} />
+        <BsFillFileEarmarkCheckFill className={"mb-2 text-6xl text-blueColor"} />
       )}
       {!state && type === "local" && (
-        <BsFillFileEarmarkExcelFill className={"text-6xl mb-2 text-el1"} />
+        <BsFillFileEarmarkExcelFill className={"mb-2 text-6xl text-el1"} />
       )}
 
       {state && type === "remote" && (
-        <BsCloudCheckFill className={"text-6xl mb-2 text-blueColor"} />
+        <BsCloudCheckFill className={"mb-2 text-6xl text-blueColor"} />
       )}
-      {!state && type === "remote" && <BsCloudSlash className={"text-6xl mb-2 text-el1"} />}
+      {!state && type === "remote" && <BsCloudSlash className={"mb-2 text-6xl text-el1"} />}
 
       {state && (
         <>
@@ -58,7 +58,7 @@ export default function State({ state, type, onDelete }: StateProps) {
       )}
 
       {state && (
-        <Title text="Delete State" position="right" className="!absolute top-0 right-0 m-1">
+        <Title text="Delete State" position="right" className="!absolute right-0 top-0 m-1">
           <Button className="ctrl-invisible py-2" onClick={() => setIsConfirmOpen(true)}>
             <BsFillTrashFill className="text-lg text-redColor" />
           </Button>

@@ -31,7 +31,7 @@ export default function Input({
       {label && <span className="font-bold">{label}</span>}
       <input
         className={
-          "ctrl-flat p-0.5 px-2 rounded disabled:opacity-50 disabled:pointer-events-none " +
+          "ctrl-flat rounded p-0.5 px-2 disabled:pointer-events-none disabled:opacity-50 " +
           className
         }
         value={value}

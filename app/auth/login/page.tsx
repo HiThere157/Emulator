@@ -108,8 +108,8 @@ export default function Login() {
   };
 
   return (
-    <div className="flex flex-col items-center py-[10vh] rounded">
-      <BsPersonBoundingBox className="text-8xl text-blueColor mb-7" />
+    <div className="flex flex-col items-center rounded py-[10vh]">
+      <BsPersonBoundingBox className="mb-7 text-8xl text-blueColor" />
 
       <div className="grid grid-cols-[auto_auto] gap-2">
         <span>Username:</span>
@@ -138,12 +138,12 @@ export default function Login() {
         )}
       </div>
 
-      <div className="flex justify-center mt-4">
+      <div className="mt-4 flex justify-center">
         <Loader isVisible={result === null} />
         <Error message={result?.error} />
       </div>
 
-      <div className="flex gap-2 mt-4">
+      <div className="mt-4 flex gap-2">
         <Button
           className="ctrl-invisible underline underline-offset-2"
           onClick={() => setIsRegistering(!isRegistering)}

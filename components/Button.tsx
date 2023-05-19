@@ -10,7 +10,7 @@ export default function Button({ children, disabled, className, onClick }: Butto
   return (
     <button
       className={
-        "block py-0.5 px-2 rounded disabled:opacity-50 disabled:pointer-events-none " + className
+        "block rounded px-2 py-0.5 disabled:pointer-events-none disabled:opacity-50 " + className
       }
       onClick={onClick}
       disabled={disabled}

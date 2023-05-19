@@ -23,7 +23,7 @@ export default function CustomLink({
   return (
     <Link
       className={
-        "flex items-center rounded whitespace-nowrap " +
+        "flex items-center whitespace-nowrap rounded " +
         (isMatch ? activeClassName : "") +
         " " +
         className

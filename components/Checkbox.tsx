@@ -16,10 +16,10 @@ export default function Checkbox({ checked, label, disabled, onChange }: Checkbo
       )}
       <label
         className={
-          "ctrl-flat h-6 w-6 rounded p-1 " + (disabled ? "opacity-50 pointer-events-none" : "")
+          "ctrl-flat h-6 w-6 rounded p-1 " + (disabled ? "pointer-events-none opacity-50" : "")
         }
       >
-        {checked && <BsCheckLg className="m-0 text-blueColor scale-150" />}
+        {checked && <BsCheckLg className="m-0 scale-150 text-blueColor" />}
         <input
           type="checkbox"
           className="appearance-none"

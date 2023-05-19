@@ -63,16 +63,16 @@ export default function RomPopup({
       }}
       className="items-center justify-center"
     >
-      <div className="p-4 rounded border-2 bg-lightBg border-el1">
-        <div className="flex-col sm:flex-row flex">
+      <div className="rounded border-2 border-el1 bg-lightBg p-4">
+        <div className="flex flex-col sm:flex-row">
           <div className="flex flex-col items-center justify-center">
             <div className="relative" style={getSize(resolution)}>
               <GameImage src={image} alt="Image Preview" />
             </div>
-            <span className="text-greyColor mt-1">Size: {formatBytes(rom?.size ?? 0)}</span>
+            <span className="mt-1 text-greyColor">Size: {formatBytes(rom?.size ?? 0)}</span>
           </div>
 
-          <div className="mx-4 my-2 rounded border-r-2 border-b-2 border-el1" />
+          <div className="mx-4 my-2 rounded border-b-2 border-r-2 border-el1" />
 
           <div className="flex flex-col-reverse justify-end gap-1">
             {/* flex-col-reverse: make the dropdowns not overlap each other */}
@@ -166,7 +166,7 @@ function SettingCategory({ name, children }: SettingCategoryProps) {
   return (
     <div>
       <h3 className="text-lg font-bold">{name}</h3>
-      <div className="grid grid-cols-[auto_1fr] gap-1 m-1">{children}</div>
+      <div className="m-1 grid grid-cols-[auto_1fr] gap-1">{children}</div>
     </div>
   );
 }

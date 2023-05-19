@@ -145,7 +145,7 @@ export default function StorageOptionsPage() {
 
   return (
     <div>
-      <div className="flex gap-2 m-2">
+      <div className="m-2 flex gap-2">
         <Dropdown
           values={Object.keys(storageCharts)}
           value={storageChart}
@@ -154,15 +154,15 @@ export default function StorageOptionsPage() {
           onChange={setStorageChart}
         />
         <Button
-          className="ctrl-flat px-1 group"
+          className="ctrl-flat group px-1"
           onClick={fetchData}
           disabled={roms === null || states === null || users === null}
         >
-          <FiRefreshCw className="text-lg group-hover:rotate-180 duration-150" />
+          <FiRefreshCw className="text-lg duration-150 group-hover:rotate-180" />
         </Button>
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-2">
+      <div className="flex flex-col items-center justify-center gap-2">
         <Loader isVisible={roms === null || states === null || users === null} />
         <Error className="text-2xl" message={roms?.error ?? states?.error ?? users?.error} />
       </div>

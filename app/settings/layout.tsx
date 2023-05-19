@@ -7,23 +7,23 @@ export default function OptionsLayout({ children }: { children: React.ReactNode 
   const activeClassName = "ctrl-blue";
 
   return (
-    <div className="flex-col sm:flex-row flex max-w-[70rem] h-full mx-auto p-4">
-      <nav className="sm:my-5 flex flex-col gap-2 m-2">
+    <div className="mx-auto flex h-full max-w-[70rem] flex-col p-4 sm:flex-row">
+      <nav className="m-2 flex flex-col gap-2 sm:my-5">
         <Link href="/settings" className={className} activeClassName={activeClassName}>
-          <BsDatabaseFillGear className="text-xl w-5" />
+          <BsDatabaseFillGear className="w-5 text-xl" />
           <span>Storage</span>
         </Link>
         <Link href="/settings/users" className={className} activeClassName={activeClassName}>
-          <BsPersonFillGear className="text-xl w-5" />
+          <BsPersonFillGear className="w-5 text-xl" />
           <span>User Management</span>
         </Link>
         <Link href="/settings/auth" className={className} activeClassName={activeClassName}>
-          <BsShieldLockFill className="text-xl w-5" />
+          <BsShieldLockFill className="w-5 text-xl" />
           <span>Authentication</span>
         </Link>
       </nav>
 
-      <div className="m-2 rounded border-r-2 border-b-2 border-el1" />
+      <div className="m-2 rounded border-b-2 border-r-2 border-el1" />
 
       <div className="flex-grow">{children}</div>
     </div>

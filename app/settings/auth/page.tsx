@@ -95,12 +95,12 @@ export default function AuthOptionPage() {
       />
 
       <div className="m-2">
-        <Button className="ctrl-flat h-7 px-1 group" onClick={fetchData} disabled={config === null}>
-          <FiRefreshCw className="text-lg group-hover:rotate-180 duration-150" />
+        <Button className="ctrl-flat group h-7 px-1" onClick={fetchData} disabled={config === null}>
+          <FiRefreshCw className="text-lg duration-150 group-hover:rotate-180" />
         </Button>
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-2">
+      <div className="flex flex-col items-center justify-center gap-2">
         <Loader isVisible={config === null} />
         <Error className="text-2xl" message={config?.error} />
       </div>

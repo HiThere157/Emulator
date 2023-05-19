@@ -137,9 +137,9 @@ export default function Slot({ remoteState, localState, onSubmit }: SlotProps) {
 
       <State state={localState} type="local" onDelete={deleteLocalState} />
 
-      <div className="flex flex-col justify-center items-center gap-2 m-4">
+      <div className="m-4 flex flex-col items-center justify-center gap-2">
         <Loader isVisible={result === null} />
-        <Error className="text-2xl max-w-min" message={result?.error} />
+        <Error className="max-w-min text-2xl" message={result?.error} />
       </div>
     </div>
   );

@@ -16,11 +16,11 @@ export default function GameImage({ src, alt }: GameImageProps) {
 
   if (isError || !src) {
     return (
-      <div className="flex items-center justify-center h-full bg-darkBg rounded">
+      <div className="flex h-full items-center justify-center rounded bg-darkBg">
         <Image
           src={placeholderSvg}
           alt="Image not found"
-          className="grayscale opacity-20 scale-50"
+          className="scale-50 opacity-20 grayscale"
         />
       </div>
     );

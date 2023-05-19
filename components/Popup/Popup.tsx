@@ -8,9 +8,9 @@ export default function Popup({ children, isOpen, onBackgroundClick, className }
   return (
     <>
       {isOpen && (
-        <div className={"fixed top-0 bottom-0 left-0 right-0 flex z-[50] " + className}>
+        <div className={"fixed bottom-0 left-0 right-0 top-0 z-[50] flex " + className}>
           <div
-            className="absolute top-0 bottom-0 left-0 right-0 opacity-90 bg-darkBg"
+            className="absolute bottom-0 left-0 right-0 top-0 bg-darkBg opacity-90"
             onClick={onBackgroundClick}
           />
           <div className="z-[50]">{children}</div>

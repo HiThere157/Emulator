@@ -68,7 +68,7 @@ export default function RomEditActions({
   };
 
   return (
-    <div className="flex gap-2 mt-2">
+    <div className="mt-2 flex gap-2">
       <ConfirmPopup
         isOpen={isConfirmOpen}
         text="This will permanently delete the ROM from the database. Associated state files will become unaccessible."

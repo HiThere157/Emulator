@@ -48,13 +48,13 @@ export default function UsersOptionPage() {
 
   return (
     <div>
-      <div className="flex justify-center flex-wrap gap-2 m-2">
-        <Button className="ctrl-flat px-1 group" onClick={fetchData} disabled={users === null}>
-          <FiRefreshCw className="text-lg group-hover:rotate-180 duration-150" />
+      <div className="m-2 flex flex-wrap justify-center gap-2">
+        <Button className="ctrl-flat group px-1" onClick={fetchData} disabled={users === null}>
+          <FiRefreshCw className="text-lg duration-150 group-hover:rotate-180" />
         </Button>
         <Input value={search} onChange={setSearch} placeholder="Search" />
 
-        <div className="hidden sm:block flex-grow" />
+        <div className="hidden flex-grow sm:block" />
 
         <Dropdown
           values={Object.keys(sortTypes)}
@@ -71,7 +71,7 @@ export default function UsersOptionPage() {
         />
       </div>
 
-      <div className="flex flex-col justify-center items-center gap-2">
+      <div className="flex flex-col items-center justify-center gap-2">
         <Loader isVisible={users === null} />
         <Error className="text-2xl" message={users?.error} />
       </div>

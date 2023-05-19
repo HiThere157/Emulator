@@ -64,7 +64,7 @@ export default function User({ user, disabled, onSubmit }: UserProps) {
   };
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-2 rounded py-2 px-3 bg-lightBg">
+    <div className="flex flex-wrap items-center justify-center gap-2 rounded bg-lightBg px-3 py-2">
       <ConfirmPopup
         isOpen={isConfirmOpen}
         text="This will permanently delete this user."
@@ -81,7 +81,7 @@ export default function User({ user, disabled, onSubmit }: UserProps) {
         <span className="text-greyColor">(#{user.id})</span>
       </div>
 
-      <div className="flex flex-col flex-grow justify-center items-center gap-2">
+      <div className="flex flex-grow flex-col items-center justify-center gap-2">
         <Loader isVisible={result === null} />
         <Error className="text-xl" message={result?.error} />
       </div>

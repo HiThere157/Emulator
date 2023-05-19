@@ -10,24 +10,24 @@ type RedirectPopupProps = {
 };
 export default function RedirectPopup({ href, onClose }: RedirectPopupProps) {
   return (
-    <Popup isOpen={href !== null} onBackgroundClick={onClose} className="py-[10vh] justify-center">
-      <div className="p-4 rounded border-2 bg-lightBg border-el1">
+    <Popup isOpen={href !== null} onBackgroundClick={onClose} className="justify-center py-[10vh]">
+      <div className="rounded border-2 border-el1 bg-lightBg p-4">
         <h1 className="text-xl font-bold">You are leaving the player</h1>
         <p>Are you sure you want to continue? Unsafed progess will be lost.</p>
 
-        <div data-redirect className="flex items-center mt-3">
+        <div data-redirect className="mt-3 flex items-center">
           <Button className="ctrl-flat font-bold" onClick={onClose}>
             Cancel
           </Button>
 
           <div className="flex-grow" />
 
-          <Link href={href ?? "/"} className="ctrl-red py-0.5 px-2 font-bold mr-2">
+          <Link href={href ?? "/"} className="ctrl-red mr-2 px-2 py-0.5 font-bold">
             Go anyway
           </Link>
           <a
             href={href ?? "/"}
-            className="ctrl-blue flex items-center gap-1.5 py-0.5 px-2 rounded"
+            className="ctrl-blue flex items-center gap-1.5 rounded px-2 py-0.5"
             target="_blank"
             rel="noopener noreferrer"
             onClick={onClose}
